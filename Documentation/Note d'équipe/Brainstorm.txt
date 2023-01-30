@@ -27,7 +27,7 @@ Technologie graphiques : À déterminer
                 a- Est-ce qu'il y a de la nourriture proche?
                 b- Random déplacement (Pas de retour en arrière -> tryMove())
                 c- Nourriture sur la case?
-                d- Si 2 nourritures atteintes, aller sur le côté/disable??
+                d- Si 2 nourritures atteintes, aller sur le côté/disable?? -> isEnabled ne sera pas utilisé puisqu'on va ramener les lulu directement sur le coté lorsqu'il ont mangé 2 nourriture.
             2- Survies?
                 a- Combien de nourriture
             3- Reproduction asexuée?
@@ -40,5 +40,9 @@ Technologie graphiques : À déterminer
     c- Inputs (labels, champs)
     d- Résultats (graphs, labels, etc)
 
+
+0 bouffe: Cherche une bouffe, si pu d'énergie -> reste sur place
+1 bouffe: Cherche une bouffe, si pu d'énergie -> reste sur place
+2 bouffe: Retourne vers le côté sans compté son énergie mais peux se faire intercepté et manger
 
             
