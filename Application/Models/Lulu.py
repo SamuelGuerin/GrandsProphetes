@@ -8,3 +8,6 @@ class Lulu:
         self.foodAmount = foodAmount
         self.lastPos = lastPos
         self.position = position
+
+    def __repr__(self) -> str:
+        return "Lulu"
