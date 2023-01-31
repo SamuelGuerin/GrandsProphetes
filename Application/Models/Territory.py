@@ -51,7 +51,7 @@ def __CreateLulu(rx, ry, speed, sense, energyRemaining, FoodCollected, force, la
     # Créer une lulu si la case est vide
     if (getItem(rx, ry) == None):
         rPos = Position(rx, ry)
-        __map[rPos] = Lulu(speed, sense, energyRemaining, FoodCollected, force, lastPostion, isEnabled)
+        __map[rPos] = Lulu(rPos, speed, sense, energyRemaining, FoodCollected, force, lastPostion, isEnabled)
         # Ajouter la lulu dans la liste de lulus
         __lulus.append(__map[rPos])
         return True
@@ -79,6 +79,23 @@ def getSizeX():
 
 def getSizeY():
     return __sizeY
+
+def __addItem(position, item):
+    __map[position] = item
+    if (type(item) == Lulu):
+        item.position = position
+
+def __deleteItem(position):
+    del __map[position]
+
+def moveLulu(oldPosition, newPosition):
+    __addItem(newPosition, __map[oldPosition])
+    __deleteItem(oldPosition)
+
+
+
+
+
 
 # getItemsInSense(x, y, sense)
 # reproduceLulu()
