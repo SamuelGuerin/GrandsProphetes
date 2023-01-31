@@ -84,10 +84,10 @@ def moveAll():
     lulusToMove = []
     lulusToMove.append(__lulus.copy)
     while (lulusToMove.__len__ > 0):
-        for lulu in __lulus:
+        random.shuffle(lulusToMove)
+        for lulu in lulusToMove:
             if not (lulu.move()):
                 lulusToMove.remove(lulu)
-        random.shuffle(__lulus)
 
 
 # getItemsInSense(x, y, sense)
