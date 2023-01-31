@@ -7,6 +7,7 @@ pourra donc être mangé par les autres lulus assez gros. S'il ne se fait pas ma
 - Un lulu qui a récupéré 1 nourriture va continuer à chercher pour une deuxième nourriture. S'il manque
 d'énergie, il reste sur place. Il pourra donc être mangé par les autres lulus assez gros. S'il ne se fait pas manger, il survit et passe à la prochaine génération sans se reproduire.
 - Un lulu qui a récupéré 2 nourritures tente de retourner à l'abri sur les bordures sans prendre en compte l'énergie. Il peut quand même se faire intercepter (manger) par un lulu assez gros sur son chemin. À la fin de la génération, il se reproduit.
+- Un lulu se déplace aléatoirement s'il ne détecte aucune nourriture.
 
 ## Fonctionnement de l'application
 ### Interface utilisateur
@@ -17,6 +18,8 @@ d'énergie, il reste sur place. Il pourra donc être mangé par les autres lulus
 - La nourriture va apparaître aléatoirement sur le territoire sauf sur les bordures.
 - Les lulus vont se déplacer (voir déplacement des lulus plus haut).
 - Les lulus qui ont 2 nourritures se reproduisent asexuellement. Lors de cet acte, il y a une chance de mutation pour l'enfant / nouveau-né.
+- Les lulus qui ont 1 nourriture survivent mais ne se reproduisent pas
+- Les lulus qui n'ont pas de nourriture meurent
 ### Résultat / Graphiques
 - À la fin de la simulation :
     - Le logiciel présente les résultats finaux de la dernière génération (nombre d'individus vivants, vitesse moyenne, taille moyenne, etc.)
