@@ -31,7 +31,7 @@ import random
 #         self.add(groupdots)
 
 if __name__ == '__main__':
-    Territory.createMap(10, 10, 0, 30)
+    Territory.createMap(10, 10, 50, 30)
 
 
     # for l in Territory.__lulus:

@@ -6,8 +6,8 @@ class Position:
     def __hash__(self) -> int:
         return hash((self.x, self.y))
 
-    def __eq__(self, other) -> bool:
-        return (self.x, self.y) == (other.x, other.y)
+    # def __eq__(self, other) -> bool:
+    #     return (self.x, self.y) == (other.x, other.y)
 
     def __ne__(self, other) -> bool:
         return not(self == other)

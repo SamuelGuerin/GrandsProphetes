@@ -1,4 +1,5 @@
 import Models.Territory as Territory
+import random
 from Models.Position import Position
 from Models.Food import Food
 
@@ -30,7 +31,26 @@ class Lulu:
         foodInRange = []
         lulusInRange = []
         self.__getItems(foodInRange, lulusInRange)
-        positionClosestEnemy = self.getClosestEnemy(lulusInRange)
+        targetPosition = None
+
+        if(len(lulusInRange) > 0):
+            if(len(lulusInRange) == 1):
+                targetPosition = lulusInRange[0].position
+            else:
+                targetPosition = self.getClosestEnemy(lulusInRange)
+        if (targetPosition == None and len(foodInRange) > 0):
+            if(len(foodInRange) == 1):
+                targetPosition = foodInRange[0].position
+            else:
+                targetPosition = self.getClosestFood(foodInRange)
+        if(targetPosition == None and len(lulusInRange) > 0):
+            if(len(lulusInRange) == 1):
+                targetPosition = lulusInRange[0].position
+            else:
+                targetPosition = self.getClosestPrey(lulusInRange)
+        if(targetPosition == None):
+            targetPosition = Position(random.randint(0, Territory.getSizeX()), random.randint(0, Territory.getSizeY()))
+
         i = 1
         
         
@@ -48,14 +68,38 @@ class Lulu:
                     position = i.position
                     closestDistance = currentDistance
             return Position(i.position.x, i.position.y)
-                
-
-            
-
-
-
+        return None
     
+    def getClosestPrey(self, items): # Retourne la position de la proie la plus proche
+        position = None
+        closestDistance = 0
+        sizeToBePrey = self.size / Territory.EATING_RATIO
+        for i in items:
+            if(i.size < sizeToBePrey):
+                currentDistance = abs(self.position.x - i.position.x) + abs(self.position.y - i.position.y)
+                if(position == None):
+                    position = i.position
+                    distance = currentDistance
+                elif(currentDistance < closestDistance):
+                    position = i.position
+                    closestDistance = currentDistance
+            return Position(i.position.x, i.position.y)
+        return None
 
+    def getClosestFood(self, items): # Retourne la position de la nourriture le plus proche
+        position = None
+        closestDistance = 0
+        for i in items:
+            currentDistance = abs(self.position.x - i.position.x) + abs(self.position.y - i.position.y)
+            if(position == None):
+                position = i.position
+                distance = currentDistance
+            elif(currentDistance < closestDistance):
+                position = i.position
+                closestDistance = currentDistance
+            return Position(i.position.x, i.position.y)
+        return None
+                
     def __getItems(self, foodInRange, lulusInRange):
         map = Territory.getMap()
         minX = self.position.x - self.sense
@@ -71,14 +115,6 @@ class Lulu:
                         foodInRange.append(item)
                     elif(type(item) == Lulu):
                         lulusInRange.append(item)
-
-
-
-        
-
-
-        
-        
 
 
     def resetPosition(self):
