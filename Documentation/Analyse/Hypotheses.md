@@ -17,6 +17,8 @@ d'énergie, il reste sur place. Il pourra donc être mangé par les autres lulus
 - La nourriture va apparaître aléatoirement sur le territoire sauf sur les bordures.
 - Les lulus vont se déplacer (voir déplacement des lulus plus haut).
 - Les lulus qui ont 2 nourritures se reproduisent asexuellement. Lors de cet acte, il y a une chance de mutation pour l'enfant / nouveau-né.
+- Les lulus qui ont 1 nourriture survivent mais ne se reproduisent pas
+- Les lulus qui n'ont pas de nourriture meurent
 ### Résultat / Graphiques
 - À la fin de la simulation :
     - Le logiciel présente les résultats finaux de la dernière génération (nombre d'individus vivants, vitesse moyenne, taille moyenne, etc.)
