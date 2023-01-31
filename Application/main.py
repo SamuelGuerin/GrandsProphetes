@@ -1,9 +1,9 @@
 import numpy as np
 from manim import *
 from manim.utils.file_ops import open_file as open_media_file
-import Territory
-from Lulu import Lulu
-from Food import Food
+import Models.Territory as Territory
+from Models.Lulu import Lulu
+from Models.Food import Food
 import time
 
 class VisualizeLulus(Scene):
@@ -30,11 +30,11 @@ class VisualizeLulus(Scene):
 
 if __name__ == '__main__':
     t0 = time.time()
-    Territory.createMap(10000000, 10000000, 10000, 10000)
+    Territory.createMap(1000, 1000, 100, 100)
     t1 = time.time()
     total = t1-t0
     print(str(total) + " secondes")
 
-    # print(Territory.getMap())
-    # scene = VisualizeLulus()
-    # scene.render()
+    print(Territory.getMap())
+    scene = VisualizeLulus()
+    scene.render()

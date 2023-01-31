@@ -1,7 +1,7 @@
 import random
-from Position import Position
-from Lulu import Lulu
-from Food import Food
+from Models.Position import Position
+from Models.Lulu import Lulu
+from Models.Food import Food
 
 __sizeX = None
 __sizeY = None
