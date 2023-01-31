@@ -1,5 +1,6 @@
 import Models.Territory as Territory
 from Models.Position import Position
+from Models.Food import Food
 
 class Lulu:
     def __init__(self,position,speed = 0,sense = 0,size = 0,energy = 0,foodAmount = 0,lastPos = None, isDone = False):
@@ -14,6 +15,71 @@ class Lulu:
 
     def __repr__(self) -> str:
         return "Lulu"
+
+
+    #1  Analyser les items autour avec le sense et les garder en mémoire (dictionnaire)
+                #a Lulu?
+                    # - Ennemi ou Proie? Sense, direction (random si pas de bouffe/ennemi) si oui --> bouge direction opposé -> inverser les x,y (3x,2y devient -3x, -2y)
+                #b Bouffe?   
+            #2  foodAmount (est-ce qu'il en a 2)
+            #4. Quantité Énergie
+
+    # Return true si le Lulu peut encore bouger (énergie > 0) sinon false
+    def move(self) -> bool:
+        map = Territory.getMap()
+        foodInRange = []
+        lulusInRange = []
+        self.__getItems(foodInRange, lulusInRange)
+        positionClosestEnemy = self.getClosestEnemy(lulusInRange)
+        i = 1
+        
+        
+    def getClosestEnemy(self, items): # Retourne la position de l'ennemi le plus proche
+        position = None
+        closestDistance = 0
+        sizeToBeEnemy = self.size * Territory.EATING_RATIO
+        for i in items:
+            if(i.size > sizeToBeEnemy):
+                currentDistance = abs(self.position.x - i.position.x) + abs(self.position.y - i.position.y)
+                if(position == None):
+                    position = i.position
+                    distance = currentDistance
+                elif(currentDistance < closestDistance):
+                    position = i.position
+                    closestDistance = currentDistance
+            return Position(i.position.x, i.position.y)
+                
+
+            
+
+
+
+    
+
+    def __getItems(self, foodInRange, lulusInRange):
+        map = Territory.getMap()
+        minX = self.position.x - self.sense
+        maxX = self.position.x + self.sense
+        minY = self.position.y - self.sense
+        maxY = self.position.y + self.sense
+        
+        for x in range(minX, maxX):
+            for y in range(minY, maxY):
+                if not (self.position.x == x and self.position.y == y):
+                    item = Territory.getItem(x,y)
+                    if(type(item) == Food):
+                        foodInRange.append(item)
+                    elif(type(item) == Lulu):
+                        lulusInRange.append(item)
+
+
+
+        
+
+
+        
+        
+
 
     def resetPosition(self):
         sizeX = Territory.getSizeX()

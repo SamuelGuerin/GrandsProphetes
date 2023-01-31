@@ -10,6 +10,8 @@ __foodCount = None
 __lulus = []
 __map = {}
 
+EATING_RATIO = 1.2
+
 def createMap(sizeX, sizeY, foodCount, lulusCount):
     global __sizeX
     global __sizeY
@@ -28,15 +30,15 @@ def createMap(sizeX, sizeY, foodCount, lulusCount):
             luluCreated = False
 
             # Choisir un side à 0 ou maxSide, puis un random de l'autre coordonnée (x ou y)
-            while not (luluCreated) :
+            while not (luluCreated and len(__lulus) < (2 * maxX + 2 * maxY) - 1):
                 if(bool(random.getrandbits(1))):
                     rx = random.choice([0, maxX])
                     ry = random.randint(0, maxY)
-                    luluCreated = __CreateLulu(rx, ry, 2, 2, 2, 2, 2, 2, 2)
+                    luluCreated = __CreateLulu(rx, ry, 2, 2, random.randint(100,200), 2, 2, 2)
                 else :
                     ry = random.choice([0, maxY])
                     rx = random.randint(0, maxX)
-                    luluCreated = __CreateLulu(rx, ry, 2, 2, 2, 2, 2, 2, 2)
+                    luluCreated = __CreateLulu(rx, ry, 2, 2, random.randint(100,200), 2, 2, 2)
 
     # Ajouter de la nourriture partout sauf sur le côté
     for _ in range(__foodCount):
@@ -47,11 +49,11 @@ def createMap(sizeX, sizeY, foodCount, lulusCount):
             foodCreated = __CreateFood(rx, ry)
 
 # private
-def __CreateLulu(rx, ry, speed, sense, energyRemaining, FoodCollected, force, lastPostion, isEnabled) -> bool:
+def __CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isEnabled) -> bool:
     # Créer une lulu si la case est vide
     if (getItem(rx, ry) == None):
         rPos = Position(rx, ry)
-        __map[rPos] = Lulu(rPos, speed, sense, energyRemaining, FoodCollected, force, lastPostion, isEnabled)
+        __map[rPos] = Lulu(rPos, speed, sense, size, energyRemaining, FoodCollected, rPos, isEnabled)
         # Ajouter la lulu dans la liste de lulus
         __lulus.append(__map[rPos])
         return True
@@ -62,7 +64,7 @@ def __CreateFood(rx, ry) -> bool:
     # Créer une food si la case est vide
     if (getItem(rx, ry) == None):
         rPos = Position(rx, ry)
-        __map[rPos] = Food()
+        __map[rPos] = Food(rPos)
         return True
     return False
 

@@ -31,19 +31,26 @@ import random
 #         self.add(groupdots)
 
 if __name__ == '__main__':
+    Territory.createMap(10, 10, 0, 30)
+
+
+    # for l in Territory.__lulus:
+    #     Territory.moveLulu(l.position, Position(random.randint(2,9),random.randint(2,9)))
+
+    # for l in Territory.__lulus:
+    #     print(l.position)
+    #     l.resetPosition()
+    #     print(l.position)
+
     t0 = time.time()
-    Territory.createMap(10, 10, 0, 2)
+    for l in Territory.__lulus:
+        l.move()
+
     t1 = time.time()
     total = t1-t0
     print(str(total) + " secondes")
 
-    for l in Territory.__lulus:
-        Territory.moveLulu(l.position, Position(random.randint(2,9),random.randint(2,9)))
-
-    for l in Territory.__lulus:
-        print(l.position)
-        l.resetPosition()
-        print(l.position)
+     
 
 
     #print(Territory.getMap())
