@@ -1,6 +1,7 @@
 import numpy as np
 from manim import *
 from manim.utils.file_ops import open_file as open_media_file
+import SimulationManager as Simulation
 import Models.Territory as Territory
 from Models.Lulu import Lulu
 from Models.Food import Food
@@ -30,7 +31,7 @@ class VisualizeLulus(Scene):
 
 if __name__ == '__main__':
     t0 = time.time()
-    Territory.createMap(1000, 1000, 100, 100)
+    Simulation.__run__(1000, 1000, 100, 100, 10, 20, 1, 550)
     t1 = time.time()
     total = t1-t0
     print(str(total) + " secondes")
