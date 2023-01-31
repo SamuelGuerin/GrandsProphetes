@@ -10,7 +10,7 @@ __foodCount = None
 __lulus = []
 __map = {}
 
-def createMap(sizeX, sizeY, foodCount, lulusCount):
+def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, food, size):
     global __sizeX
     global __sizeY
     global __foodCount
@@ -32,11 +32,11 @@ def createMap(sizeX, sizeY, foodCount, lulusCount):
                 if(bool(random.getrandbits(1))):
                     rx = random.choice([0, maxX])
                     ry = random.randint(0, maxY)
-                    luluCreated = __CreateLulu(rx, ry, 2, 2, 2, 2, 2, 2, 2)
+                    luluCreated = __CreateLulu(rx, ry, speed, sense, energy, food, size, True)
                 else :
                     ry = random.choice([0, maxY])
                     rx = random.randint(0, maxX)
-                    luluCreated = __CreateLulu(rx, ry, 2, 2, 2, 2, 2, 2, 2)
+                    luluCreated = __CreateLulu(rx, ry, speed, sense, energy, food, size, True)
 
     # Ajouter de la nourriture partout sauf sur le côté
     for _ in range(__foodCount):
@@ -47,11 +47,11 @@ def createMap(sizeX, sizeY, foodCount, lulusCount):
             foodCreated = __CreateFood(rx, ry)
 
 # private
-def __CreateLulu(rx, ry, speed, sense, energyRemaining, FoodCollected, force, lastPostion, isEnabled) -> bool:
+def __CreateLulu(rx, ry, speed, sense, energyRemaining, FoodCollected, size, isEnabled) -> bool:
     # Créer une lulu si la case est vide
     if (getItem(rx, ry) == None):
         rPos = Position(rx, ry)
-        __map[rPos] = Lulu(speed, sense, energyRemaining, FoodCollected, force, lastPostion, isEnabled)
+        __map[rPos] = Lulu(speed, sense, energyRemaining, FoodCollected, size, rPos, isEnabled)
         # Ajouter la lulu dans la liste de lulus
         __lulus.append(__map[rPos])
         return True
@@ -79,6 +79,17 @@ def getSizeX():
 
 def getSizeY():
     return __sizeY
+
+def moveAll():
+    lulusToMove = []
+    lulusToMove.append(__lulus.copy)
+    while (lulusToMove.__len__ > 0):
+        for lulu in lulusToMove:
+            if not (lulu.move()):
+                lulusToMove.remove(lulu)
+    
+    random.shuffle(__lulus)
+
 
 # getItemsInSense(x, y, sense)
 # reproduceLulu()
