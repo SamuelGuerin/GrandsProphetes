@@ -21,8 +21,6 @@ package Entité {
         move()
     }
 
-    class "Empty" as vide {
-    }
 
     class "Food" as nourriture {
         Position position
@@ -33,8 +31,7 @@ package Entité {
         + int sizeY
         + int LulusCount
         + int FoodCount
-        + Lulus[] lulus
-        - array[] Map
+        + Dictionnary Map
 
         createMap(sizeX, sizeY, foodCount, LulusCount)
         getMap()
@@ -52,7 +49,6 @@ package Entité {
 
 territoire "1" -- "*" lulu
 territoire "1" -- "*" nourriture
-territoire "1" -- "*" vide
 
 lulu "1" -- "1" position
 nourriture "1" -- "1" position
