@@ -107,7 +107,7 @@ class Lulu:
         self.Size = size
 
 def generateGraph(generation, currentGeneration):
-    fig, ax = plt.subplots(figsize=(Form.Form.width / 10, Form.Form.height / 10))
+    fig, ax = plt.subplots(figsize=(16, 9))
     #fig, ax = plt.subplots(figsize=(19, 6))
     plt.axis('off')
     ax = plt.axes(projection="3d")
@@ -125,7 +125,7 @@ def generateGraph(generation, currentGeneration):
     generateColors(speeds,senses,sizes,colors)
 
     setAxesLabel(ax)
-    ax.scatter(speeds, senses, sizes, c=colors ,cmap='viridis')
+    ax.scatter(speeds, senses, sizes, c=colors)
 
     # Stats
     ax_stats = plt.axes([0.005, 0.05, 0.23, 0.9])
