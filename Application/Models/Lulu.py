@@ -15,7 +15,7 @@ class Lulu:
         self.isDone = isDone
 
     def __repr__(self) -> str:
-        return "Lulu"
+        return ("Lulu" + str(self.position))
 
 
     #1  Analyser les items autour avec le sense et les garder en mémoire (dictionnaire)
@@ -32,73 +32,74 @@ class Lulu:
         lulusInRange = []
         self.__getItems(foodInRange, lulusInRange)
         targetPosition = None
+        targetFound = False
 
         if(len(lulusInRange) > 0):
-            if(len(lulusInRange) == 1):
-                targetPosition = lulusInRange[0].position
-            else:
-                targetPosition = self.getClosestEnemy(lulusInRange)
-        if (targetPosition == None and len(foodInRange) > 0):
+            targetPosition, targetFound = self.getClosestEnemy(lulusInRange)
+        if (not targetFound and len(foodInRange) > 0):
             if(len(foodInRange) == 1):
                 targetPosition = foodInRange[0].position
+                targetFound = True
             else:
-                targetPosition = self.getClosestFood(foodInRange)
-        if(targetPosition == None and len(lulusInRange) > 0):
-            if(len(lulusInRange) == 1):
-                targetPosition = lulusInRange[0].position
-            else:
-                targetPosition = self.getClosestPrey(lulusInRange)
-        if(targetPosition == None):
-            targetPosition = Position(random.randint(0, Territory.getSizeX()), random.randint(0, Territory.getSizeY()))
-
+                targetPosition, targetFound = self.getClosestFood(foodInRange)
+        if(not targetFound and len(lulusInRange) > 0):
+            targetPosition, targetFound = self.getClosestPrey(lulusInRange)
+        if(not targetFound):
+            targetPosition = Position(random.randint(1, Territory.getSizeX()), random.randint(1, Territory.getSizeY()))
         i = 1
-        
         
     def getClosestEnemy(self, items): # Retourne la position de l'ennemi le plus proche
         position = None
-        closestDistance = 0
+        closestDistance = None
         sizeToBeEnemy = self.size * Territory.EATING_RATIO
+        enemyFound = False
         for i in items:
             if(i.size > sizeToBeEnemy):
-                currentDistance = abs(self.position.x - i.position.x) + abs(self.position.y - i.position.y)
-                if(position == None):
+                currentDistance = max(abs(self.position.x - i.position.x), abs(self.position.y - i.position.y))
+                if(not enemyFound):
+                    enemyFound = True
                     position = i.position
-                    distance = currentDistance
+                    closestDistance = currentDistance
                 elif(currentDistance < closestDistance):
                     position = i.position
                     closestDistance = currentDistance
-            return Position(i.position.x, i.position.y)
-        return None
+        if (enemyFound):
+            # Retourner comme target l'opposé de l'enemi
+            return Position(self.position.x + (self.position.x - position.x), self.position.y + (self.position.y - position.y)), True
+        else:
+            return None
     
     def getClosestPrey(self, items): # Retourne la position de la proie la plus proche
         position = None
-        closestDistance = 0
+        closestDistance = None
         sizeToBePrey = self.size / Territory.EATING_RATIO
+        preyFound = False
         for i in items:
             if(i.size < sizeToBePrey):
-                currentDistance = abs(self.position.x - i.position.x) + abs(self.position.y - i.position.y)
-                if(position == None):
+                currentDistance = max(abs(self.position.x - i.position.x), abs(self.position.y - i.position.y))
+                if(not preyFound):
+                    preyFound = True
                     position = i.position
-                    distance = currentDistance
+                    closestDistance = currentDistance
                 elif(currentDistance < closestDistance):
                     position = i.position
                     closestDistance = currentDistance
-            return Position(i.position.x, i.position.y)
-        return None
+        return position, preyFound
 
-    def getClosestFood(self, items): # Retourne la position de la nourriture le plus proche
+    def getClosestFood(self, items): # Retourne la position de la nourriture la plus proche
         position = None
-        closestDistance = 0
+        closestDistance = None
+        foodFound = False
         for i in items:
-            currentDistance = abs(self.position.x - i.position.x) + abs(self.position.y - i.position.y)
-            if(position == None):
+            currentDistance = max(abs(self.position.x - i.position.x), abs(self.position.y - i.position.y))
+            if(not foodFound):
+                foodFound = True
                 position = i.position
-                distance = currentDistance
+                closestDistance = currentDistance
             elif(currentDistance < closestDistance):
                 position = i.position
                 closestDistance = currentDistance
-            return Position(i.position.x, i.position.y)
-        return None
+        return position, foodFound
                 
     def __getItems(self, foodInRange, lulusInRange):
         map = Territory.getMap()
@@ -107,8 +108,8 @@ class Lulu:
         minY = self.position.y - self.sense
         maxY = self.position.y + self.sense
         
-        for x in range(minX, maxX):
-            for y in range(minY, maxY):
+        for x in range(minX, maxX + 1):
+            for y in range(minY, maxY + 1):
                 if not (self.position.x == x and self.position.y == y):
                     item = Territory.getItem(x,y)
                     if(type(item) == Food):
@@ -116,8 +117,8 @@ class Lulu:
                     elif(type(item) == Lulu):
                         lulusInRange.append(item)
 
-
-    def resetPosition(self):
+    # Si la lulu a ses deux nourritures, elle se dirige vers le côté
+    def moveToInitialPosition(self):
         sizeX = Territory.getSizeX()
         sizeY = Territory.getSizeY()
         halfSizeX = sizeX / 2
@@ -142,7 +143,10 @@ class Lulu:
                 Territory.moveLulu(self.position, Position(self.position.x + 1, self.position.y)) # va vers x=max
             else:
                 Territory.moveLulu(self.position, Position(self.position.x, self.position.y + 1)) # vs vers y=max
-            
+    
+    # Téléporte la lulu sur le côté au début d'une round
+    def resetPosition(self):
+        i = 3
 
 
 

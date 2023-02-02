@@ -31,8 +31,7 @@ import random
 #         self.add(groupdots)
 
 if __name__ == '__main__':
-    Territory.createMap(10, 10, 50, 30)
-
+    Territory.createMap(3, 3, 50, 50)
 
     # for l in Territory.__lulus:
     #     Territory.moveLulu(l.position, Position(random.randint(2,9),random.randint(2,9)))

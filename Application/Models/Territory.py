@@ -9,6 +9,7 @@ __lulusCount = None
 __foodCount = None
 __lulus = []
 __map = {}
+__numberOfFood = 0
 
 EATING_RATIO = 1.2
 
@@ -30,22 +31,22 @@ def createMap(sizeX, sizeY, foodCount, lulusCount):
             luluCreated = False
 
             # Choisir un side à 0 ou maxSide, puis un random de l'autre coordonnée (x ou y)
-            while not (luluCreated and len(__lulus) < (2 * maxX + 2 * maxY) - 1):
+            while (not luluCreated and len(__lulus) < (2 * maxX + 2 * maxY) - 4):
                 if(bool(random.getrandbits(1))):
-                    rx = random.choice([0, maxX])
-                    ry = random.randint(0, maxY)
+                    rx = random.choice([1, maxX])
+                    ry = random.randint(1, maxY)
                     luluCreated = __CreateLulu(rx, ry, 2, 2, random.randint(100,200), 2, 2, 2)
                 else :
-                    ry = random.choice([0, maxY])
-                    rx = random.randint(0, maxX)
+                    ry = random.choice([1, maxY])
+                    rx = random.randint(1, maxX)
                     luluCreated = __CreateLulu(rx, ry, 2, 2, random.randint(100,200), 2, 2, 2)
 
     # Ajouter de la nourriture partout sauf sur le côté
     for _ in range(__foodCount):
         foodCreated = False
-        while not (foodCreated) :
-            rx = random.randint(1, maxX - 1)
-            ry = random.randint(1, maxY - 1)
+        while ( not foodCreated and __numberOfFood < ((sizeX - 2) * (sizeY - 2))) :
+            rx = random.randint(2, maxX - 1)
+            ry = random.randint(2, maxY - 1)
             foodCreated = __CreateFood(rx, ry)
 
 # private
@@ -62,9 +63,11 @@ def __CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isE
 # private
 def __CreateFood(rx, ry) -> bool:
     # Créer une food si la case est vide
+    global __numberOfFood
     if (getItem(rx, ry) == None):
         rPos = Position(rx, ry)
         __map[rPos] = Food(rPos)
+        __numberOfFood += 1
         return True
     return False
 
