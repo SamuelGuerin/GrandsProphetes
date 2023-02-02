@@ -40,7 +40,7 @@ def setAxesSize(ax):
     ax.set_ylim([0,100])
     ax.set_zlim([0,100])
 
-def updateGraph(ax, speeds, senses, sizes, generations, index):
+def updateGraph(ax, speeds, senses, sizes, generations, index, colors):
     ax.clear()
     calculateCoordinates(generations, speeds, senses, sizes, index)
     generateColors(speeds, senses, sizes, colors)
@@ -145,7 +145,7 @@ def generateGraph():
             if self.ind > len(generations) - 1:
                 self.ind = len(generations) - 1
                 return
-            updateGraph(ax, speeds, senses, sizes, generations, self.ind)
+            updateGraph(ax, speeds, senses, sizes, generations, self.ind, colors)
             setStats(ax_stats, generations, self.ind)
 
         def prev(self, event):
@@ -153,17 +153,17 @@ def generateGraph():
             if self.ind < 0:
                 self.ind = 0
                 return
-            updateGraph(ax, speeds, senses, sizes, generations, self.ind)
+            updateGraph(ax, speeds, senses, sizes, generations, self.ind, colors)
             setStats(ax_stats, generations, self.ind)
         
         def first(self, event):
             self.ind = 0
-            updateGraph(ax, speeds, senses, sizes, generations, self.ind)
+            updateGraph(ax, speeds, senses, sizes, generations, self.ind, colors)
             setStats(ax_stats, generations, self.ind)
         
         def last(self, event):
             self.ind = len(generations) - 1
-            updateGraph(ax, speeds, senses, sizes, generations, self.ind)
+            updateGraph(ax, speeds, senses, sizes, generations, self.ind, colors)
             setStats(ax_stats, generations, self.ind)
 
     # Buttons
@@ -190,4 +190,5 @@ def generateGraph():
     setStats(ax_stats, generations, callback.ind)
 
     plt.show()
-    return fig
+
+generateGraph()
