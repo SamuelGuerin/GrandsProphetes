@@ -158,4 +158,11 @@ def moveAll():
 
 
 # getItemsInSense(x, y, sense)
-# dayResultLulu()
+def dayResultLulu():
+    for lulu in __lulus:
+        if (lulu.foodAmount == 0):
+            __lulus.remove(lulu)
+        elif (lulu.foodAmount == 1):
+            lulu.resetPosition()
+        elif (lulu.foodAmount > 1):
+            reproduceLulu(lulu) 
