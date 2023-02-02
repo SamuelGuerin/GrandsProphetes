@@ -35,11 +35,11 @@ def createMap(sizeX, sizeY, foodCount, lulusCount):
                 if(bool(random.getrandbits(1))):
                     rx = random.choice([1, maxX])
                     ry = random.randint(1, maxY)
-                    luluCreated = __CreateLulu(rx, ry, 2, 2, random.randint(100,200), 2, 2, 2)
+                    luluCreated = __CreateLulu(rx, ry, 2, 2, random.randint(100,200), 4, 0, True)
                 else :
                     ry = random.choice([1, maxY])
                     rx = random.randint(1, maxX)
-                    luluCreated = __CreateLulu(rx, ry, 2, 2, random.randint(100,200), 2, 2, 2)
+                    luluCreated = __CreateLulu(rx, ry, 2, 2, random.randint(100,200), 4, 0, True)
 
     # Ajouter de la nourriture partout sauf sur le côté
     for _ in range(__foodCount):
@@ -93,8 +93,36 @@ def __addItem(position, item):
 def __deleteItem(position):
     del __map[position]
 
+# Vérifie s'il est possible de faire le mouvement demandé
+# return true si le move est fait, sinon false
+def tryMove(oldPosition, newPosition) -> bool:
+    # Vérifier si le mouvement est dans la map
+    if((newPosition.x >= 1 and newPosition.x <= getSizeX()) and (newPosition.y >= 1 and newPosition.y <= getSizeY())):
+        # Vérifier s'il n'y a pas une lulu plus grosse ou égale
+        itemInNewPosition = getItem(newPosition.x, newPosition.y)
+        if (itemInNewPosition == None):
+            moveLulu(oldPosition, newPosition)
+            return True
+        elif (type(itemInNewPosition) == Food):
+            moveLulu(oldPosition, newPosition)
+            return True
+        elif (itemInNewPosition.size < __map[oldPosition].size / EATING_RATIO):
+            moveLulu(oldPosition, newPosition)
+            return True
+    return False
+
+# Todo : Gérer l'énergie avec la formule
 def moveLulu(oldPosition, newPosition):
-    __addItem(newPosition, __map[oldPosition])
+    # S'il y avait qqch sur la nouvelle case, l'enlever et ajouter 1 de nourriture
+    currentLulu = __map[oldPosition]
+    currentLulu.energy -= 1
+    if (getItem(newPosition.x, newPosition.y) != None):
+        currentLulu.foodAmount += 1
+        # ToDo : Valider que la liste lulus ne la contient plus
+        if (type(__map[newPosition]) == Lulu):
+            __lulus.remove(__map[newPosition])
+        __deleteItem(newPosition)
+    __addItem(newPosition, currentLulu)
     __deleteItem(oldPosition)
 
 
