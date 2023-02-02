@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
+import threading
 
 def generateLulus():
     i = 0
@@ -21,11 +22,11 @@ def generateColors(speeds, senses, sizes, colors):
     for i in range(len(speeds)):
         colors.append([speeds[i]/100, senses[i]/100, sizes[i]/100])
 
-def calculateCoordinates(generations, speeds, senses, sizes, index):
+def calculateCoordinates(generation, speeds, senses, sizes):
     speeds.clear()
     senses.clear()
     sizes.clear()
-    for lulu in generations[index]:
+    for lulu in generation:
         speeds.append(lulu.Speed)
         senses.append(lulu.Sense)
         sizes.append(lulu.Size)
@@ -40,19 +41,8 @@ def setAxesSize(ax):
     ax.set_ylim([0,100])
     ax.set_zlim([0,100])
 
-def updateGraph(ax, speeds, senses, sizes, generations, index, colors):
+def setStats(ax, generation):
     ax.clear()
-    calculateCoordinates(generations, speeds, senses, sizes, index)
-    generateColors(speeds, senses, sizes, colors)
-    setAxesLabel(ax)
-    setAxesSize(ax)
-    ax.set_title('Génération ' + str(index + 1))
-    ax.scatter(speeds, senses, sizes, c=colors ,cmap='viridis')
-    plt.draw()
-
-def setStats(ax, generations, index):
-    ax.clear()
-    generation = generations[index]
     speed = [0,0,1000000]
     sense = [0,0,1000000]
     size = [0,0,1000000]
@@ -115,81 +105,34 @@ class Lulu:
         self.Sense = sense
         self.Size = size
 
-def generateGraph():
-    generations = generateLulus()
-
+def generateGraph(generation, currentGeneration):
     fig, ax = plt.subplots(figsize=(16,9))
     plt.axis('off')
     ax = plt.axes(projection="3d")
     plt.subplots_adjust(left=0.25)
-    ax.set_title('Génération ' + str(1))
+    ax.set_title('Génération ' + str(currentGeneration))
     setAxesSize(ax)
     fig.subplots_adjust(bottom=0.2)
 
     speeds = []
     senses = []
     sizes = []
-
-    calculateCoordinates(generations, speeds, senses, sizes, 0)
     colors = []
+
+    calculateCoordinates(generation, speeds, senses, sizes)
     generateColors(speeds,senses,sizes,colors)
 
     setAxesLabel(ax)
     ax.scatter(speeds, senses, sizes, c=colors ,cmap='viridis')
 
-    class Index:
-        ind = 0
-
-        def next(self, event):
-            self.ind += 1
-            if self.ind > len(generations) - 1:
-                self.ind = len(generations) - 1
-                return
-            updateGraph(ax, speeds, senses, sizes, generations, self.ind, colors)
-            setStats(ax_stats, generations, self.ind)
-
-        def prev(self, event):
-            self.ind -= 1
-            if self.ind < 0:
-                self.ind = 0
-                return
-            updateGraph(ax, speeds, senses, sizes, generations, self.ind, colors)
-            setStats(ax_stats, generations, self.ind)
-        
-        def first(self, event):
-            self.ind = 0
-            updateGraph(ax, speeds, senses, sizes, generations, self.ind, colors)
-            setStats(ax_stats, generations, self.ind)
-        
-        def last(self, event):
-            self.ind = len(generations) - 1
-            updateGraph(ax, speeds, senses, sizes, generations, self.ind, colors)
-            setStats(ax_stats, generations, self.ind)
-
-    # Buttons
-    callback = Index()
-
-    axPrev = fig.add_axes([0.66, 0.05, 0.14, 0.078])
-    bPrev = Button(axPrev, 'Génération \nPrécédente')
-    bPrev.on_clicked(callback.prev)
-
-    axNext = fig.add_axes([0.81, 0.05, 0.14, 0.078])
-    bNext = Button(axNext, 'Prochaine \nGénération')
-    bNext.on_clicked(callback.next)
-
-    axLast = fig.add_axes([0.50, 0.05, 0.14, 0.078])
-    bLast = Button(axLast, 'Dernière \nGénération')
-    bLast.on_clicked(callback.last)
-
-    axFirst = fig.add_axes([0.35, 0.05, 0.14, 0.078])
-    bFirst = Button(axFirst, 'Première \nGénération')
-    bFirst.on_clicked(callback.first)
-
     # Stats
     ax_stats = plt.axes([0.005, 0.05, 0.23, 0.9])
-    setStats(ax_stats, generations, callback.ind)
+    setStats(ax_stats, generation)
 
     plt.show()
     return fig
 
-generateGraph()
+test = generateLulus()
+generateGraph(test[0], 1)
+    
+    
