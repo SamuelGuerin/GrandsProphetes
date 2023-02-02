@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
+import Form
 
 def generateLulus():
     i = 0
@@ -118,7 +119,8 @@ class Lulu:
 def generateGraph():
     generations = generateLulus()
 
-    fig, ax = plt.subplots(figsize=(16,9))
+
+    fig, ax = plt.subplots(figsize=(Form.Form.width / 10, Form.Form.height / 10))
     plt.axis('off')
     ax = plt.axes(projection="3d")
     plt.subplots_adjust(left=0.25)
@@ -189,7 +191,7 @@ def generateGraph():
     ax_stats = plt.axes([0.005, 0.05, 0.23, 0.9])
     setStats(ax_stats, generations, callback.ind)
     
-    plt.show()
+    #plt.show()
     return fig
 
-generateGraph()
+#generateGraph()
