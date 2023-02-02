@@ -19,7 +19,7 @@ def generateLulus():
 def generateColors(speeds, senses, sizes, colors):
     colors.clear()
     for i in range(len(speeds)):
-        colors.append([speeds[i]/80, senses[i]/80, sizes[i]/80])
+        colors.append([speeds[i]/100, senses[i]/100, sizes[i]/100])
 
 def calculateCoordinates(generations, speeds, senses, sizes, index):
     speeds.clear()
@@ -118,7 +118,7 @@ class Lulu:
 def generateGraph():
     generations = generateLulus()
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(16,9))
     plt.axis('off')
     ax = plt.axes(projection="3d")
     plt.subplots_adjust(left=0.25)
@@ -188,7 +188,8 @@ def generateGraph():
     # Stats
     ax_stats = plt.axes([0.005, 0.05, 0.23, 0.9])
     setStats(ax_stats, generations, callback.ind)
-
+    
     plt.show()
+    return fig
 
 generateGraph()
