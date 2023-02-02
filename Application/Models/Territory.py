@@ -130,6 +130,11 @@ def moveLulu(oldPosition, newPosition):
         __deleteItem(newPosition)
     __addItem(newPosition, currentLulu)
     __deleteItem(oldPosition)
+    
+def __addItem(position, item):
+    __map[position] = item
+    if (type(item) == Lulu):
+        item.position = position
 
 def reproduceLulu(Lulu):
     # 50% Chance de mutation
@@ -198,12 +203,5 @@ def dayResultLulu():
             lulu.resetPosition()
         elif (lulu.foodAmount > 1):
             reproduceLulu(lulu) 
-
-
-
-
-
-
-# getItemsInSense(x, y, sense)
 
 # getItemsInSense(x, y, sense)
