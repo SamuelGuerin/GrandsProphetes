@@ -1,9 +1,12 @@
 import customtkinter as ct
 from PIL import Image
 import os
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from mpl_toolkits.mplot3d import axes3d
+import matplotlib.pyplot as plt
 
-ct.set_appearance_mode("dark")  # Modes: "System" (standard), "Dark", "Light"
-ct.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
+ct.set_appearance_mode("dark")
+ct.set_default_color_theme("blue")
 
 
 class Form(ct.CTk):
@@ -41,7 +44,7 @@ class Form(ct.CTk):
         txtMapSizeX = ct.CTkEntry(master=self.frame_1)
         txtMapSizeX.grid(row=0, column=1, padx=20, pady=10, sticky="ew")
         lblMapSizeXGood = ct.CTkLabel(master=self.frame_1, text="")
-        lblMapSizeXGood.grid(row=0, column=3, pady=10, padx=10)
+        lblMapSizeXGood.grid(row=0, column=2, pady=10, padx=10)
 
         # Enter 2 -- MapSizeY
         lblMapSizeY = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Taille du territoire en y (en m)")
@@ -49,7 +52,7 @@ class Form(ct.CTk):
         txtMapSizeY = ct.CTkEntry(master=self.frame_1)
         txtMapSizeY.grid(row=1, column=1, padx=20, pady=10, sticky="ew")
         lblMapSizeYGood = ct.CTkLabel(master=self.frame_1, text="")
-        lblMapSizeYGood.grid(row=1, column=3, pady=10, padx=10)
+        lblMapSizeYGood.grid(row=1, column=2, pady=10, padx=10)
 
         # Enter 3 -- StartFood
         lblStartFood = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Nombre de nourriture disponible \rau début")
@@ -57,7 +60,7 @@ class Form(ct.CTk):
         txtStartFood = ct.CTkEntry(master=self.frame_1)
         txtStartFood.grid(row=2, column=1, padx=20, pady=10, sticky="ew")
         lblStartFoodGood = ct.CTkLabel(master=self.frame_1, text="")
-        lblStartFoodGood.grid(row=2, column=3, pady=10, padx=10)
+        lblStartFoodGood.grid(row=2, column=2, pady=10, padx=10)
 
         # Enter 4 -- StartLulu
         lblStartLulu = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Nombre d'individu au début")
@@ -65,7 +68,7 @@ class Form(ct.CTk):
         txtStartLulu = ct.CTkEntry(master=self.frame_1)
         txtStartLulu.grid(row=3, column=1, padx=20, pady=10, sticky="ew")
         lblStartLuluGood = ct.CTkLabel(master=self.frame_1, text="")
-        lblStartLuluGood.grid(row=3, column=3, pady=10, padx=10)
+        lblStartLuluGood.grid(row=3, column=2, pady=10, padx=10)
 
         # Enter 5 -- Energy
         lblEnergy = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Énergie pour ce déplacer")
@@ -73,7 +76,7 @@ class Form(ct.CTk):
         txtEnergy = ct.CTkEntry(master=self.frame_1)
         txtEnergy.grid(row=4, column=1, padx=20, pady=10, sticky="ew")
         lblEnergyGood = ct.CTkLabel(master=self.frame_1, text="")
-        lblEnergyGood.grid(row=4, column=3, pady=10, padx=10)
+        lblEnergyGood.grid(row=4, column=2, pady=10, padx=10)
 
         # Enter 6 -- Speed
         lblSpeed = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Augmentation de la vitesse lors \rde la mutation (en %)")
@@ -81,7 +84,7 @@ class Form(ct.CTk):
         txtSpeed = ct.CTkEntry(master=self.frame_1)
         txtSpeed.grid(row=5, column=1, padx=20, pady=10, sticky="ew")
         lblSpeedGood = ct.CTkLabel(master=self.frame_1, text="")
-        lblSpeedGood.grid(row=5, column=3, pady=10, padx=10)
+        lblSpeedGood.grid(row=5, column=2, pady=10, padx=10)
 
         # Enter 7 -- Sense
         lblSense = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Augmentation de la porté à laquel \rl'individu détecte la nourriture \rlors de la mutation (en %)")
@@ -89,7 +92,7 @@ class Form(ct.CTk):
         txtSense = ct.CTkEntry(master=self.frame_1)
         txtSense.grid(row=6, column=1, padx=20, pady=10, sticky="ew")
         lblSenseGood = ct.CTkLabel(master=self.frame_1, text="")
-        lblSenseGood.grid(row=6, column=3, pady=10, padx=10)
+        lblSenseGood.grid(row=6, column=2, pady=10, padx=10)
 
         # Enter 8 -- Size
         lblSize = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Poids supplémentaire lors de la \rprochaine mutation (en %)")
@@ -97,7 +100,15 @@ class Form(ct.CTk):
         txtSize = ct.CTkEntry(master=self.frame_1)
         txtSize.grid(row=7, column=1, padx=20, pady=10, sticky="ew")
         lblSizeGood = ct.CTkLabel(master=self.frame_1, text="")
-        lblSizeGood.grid(row=7, column=3, pady=10, padx=10)
+        lblSizeGood.grid(row=7, column=2, pady=10, padx=10)
+
+        # Enter 9 -- Generation
+        lblGeneration = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Nombre de génération")
+        lblGeneration.grid(row=8, column=0, pady=10, padx=10)
+        txtGeneration = ct.CTkEntry(master=self.frame_1)
+        txtGeneration.grid(row=8, column=1, padx=20, pady=10, sticky="ew")
+        lblGenerationGood = ct.CTkLabel(master=self.frame_1, text="")
+        lblGenerationGood.grid(row=8, column=2, pady=10, padx=10)
 
         # Enter 1 -- Validation
         def get_inputMapSizeX():
@@ -219,6 +230,20 @@ class Form(ct.CTk):
             except ValueError:
                 lblSizeGood.configure(text="Ce n'est pas un nombre entier", text_color="red")
 
+        # Enter 9 -- Validation
+        def get_inputGeneration():
+            try:
+                generationValue = int(txtGeneration.get())
+                if(generationValue < 1 or generationValue > 1000000):
+                    lblGenerationGood.configure(text="Cette valeur doit être entre 1 et 1 000 000", text_color="red")
+                else:
+                    lblGenerationGood.configure(text="")
+                    print(generationValue)
+                    return generationValue
+            except ValueError:
+                lblGenerationGood.configure(text="Ce n'est pas un nombre entier", text_color="red")
+
+        # -------------------------------------------------
         def get_allBeforeSimulation():
             validMapSizeX = get_inputMapSizeX()
             validMapSizeY = get_inputMapSizeY()
@@ -228,6 +253,7 @@ class Form(ct.CTk):
             validSpeed = get_inputSpeed()
             validSense = get_inputSense()
             validSize = get_inputSize()
+            validGeneration = get_inputGeneration()
             print(validMapSizeX)
             if(type(validMapSizeX) is int
                and type(validMapSizeY) is int
@@ -236,23 +262,45 @@ class Form(ct.CTk):
                and type(validEnergy) is int
                and type(validSpeed) is int
                and type(validSense) is int
-               and type(validSize) is int):
+               and type(validSize) is int
+               and type(validGeneration) is int):
                 
                 #Simule
-                #__run__(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy)
+                #__run__(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration)
                 lblErrorInForm.configure(text="OK", text_color="green")
             else:
                 lblErrorInForm.configure(text="Error: Veuillez remplir convenablement le formulaire", text_color="red")
                   
         btnSimulate = ct.CTkButton(master=self.frame_1, text="Lancer la simulation", command=get_allBeforeSimulation)
-        btnSimulate.grid(row=8, column=0, padx=20, pady=10, sticky="we")
+        btnSimulate.grid(row=9, column=0, padx=20, pady=10, sticky="we")
 
-        #btnGraph = ct.CTkButton(master=self.frame_1, text="Visualiser les graphiques" command=graph)
-        btnGraph = ct.CTkButton(master=self.frame_1, text="Visualiser les graphiques")
-        btnGraph.grid(row=8, column=1, padx=20, pady=10, sticky="we")
+        # Graph
+        def add_Graph():
+            def remove_graph():
+                canvas.get_tk_widget().destroy()
+                buttonDestroyGraph.destroy()
+
+            fig = plt.Figure(figsize=(self.width / 10, self.height / 10))
+            #fig = plt.Figure(figsize=(self.width / 10, self.height / 10), facecolor="#1c1c1c")
+            #plt.style.use('dark_background')
+            ax = fig.add_subplot(111)
+
+            x = [1, 2, 3, 4, 5]
+            y = [5, 4, 3, 2, 1]
+
+            ax.plot(x, y)
+
+            canvas = FigureCanvasTkAgg(fig, master=self)
+            canvas.get_tk_widget().grid(row=0, column=0, padx=20, pady=10)
+
+            buttonDestroyGraph = ct.CTkButton(self, text="Remove Graph", command=remove_graph)
+            buttonDestroyGraph.grid(row=1, column=0, padx=20, pady=10, sticky="we")
+
+        btnGraph = ct.CTkButton(master=self.frame_1, text="Visualiser les graphiques", command=add_Graph)
+        btnGraph.grid(row=9, column=1, padx=20, pady=10, sticky="we")
 
         lblErrorInForm = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="")
-        lblErrorInForm.grid(row=8, column=3, padx=20, pady=10)
+        lblErrorInForm.grid(row=9, column=2, padx=20, pady=10)
 
 if __name__ == "__main__":
     app = Form()
