@@ -1,6 +1,6 @@
 import numpy as np
 
-import Graph
+import Graph2 as Graph
 import Form
 
 
@@ -26,29 +26,29 @@ class Lulu:
         self.Size = size
 
 class Index:
-        ind = 0
+    ind = 0
 
 class graphGeneration:
-        def next(ind):
-            ind += 1
-            if ind > len(generations) - 1:
-                ind = len(generations) - 1
-            return Graph.generateGraph(generations[ind], ind + 1)
+        def next(index):
+            index.ind += 1
+            if index.ind > len(generations) - 1:
+                index.ind = len(generations) - 1
+            return Graph.generateGraph(generations[index.ind], index.ind + 1)
             
 
-        def previous(ind):
-            ind -= 1
-            if ind < 0:
-                ind = 0
-            return Graph.generateGraph(generations[ind], ind + 1)
+        def previous(index):
+            index.ind -= 1
+            if index.ind < 0:
+                index.ind = 0
+            return Graph.generateGraph(generations[index.ind], index.ind + 1)
 
-        def first(ind):
-            ind = 0
-            return Graph.generateGraph(generations[ind], ind + 1)
+        def first(index):
+            index.ind = 0
+            return Graph.generateGraph(generations[index.ind], index.ind + 1)
         
-        def last(ind):
-            ind = len(generations) - 1
-            return Graph.generateGraph(generations[ind], ind + 1)
+        def last(index):
+            index.ind = len(generations) - 1
+            return Graph.generateGraph(generations[index.ind], index.ind + 1)
 
 generations = generateLulus()
 

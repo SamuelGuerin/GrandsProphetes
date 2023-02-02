@@ -4,7 +4,7 @@ import os
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from mpl_toolkits.mplot3d import axes3d
 import matplotlib.pyplot as plt
-import Graph
+import Graph2 as Graph
 import FormGraph as fg
 
 ct.set_appearance_mode("dark")
@@ -277,32 +277,24 @@ class Form(ct.CTk):
         btnSimulate.grid(row=9, column=0, padx=20, pady=10, sticky="we")
 
         def previous():
-            fig = fg.graphGeneration.previous(index.ind)
-            #fig = plt.Figure(figsize=(self.width / 10, self.height / 10), facecolor="#1c1c1c")
-            #plt.style.use('dark_background')
-            canvas = FigureCanvasTkAgg(fig, app)
-            canvas.get_tk_widget().grid(row=0, column=0, padx=20, pady=10)
+            fig = fg.graphGeneration.previous(index)
+            canvas = FigureCanvasTkAgg(fig, self)
+            canvas.get_tk_widget().grid(row=0, column=0, columnspan=4, padx=20, pady=10)
 
         def next():
-            fig = fg.graphGeneration.next(index.ind)
-            #fig = plt.Figure(figsize=(self.width / 10, self.height / 10), facecolor="#1c1c1c")
-            #plt.style.use('dark_background')
-            canvas = FigureCanvasTkAgg(fig, app)
-            canvas.get_tk_widget().grid(row=0, column=0, padx=20, pady=10)
+            fig = fg.graphGeneration.next(index)
+            canvas = FigureCanvasTkAgg(fig, self)
+            canvas.get_tk_widget().grid(row=0, column=0, columnspan=4, padx=20, pady=10)
 
         def last():
-            fig = fg.graphGeneration.last(index.ind)
-            #fig = plt.Figure(figsize=(self.width / 10, self.height / 10), facecolor="#1c1c1c")
-            #plt.style.use('dark_background')
-            canvas = FigureCanvasTkAgg(fig, app)
-            canvas.get_tk_widget().grid(row=0, column=0, padx=20, pady=10)
+            fig = fg.graphGeneration.last(index)
+            canvas = FigureCanvasTkAgg(fig, self)
+            canvas.get_tk_widget().grid(row=0, column=0, columnspan=4, padx=20, pady=10)
 
         def first():
-            fig = fg.graphGeneration.first(index.ind)
-            #fig = plt.Figure(figsize=(self.width / 10, self.height / 10), facecolor="#1c1c1c")
-            #plt.style.use('dark_background')
-            canvas = FigureCanvasTkAgg(fig, app)
-            canvas.get_tk_widget().grid(row=0, column=0, padx=20, pady=10)
+            fig = fg.graphGeneration.first(index)
+            canvas = FigureCanvasTkAgg(fig, self)
+            canvas.get_tk_widget().grid(row=0, column=0, columnspan=4, padx=20, pady=10)
     
         # Graph
         def add_Graph():
@@ -313,21 +305,17 @@ class Form(ct.CTk):
             #     btnNextGeneration.destroy()
             #     btnLastGeneration.destroy()
             #     btnFirstGeneration.destroy()
-
-            btnPreviousGeneration = ct.CTkButton(self, text="Génération Précédente",
-                                                    command=previous)
+            first()
+            btnPreviousGeneration = ct.CTkButton(self, text="Génération Précédente", command=previous)
             btnPreviousGeneration.grid(row=1, column=0, padx=20, pady=10, sticky="we")
 
-            btnNextGeneration = ct.CTkButton(self, text="Prochaine Génération",
-                                                command=next)
+            btnNextGeneration = ct.CTkButton(self, text="Prochaine Génération", command=next)
             btnNextGeneration.grid(row=1, column=1, padx=20, pady=10, sticky="we")
 
-            btnLastGeneration = ct.CTkButton(self, text="Dernière Génération",
-                                                command=last)
+            btnLastGeneration = ct.CTkButton(self, text="Dernière Génération", command=last)
             btnLastGeneration.grid(row=1, column=2, padx=20, pady=10, sticky="we")
 
-            btnFirstGeneration = ct.CTkButton(self, text="Première Génération",
-                                                command=first)
+            btnFirstGeneration = ct.CTkButton(self, text="Première Génération", command=first)
             btnFirstGeneration.grid(row=1, column=3, padx=20, pady=10, sticky="we")
 
             # buttonDestroyGraph = ct.CTkButton(self, text="Remove Graph", command=remove_graph)
