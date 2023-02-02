@@ -115,77 +115,79 @@ class Lulu:
         self.Sense = sense
         self.Size = size
 
-generations = generateLulus()
+def generateGraph():
+    generations = generateLulus()
 
-fig, ax = plt.subplots()
-plt.axis('off')
-ax = plt.axes(projection="3d")
-plt.subplots_adjust(left=0.25)
-ax.set_title('Génération ' + str(1))
-setAxesSize(ax)
-fig.subplots_adjust(bottom=0.2)
+    fig, ax = plt.subplots()
+    plt.axis('off')
+    ax = plt.axes(projection="3d")
+    plt.subplots_adjust(left=0.25)
+    ax.set_title('Génération ' + str(1))
+    setAxesSize(ax)
+    fig.subplots_adjust(bottom=0.2)
 
-speeds = []
-senses = []
-sizes = []
+    speeds = []
+    senses = []
+    sizes = []
 
-calculateCoordinates(generations, speeds, senses, sizes, 0)
-colors = []
-generateColors(speeds,senses,sizes,colors)
+    calculateCoordinates(generations, speeds, senses, sizes, 0)
+    colors = []
+    generateColors(speeds,senses,sizes,colors)
 
-setAxesLabel(ax)
-ax.scatter(speeds, senses, sizes, c=colors ,cmap='viridis')
+    setAxesLabel(ax)
+    ax.scatter(speeds, senses, sizes, c=colors ,cmap='viridis')
 
-class Index:
-    ind = 0
+    class Index:
+        ind = 0
 
-    def next(self, event):
-        self.ind += 1
-        if self.ind > len(generations) - 1:
-            self.ind = len(generations) - 1
-            return
-        updateGraph(ax, speeds, senses, sizes, generations, self.ind)
-        setStats(ax_stats, generations, self.ind)
+        def next(self, event):
+            self.ind += 1
+            if self.ind > len(generations) - 1:
+                self.ind = len(generations) - 1
+                return
+            updateGraph(ax, speeds, senses, sizes, generations, self.ind)
+            setStats(ax_stats, generations, self.ind)
 
-    def prev(self, event):
-        self.ind -= 1
-        if self.ind < 0:
+        def prev(self, event):
+            self.ind -= 1
+            if self.ind < 0:
+                self.ind = 0
+                return
+            updateGraph(ax, speeds, senses, sizes, generations, self.ind)
+            setStats(ax_stats, generations, self.ind)
+        
+        def first(self, event):
             self.ind = 0
-            return
-        updateGraph(ax, speeds, senses, sizes, generations, self.ind)
-        setStats(ax_stats, generations, self.ind)
-    
-    def first(self, event):
-        self.ind = 0
-        updateGraph(ax, speeds, senses, sizes, generations, self.ind)
-        setStats(ax_stats, generations, self.ind)
-    
-    def last(self, event):
-        self.ind = len(generations) - 1
-        updateGraph(ax, speeds, senses, sizes, generations, self.ind)
-        setStats(ax_stats, generations, self.ind)
+            updateGraph(ax, speeds, senses, sizes, generations, self.ind)
+            setStats(ax_stats, generations, self.ind)
+        
+        def last(self, event):
+            self.ind = len(generations) - 1
+            updateGraph(ax, speeds, senses, sizes, generations, self.ind)
+            setStats(ax_stats, generations, self.ind)
 
-# Buttons
-callback = Index()
+    # Buttons
+    callback = Index()
 
-axPrev = fig.add_axes([0.66, 0.05, 0.14, 0.078])
-bPrev = Button(axPrev, 'Génération \nPrécédente')
-bPrev.on_clicked(callback.prev)
+    axPrev = fig.add_axes([0.66, 0.05, 0.14, 0.078])
+    bPrev = Button(axPrev, 'Génération \nPrécédente')
+    bPrev.on_clicked(callback.prev)
 
-axNext = fig.add_axes([0.81, 0.05, 0.14, 0.078])
-bNext = Button(axNext, 'Prochaine \nGénération')
-bNext.on_clicked(callback.next)
+    axNext = fig.add_axes([0.81, 0.05, 0.14, 0.078])
+    bNext = Button(axNext, 'Prochaine \nGénération')
+    bNext.on_clicked(callback.next)
 
-axLast = fig.add_axes([0.50, 0.05, 0.14, 0.078])
-bLast = Button(axLast, 'Dernière \nGénération')
-bLast.on_clicked(callback.last)
+    axLast = fig.add_axes([0.50, 0.05, 0.14, 0.078])
+    bLast = Button(axLast, 'Dernière \nGénération')
+    bLast.on_clicked(callback.last)
 
-axFirst = fig.add_axes([0.35, 0.05, 0.14, 0.078])
-bFirst = Button(axFirst, 'Première \nGénération')
-bFirst.on_clicked(callback.first)
+    axFirst = fig.add_axes([0.35, 0.05, 0.14, 0.078])
+    bFirst = Button(axFirst, 'Première \nGénération')
+    bFirst.on_clicked(callback.first)
 
-# Stats
-ax_stats = plt.axes([0.005, 0.05, 0.23, 0.9])
-setStats(ax_stats, generations, callback.ind)
+    # Stats
+    ax_stats = plt.axes([0.005, 0.05, 0.23, 0.9])
+    setStats(ax_stats, generations, callback.ind)
 
-plt.show()
+    plt.show()
+    return fig
