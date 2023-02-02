@@ -13,4 +13,4 @@ class Position:
         return not(self == other)
 
     def __repr__(self) -> str:
-        return ('position (' + str(self.x) + ', ' + str(self.y) + ')')
+        return ('(' + str(self.x) + ', ' + str(self.y) + ')')

@@ -5,7 +5,9 @@ import SimulationManager as Simulation
 import Models.Territory as Territory
 from Models.Lulu import Lulu
 from Models.Food import Food
+from Models.Position import Position
 import time
+import random
 
 class VisualizeLulus(Scene):
     def construct(self):
@@ -30,12 +32,23 @@ class VisualizeLulus(Scene):
         self.add(groupdots)
 
 if __name__ == '__main__':
+    Territory.createMap(10, 10, 32, 18)
+
+    # scene = VisualizeLulus()
+    # scene.render()
+
+    # for l in Territory.__lulus:
+    #     Territory.moveLulu(l.position, Position(random.randint(2,9),random.randint(2,9)))
+
+    # for l in Territory.__lulus:
+    #     print(l.position)
+    #     l.resetPosition()
+    #     print(l.position)
+
     t0 = time.time()
-    Simulation.__run__(1000, 1000, 100, 100, 10, 20, 1, 550)
+    for l in Territory.__lulus:
+        l.move()
+
     t1 = time.time()
     total = t1-t0
     print(str(total) + " secondes")
-
-    print(Territory.getMap())
-    scene = VisualizeLulus()
-    scene.render()
