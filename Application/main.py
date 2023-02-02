@@ -31,8 +31,8 @@ class VisualizeLulus(Scene):
         self.add(groupdots)
 
 if __name__ == '__main__':
-    Territory.createMap(10, 10, 32, 18)
-
+    Territory.createMap(3, 3, 1, 1)
+    Territory.printMap()
     # scene = VisualizeLulus()
     # scene.render()
 
@@ -47,6 +47,8 @@ if __name__ == '__main__':
     t0 = time.time()
     for l in Territory.__lulus:
         l.move()
+
+    Territory.printMap()
 
     t1 = time.time()
     total = t1-t0

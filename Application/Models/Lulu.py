@@ -15,23 +15,22 @@ class Lulu:
         self.isDone = isDone
 
     def __repr__(self) -> str:
-        return ("Lulu" + str(self.position))
+        return ("Lulu")
 
-
-    #1  Analyser les items autour avec le sense et les garder en mémoire (dictionnaire)
-                #a Lulu?
-                    # - Ennemi ou Proie? Sense, direction (random si pas de bouffe/ennemi) si oui --> bouge direction opposé -> inverser les x,y (3x,2y devient -3x, -2y)
-                #b Bouffe?   
-            #2  foodAmount (est-ce qu'il en a 2)
-            #4. Quantité Énergie
-
+    # ToDo : Ne pas bouger ou manger dans un side (périmètre) (safe zone)
+        # Sauf si 2 nourritures
     # Return true si le Lulu peut encore bouger (énergie > 0) sinon false
     def move(self) -> bool:
         map = Territory.getMap()
         foodInRange = []
         lulusInRange = []
         
+        # ToDo : changer energy pour speed.
+            # Variable qui garde l'énergie utilisée pour 1 tour
+        # ToDO : S'il a atteint sa nourriture, aller vers le côté (call moveToInitialPosition)
         while(self.foodAmount < 2 and self.energy > 0):
+            foodInRange.clear()
+            lulusInRange.clear()
             self.__getItems(foodInRange, lulusInRange)
             targetPosition = None
             targetFound = False
@@ -92,18 +91,55 @@ class Lulu:
 
     # dernier recours d'un lulu : fait un move random
     def randomMove(self):
-        map = Territory.getMap()
-        minX = self.position.x - 1
-        maxX = self.position.x + 1
-        minY = self.position.y - 1
-        maxY = self.position.y + 1
         
-        for x in range(minX, maxX + 1):
-            for y in range(minY, maxY + 1):
-                if not (self.position.x == x and self.position.y == y):
-                    item = Territory.getItem(x,y)
+        moveChoices = [1, 2, 3, 4, 5, 6, 7, 8]
+        foundMove = False
+
+        while(not foundMove and len(moveChoices) > 0):
+            move = random.choice(moveChoices)
+            moveChoices.remove(move)
+            
+            match move:
+                case 1:
+                    # bas-gauche
+                    item = Territory.getItem(self.position.x - 1, self.position.y - 1)
                     if(item == None):
-                        Territory.moveLulu(self.position, Position(x, y))
+                        foundMove = Territory.tryMove(self.position, Position(self.position.x - 1, self.position.y - 1))
+                case 2:
+                    # gauche
+                    item = Territory.getItem(self.position.x - 1, self.position.y)
+                    if(item == None):
+                        foundMove = Territory.tryMove(self.position, Position(self.position.x - 1, self.position.y))
+                case 3:
+                    # haut gauche
+                    item = Territory.getItem(self.position.x - 1, self.position.y + 1)
+                    if(item == None):
+                        foundMove = Territory.tryMove(self.position, Position(self.position.x - 1, self.position.y + 1))
+                case 4:
+                    # haut
+                    item = Territory.getItem(self.position.x, self.position.y + 1)
+                    if(item == None):
+                        foundMove = Territory.tryMove(self.position, Position(self.position.x, self.position.y + 1))
+                case 5:
+                    # haut droite
+                    item = Territory.getItem(self.position.x + 1, self.position.y + 1)
+                    if(item == None):
+                        foundMove = Territory.tryMove(self.position, Position(self.position.x + 1, self.position.y + 1))
+                case 6:
+                    # droite
+                    item = Territory.getItem(self.position.x + 1, self.position.y)
+                    if(item == None):
+                        foundMove = Territory.tryMove(self.position, Position(self.position.x + 1, self.position.y))
+                case 7:
+                    # bas droite
+                    item = Territory.getItem(self.position.x + 1, self.position.y - 1)
+                    if(item == None):
+                        foundMove = Territory.tryMove(self.position, Position(self.position.x + 1, self.position.y - 1))
+                case 8:
+                    # bas
+                    item = Territory.getItem(self.position.x, self.position.y - 1)
+                    if(item == None):
+                        foundMove = Territory.tryMove(self.position, Position(self.position.x, self.position.y - 1))
 
     def getMoveFromDiff(self, diff):
         if diff > 0:

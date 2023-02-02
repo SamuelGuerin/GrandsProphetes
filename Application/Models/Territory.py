@@ -35,11 +35,11 @@ def createMap(sizeX, sizeY, foodCount, lulusCount):
                 if(bool(random.getrandbits(1))):
                     rx = random.choice([1, maxX])
                     ry = random.randint(1, maxY)
-                    luluCreated = __CreateLulu(rx, ry, 2, 2, random.randint(100,200), 4, 0, True)
+                    luluCreated = __CreateLulu(rx, ry, 1, 2, random.randint(100,200), 1, 0, True)
                 else :
                     ry = random.choice([1, maxY])
                     rx = random.randint(1, maxX)
-                    luluCreated = __CreateLulu(rx, ry, 2, 2, random.randint(100,200), 4, 0, True)
+                    luluCreated = __CreateLulu(rx, ry, 1, 2, random.randint(100,200), 1, 0, True)
 
     # Ajouter de la nourriture partout sauf sur le côté
     for _ in range(__foodCount):
@@ -125,11 +125,5 @@ def moveLulu(oldPosition, newPosition):
     __addItem(newPosition, currentLulu)
     __deleteItem(oldPosition)
 
-
-
-
-
-
-# getItemsInSense(x, y, sense)
-# reproduceLulu()
-# dayResultLulu()
+def printMap():
+    print(__map)
