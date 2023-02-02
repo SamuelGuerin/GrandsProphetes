@@ -4,6 +4,7 @@ import os
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from mpl_toolkits.mplot3d import axes3d
 import matplotlib.pyplot as plt
+import Graph
 
 ct.set_appearance_mode("dark")
 ct.set_default_color_theme("blue")
@@ -280,15 +281,9 @@ class Form(ct.CTk):
                 canvas.get_tk_widget().destroy()
                 buttonDestroyGraph.destroy()
 
-            fig = plt.Figure(figsize=(self.width / 10, self.height / 10))
+            fig = Graph.generateGraph()
             #fig = plt.Figure(figsize=(self.width / 10, self.height / 10), facecolor="#1c1c1c")
             #plt.style.use('dark_background')
-            ax = fig.add_subplot(111)
-
-            x = [1, 2, 3, 4, 5]
-            y = [5, 4, 3, 2, 1]
-
-            ax.plot(x, y)
 
             canvas = FigureCanvasTkAgg(fig, master=self)
             canvas.get_tk_widget().grid(row=0, column=0, padx=20, pady=10)
