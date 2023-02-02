@@ -14,7 +14,7 @@ __numberOfFood = 0
 EATING_RATIO = 1.2
 
 
-def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, food, size):
+def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size):
     global __sizeX
     global __sizeY
     global __foodCount
@@ -29,43 +29,46 @@ def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, food, s
     # Créer x lulus dans la map (La map va de 0 à maxX ou maxY)
     # Les mettre sur le côté
     for _ in range(__lulusCount):
-            maxX = __sizeX
-            maxY = __sizeY
-            luluCreated = False
+        maxX = __sizeX
+        maxY = __sizeY
+        luluCreated = False
 
-            # Choisir un side à 0 ou maxSide, puis un random de l'autre coordonnée (x ou y)
-            while (not luluCreated and len(__lulus) < (2 * maxX + 2 * maxY) - 4):
-                if(bool(random.getrandbits(1))):
-                    rx = random.choice([1, maxX])
-                    ry = random.randint(1, maxY)
-                    luluCreated = __CreateLulu(rx, ry, 2, 2, random.randint(100,200), 4, 0, True)
-                else :
-                    ry = random.choice([1, maxY])
-                    rx = random.randint(1, maxX)
-                    luluCreated = __CreateLulu(rx, ry, 2, 2, random.randint(100,200), 4, 0, True)
+        # Choisir un side à 0 ou maxSide, puis un random de l'autre coordonnée (x ou y)
+        while (not luluCreated and len(__lulus) < (2 * maxX + 2 * maxY) - 4):
+            if (bool(random.getrandbits(1))):
+                rx = random.choice([1, maxX])
+                ry = random.randint(1, maxY)
+                luluCreated = __CreateLulu(
+                    rx, ry, speed, sense, size, energy, 0, True)
+            else:
+                ry = random.choice([1, maxY])
+                rx = random.randint(1, maxX)
+                luluCreated = __CreateLulu(
+                    rx, ry, speed, sense, size, energy, 0, True)
 
     # Ajouter de la nourriture partout sauf sur le côté
     for _ in range(__foodCount):
         foodCreated = False
-        while ( not foodCreated and __numberOfFood < ((sizeX - 2) * (sizeY - 2))) :
+        while (not foodCreated and __numberOfFood < ((sizeX - 2) * (sizeY - 2))):
             rx = random.randint(2, maxX - 1)
             ry = random.randint(2, maxY - 1)
             foodCreated = __CreateFood(rx, ry)
+
 
 # private
 def __CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isEnabled) -> bool:
     # Créer une lulu si la case est vide
     if (getItem(rx, ry) == None):
         rPos = Position(rx, ry)
-        __map[rPos] = Lulu(rPos, speed, sense, size, energyRemaining, FoodCollected, rPos, isEnabled)
+        __map[rPos] = Lulu(rPos, speed, sense, size,
+                           energyRemaining, FoodCollected, rPos, isEnabled)
         # Ajouter la lulu dans la liste de lulus
         __lulus.append(__map[rPos])
         return True
     return False
 
+
 # private
-
-
 def __CreateFood(rx, ry) -> bool:
     # Créer une food si la case est vide
     global __numberOfFood
@@ -77,8 +80,6 @@ def __CreateFood(rx, ry) -> bool:
     return False
 
 # public
-
-
 def getItem(x, y):
     item = __map.get(Position(x, y))
     return item
@@ -103,7 +104,7 @@ def __deleteItem(position):
 # return true si le move est fait, sinon false
 def tryMove(oldPosition, newPosition) -> bool:
     # Vérifier si le mouvement est dans la map
-    if((newPosition.x >= 1 and newPosition.x <= getSizeX()) and (newPosition.y >= 1 and newPosition.y <= getSizeY())):
+    if ((newPosition.x >= 1 and newPosition.x <= getSizeX()) and (newPosition.y >= 1 and newPosition.y <= getSizeY())):
         # Vérifier s'il n'y a pas une lulu plus grosse ou égale
         itemInNewPosition = getItem(newPosition.x, newPosition.y)
         if (itemInNewPosition == None):
@@ -130,11 +131,13 @@ def moveLulu(oldPosition, newPosition):
         __deleteItem(newPosition)
     __addItem(newPosition, currentLulu)
     __deleteItem(oldPosition)
-    
+
+
 def __addItem(position, item):
     __map[position] = item
     if (type(item) == Lulu):
         item.position = position
+
 
 def reproduceLulu(Lulu):
     # 50% Chance de mutation
@@ -182,8 +185,8 @@ def reproduceLulu(Lulu):
             else:
                 i += 1
 
-    __CreateLulu(rx, ry, newSpeed, newSense, __energy,
-                 0, newSize, False)
+    __CreateLulu(rx, ry, newSpeed, newSense, newSize, __energy,
+                 0, True)
 
 
 def moveAll():
@@ -195,6 +198,7 @@ def moveAll():
             if not (lulu.move()):
                 lulusToMove.remove(lulu)
 
+
 def dayResultLulu():
     for lulu in __lulus:
         if (lulu.foodAmount == 0):
@@ -202,6 +206,6 @@ def dayResultLulu():
         elif (lulu.foodAmount == 1):
             lulu.resetPosition()
         elif (lulu.foodAmount > 1):
-            reproduceLulu(lulu) 
+            reproduceLulu(lulu)
 
 # getItemsInSense(x, y, sense)
