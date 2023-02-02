@@ -136,4 +136,11 @@ def reproduceLulu(Lulu):
 
 # getItemsInSense(x, y, sense)
 # reproduceLulu()
-# dayResultLulu()
+def dayResultLulu():
+    for lulu in __lulus:
+        if (lulu.foodAmount == 0):
+            __lulus.remove(lulu)
+        elif (lulu.foodAmount == 1):
+            lulu.resetPosition()
+        elif (lulu.foodAmount > 1):
+            reproduceLulu(lulu) 
