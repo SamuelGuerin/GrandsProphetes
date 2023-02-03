@@ -18,7 +18,6 @@ class Form(ct.CTk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         index = fg.Index()
-        canvas = None
 
         # Setup de base de l'interface
         self.geometry("900x700")
@@ -277,55 +276,61 @@ class Form(ct.CTk):
                   
         btnSimulate = ct.CTkButton(master=self.frame_1, text="Lancer la simulation", command=get_allBeforeSimulation)
         btnSimulate.grid(row=9, column=0, padx=20, pady=10, sticky="we")
-
-        def previous():
-            if(canvas is not None):
-                canvas.get_tk_widget().destroy()
-            fig = fg.graphGeneration.previous(index)
-            canvas = FigureCanvasTkAgg(fig, self)
-            canvas.get_tk_widget().grid(row=0, column=0, columnspan=4, sticky="wesn")
-
-        def next(canvas):
-            if(canvas is not None):
-                canvas.get_tk_widget().destroy()
-            fig = fg.graphGeneration.next(index)
-            canvas = FigureCanvasTkAgg(fig, self)
-            canvas.get_tk_widget().grid(row=0, column=0, columnspan=4, sticky="wesn")
-
-        def last():
-            if(canvas is not None):
-                canvas.get_tk_widget().destroy()
-            fig = fg.graphGeneration.last(index)
-            canvas = FigureCanvasTkAgg(fig, self)
-            canvas.get_tk_widget().grid(row=0, column=0, columnspan=4, sticky="wesn")
-
-        def first(canvas):
-            if(canvas is not None):
-                canvas.get_tk_widget().destroy()
-            fig = fg.graphGeneration.first(index)
-            canvas = FigureCanvasTkAgg(fig, self)
-            canvas.get_tk_widget().grid(row=0, column=0, columnspan=4, sticky="wesn")
     
         # Graph
         def add_Graph():
-            # def remove_graph():
-            #     canvas.get_tk_widget().destroy()
-            #     buttonDestroyGraph.destroy()
-            #     btnPreviousGeneration.destroy()
-            #     btnNextGeneration.destroy()
-            #     btnLastGeneration.destroy()
-            #     btnFirstGeneration.destroy()
-            first(canvas)
-            btnPreviousGeneration = ct.CTkButton(self, text="Génération Précédente", command=lambda:previous(canvas))
+            global canvasR
+            fig = fg.graphGeneration.first(index)
+            canvasR = FigureCanvasTkAgg() 
+            canvasG = FigureCanvasTkAgg(fig, self)
+            canvasG.get_tk_widget().grid(row=0, column=0, columnspan=4, sticky="wesn")
+            canvasR = canvasG
+
+            def previous(canvas):
+                canvas.get_tk_widget().destroy()
+                fig = fg.graphGeneration.previous(index)
+                canvasN = FigureCanvasTkAgg(fig, self)
+                canvasN.get_tk_widget().grid(row=0, column=0, columnspan=4, sticky="wesn")
+                global canvasR
+                canvasR = canvasN
+
+            def next(canvas):
+                canvas.get_tk_widget().destroy()
+                fig = fg.graphGeneration.next(index)
+                canvasN = FigureCanvasTkAgg(fig, self)
+                canvasN.get_tk_widget().grid(row=0, column=0, columnspan=4, sticky="wesn")
+                global canvasR
+                canvasR = canvasN
+                i = 10
+
+            def last(canvas):
+                global canvasR
+                canvas.get_tk_widget().destroy()
+                fig = fg.graphGeneration.last(index)
+                canvasN = FigureCanvasTkAgg(fig, self)
+                canvasN.get_tk_widget().grid(row=0, column=0, columnspan=4, sticky="wesn")
+                global canvasR
+                canvasR = canvasN
+
+            def first(canvas):
+                canvas.get_tk_widget().destroy()
+                fig = fg.graphGeneration.first(index)
+                canvasN = FigureCanvasTkAgg(fig, self)
+                canvasN.get_tk_widget().grid(row=0, column=0, columnspan=4, sticky="wesn")
+                global canvasR
+                canvasR = canvasN
+                i = 10
+
+            btnPreviousGeneration = ct.CTkButton(self, text="Génération Précédente", command=lambda:previous(canvasR))
             btnPreviousGeneration.grid(row=1, column=0, padx=20, pady=10)
 
-            btnNextGeneration = ct.CTkButton(self, text="Prochaine Génération", command=lambda:next(canvas))
+            btnNextGeneration = ct.CTkButton(self, text="Prochaine Génération", command=lambda:next(canvasR))
             btnNextGeneration.grid(row=1, column=1, padx=20, pady=10)
 
-            btnLastGeneration = ct.CTkButton(self, text="Dernière Génération", command=lambda:last(canvas))
+            btnLastGeneration = ct.CTkButton(self, text="Dernière Génération", command=lambda:last(canvasR))
             btnLastGeneration.grid(row=1, column=2, padx=20, pady=10)
 
-            btnFirstGeneration = ct.CTkButton(self, text="Première Génération", command=lambda:first(canvas))
+            btnFirstGeneration = ct.CTkButton(self, text="Première Génération", command=lambda:first(canvasR))
             btnFirstGeneration.grid(row=1, column=3, padx=20, pady=10)
 
             # buttonDestroyGraph = ct.CTkButton(self, text="Remove Graph", command=remove_graph)
