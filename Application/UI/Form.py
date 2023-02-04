@@ -42,7 +42,7 @@ class Form(ct.CTk):
         self.frame_1.grid(row=0, column=0, columnspan=5, sticky="ns")
 
         # Enter 1 -- MapSizeX
-        lblMapSizeX = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Taille du territoire en x (en m)")
+        lblMapSizeX = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Taille X du territoire")
         lblMapSizeX.grid(row=0, column=0, pady=10, padx=10)
         txtMapSizeX = ct.CTkEntry(master=self.frame_1)
         txtMapSizeX.grid(row=0, column=1, padx=20, pady=10, sticky="ew")
@@ -50,7 +50,7 @@ class Form(ct.CTk):
         lblMapSizeXGood.grid(row=0, column=2, pady=10, padx=10)
 
         # Enter 2 -- MapSizeY
-        lblMapSizeY = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Taille du territoire en y (en m)")
+        lblMapSizeY = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Taille Y du territoire")
         lblMapSizeY.grid(row=1, column=0, pady=10, padx=10)
         txtMapSizeY = ct.CTkEntry(master=self.frame_1)
         txtMapSizeY.grid(row=1, column=1, padx=20, pady=10, sticky="ew")
@@ -58,7 +58,7 @@ class Form(ct.CTk):
         lblMapSizeYGood.grid(row=1, column=2, pady=10, padx=10)
 
         # Enter 3 -- StartFood
-        lblStartFood = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Nombre de nourriture disponible \rau début")
+        lblStartFood = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Nourriture disponible par génération")
         lblStartFood.grid(row=2, column=0, pady=10, padx=10)
         txtStartFood = ct.CTkEntry(master=self.frame_1)
         txtStartFood.grid(row=2, column=1, padx=20, pady=10, sticky="ew")
@@ -66,7 +66,7 @@ class Form(ct.CTk):
         lblStartFoodGood.grid(row=2, column=2, pady=10, padx=10)
 
         # Enter 4 -- StartLulu
-        lblStartLulu = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Nombre d'individu au début")
+        lblStartLulu = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Nombre de Lulu initial")
         lblStartLulu.grid(row=3, column=0, pady=10, padx=10)
         txtStartLulu = ct.CTkEntry(master=self.frame_1)
         txtStartLulu.grid(row=3, column=1, padx=20, pady=10, sticky="ew")
@@ -74,7 +74,7 @@ class Form(ct.CTk):
         lblStartLuluGood.grid(row=3, column=2, pady=10, padx=10)
 
         # Enter 5 -- Energy
-        lblEnergy = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Énergie pour ce déplacer")
+        lblEnergy = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Énergie des Lulus")
         lblEnergy.grid(row=4, column=0, pady=10, padx=10)
         txtEnergy = ct.CTkEntry(master=self.frame_1)
         txtEnergy.grid(row=4, column=1, padx=20, pady=10, sticky="ew")
@@ -90,7 +90,7 @@ class Form(ct.CTk):
         lblSpeedGood.grid(row=5, column=2, pady=10, padx=10)
 
         # Enter 7 -- Sense
-        lblSense = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Augmentation de la porté à laquel \rl'individu détecte la nourriture \rlors de la mutation (en %)")
+        lblSense = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Augmentation de la vision lors \rde la mutation (en %)")
         lblSense.grid(row=6, column=0, pady=10, padx=10)
         txtSense = ct.CTkEntry(master=self.frame_1)
         txtSense.grid(row=6, column=1, padx=20, pady=10, sticky="ew")
@@ -98,7 +98,7 @@ class Form(ct.CTk):
         lblSenseGood.grid(row=6, column=2, pady=10, padx=10)
 
         # Enter 8 -- Size
-        lblSize = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Poids supplémentaire lors de la \rprochaine mutation (en %)")
+        lblSize = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Augmentation de la taille lors \rde la mutation (en %)")
         lblSize.grid(row=7, column=0, pady=10, padx=10)
         txtSize = ct.CTkEntry(master=self.frame_1)
         txtSize.grid(row=7, column=1, padx=20, pady=10, sticky="ew")
@@ -339,16 +339,16 @@ class Form(ct.CTk):
 
 
             btnPreviousGeneration = ct.CTkButton(self, text="Génération Précédente", command=lambda:previous(canvasR))
-            btnPreviousGeneration.grid(row=1, column=1, padx=5, pady=10, sticky="we")
+            btnPreviousGeneration.grid(row=1, column=3, padx=5, pady=10, sticky="we")
 
             btnNextGeneration = ct.CTkButton(self, text="Prochaine Génération", command=lambda:next(canvasR))
-            btnNextGeneration.grid(row=1, column=2, padx=5, pady=10, sticky="we")
+            btnNextGeneration.grid(row=1, column=4, padx=5, pady=10, sticky="we")
 
             btnLastGeneration = ct.CTkButton(self, text="Dernière Génération", command=lambda:last(canvasR))
-            btnLastGeneration.grid(row=1, column=3, padx=5, pady=10, sticky="we")
+            btnLastGeneration.grid(row=1, column=2, padx=5, pady=10, sticky="we")
 
             btnFirstGeneration = ct.CTkButton(self, text="Première Génération", command=lambda:first(canvasR))
-            btnFirstGeneration.grid(row=1, column=4, padx=5, pady=10, sticky="we")
+            btnFirstGeneration.grid(row=1, column=1, padx=5, pady=10, sticky="we")
 
             buttonDestroyGraph = ct.CTkButton(self, text="Remove Graph", command=lambda:remove_graph(canvasR))
             buttonDestroyGraph.grid(row=1, column=0, padx=10, pady=10, sticky="we")
