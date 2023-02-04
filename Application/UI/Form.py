@@ -287,6 +287,8 @@ class Form(ct.CTk):
             canvasR = canvasG
 
             def previous(canvas):
+                if index.isMin():
+                    return
                 canvas.get_tk_widget().destroy()
                 fig = fg.graphGeneration.previous(index)
                 canvasN = FigureCanvasTkAgg(fig, self)
@@ -295,6 +297,8 @@ class Form(ct.CTk):
                 canvasR = canvasN
 
             def next(canvas):
+                if index.isMax():
+                    return
                 canvas.get_tk_widget().destroy()
                 fig = fg.graphGeneration.next(index)
                 canvasN = FigureCanvasTkAgg(fig, self)
@@ -304,6 +308,8 @@ class Form(ct.CTk):
                 i = 10
 
             def last(canvas):
+                if index.isMax():
+                    return
                 global canvasR
                 canvas.get_tk_widget().destroy()
                 fig = fg.graphGeneration.last(index)
@@ -313,6 +319,8 @@ class Form(ct.CTk):
                 canvasR = canvasN
 
             def first(canvas):
+                if index.isMin():
+                    return
                 canvas.get_tk_widget().destroy()
                 fig = fg.graphGeneration.first(index)
                 canvasN = FigureCanvasTkAgg(fig, self)

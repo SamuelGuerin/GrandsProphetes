@@ -28,6 +28,16 @@ class Lulu:
 class Index:
     ind = 0
 
+    def isMax(self):
+        if self.ind == len(generations) - 1:
+            return True
+        return False
+    
+    def isMin(self):
+        if self.ind == 0:
+            return True
+        return False
+
 class graphGeneration:
         def next(index):
             index.ind += 1
@@ -35,7 +45,6 @@ class graphGeneration:
                 index.ind = len(generations) - 1
             return Graph.generateGraph(generations[index.ind], index.ind + 1)
             
-
         def previous(index):
             index.ind -= 1
             if index.ind < 0:
