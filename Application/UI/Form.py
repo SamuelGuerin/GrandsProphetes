@@ -33,13 +33,13 @@ class Form(ct.CTk):
         self.bg_image = ct.CTkImage(Image.open(current_path + "/evo.jpeg"),
                                                size=(self.width, self.height))
         self.bg_image = ct.CTkLabel(self, image=self.bg_image, text="")
-        self.bg_image.grid(row=0, column=0)
+        self.bg_image.grid(row=0, column=0, columnspan=5)
         self.bg_image.rowconfigure(0, weight=1)
         self.bg_image.columnconfigure(0, weight=1)
 
         # Ajout du frame
         self.frame_1 = ct.CTkFrame(master=self)
-        self.frame_1.grid(row=0, column=0, sticky="ns")
+        self.frame_1.grid(row=0, column=0, columnspan=5, sticky="ns")
 
         # Enter 1 -- MapSizeX
         lblMapSizeX = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Taille du territoire en x (en m)")
@@ -283,14 +283,14 @@ class Form(ct.CTk):
             fig = fg.graphGeneration.first(index)
             canvasR = FigureCanvasTkAgg() 
             canvasG = FigureCanvasTkAgg(fig, self)
-            canvasG.get_tk_widget().grid(row=0, column=0, columnspan=4, sticky="wesn")
+            canvasG.get_tk_widget().grid(row=0, column=0, columnspan=5, sticky="wesn")
             canvasR = canvasG
 
             def previous(canvas):
                 canvas.get_tk_widget().destroy()
                 fig = fg.graphGeneration.previous(index)
                 canvasN = FigureCanvasTkAgg(fig, self)
-                canvasN.get_tk_widget().grid(row=0, column=0, columnspan=4, sticky="wesn")
+                canvasN.get_tk_widget().grid(row=0, column=0, columnspan=5, sticky="wesn")
                 global canvasR
                 canvasR = canvasN
 
@@ -298,7 +298,7 @@ class Form(ct.CTk):
                 canvas.get_tk_widget().destroy()
                 fig = fg.graphGeneration.next(index)
                 canvasN = FigureCanvasTkAgg(fig, self)
-                canvasN.get_tk_widget().grid(row=0, column=0, columnspan=4, sticky="wesn")
+                canvasN.get_tk_widget().grid(row=0, column=0, columnspan=5, sticky="wesn")
                 global canvasR
                 canvasR = canvasN
                 i = 10
@@ -308,7 +308,7 @@ class Form(ct.CTk):
                 canvas.get_tk_widget().destroy()
                 fig = fg.graphGeneration.last(index)
                 canvasN = FigureCanvasTkAgg(fig, self)
-                canvasN.get_tk_widget().grid(row=0, column=0, columnspan=4, sticky="wesn")
+                canvasN.get_tk_widget().grid(row=0, column=0, columnspan=5, sticky="wesn")
                 global canvasR
                 canvasR = canvasN
 
@@ -316,25 +316,34 @@ class Form(ct.CTk):
                 canvas.get_tk_widget().destroy()
                 fig = fg.graphGeneration.first(index)
                 canvasN = FigureCanvasTkAgg(fig, self)
-                canvasN.get_tk_widget().grid(row=0, column=0, columnspan=4, sticky="wesn")
+                canvasN.get_tk_widget().grid(row=0, column=0, columnspan=5, sticky="wesn")
                 global canvasR
                 canvasR = canvasN
                 i = 10
 
+            def remove_graph(canvas):
+                canvas.get_tk_widget().destroy()
+                btnPreviousGeneration.destroy()
+                btnNextGeneration.destroy()
+                btnLastGeneration.destroy()
+                btnFirstGeneration.destroy()
+                buttonDestroyGraph.destroy()
+
+
             btnPreviousGeneration = ct.CTkButton(self, text="Génération Précédente", command=lambda:previous(canvasR))
-            btnPreviousGeneration.grid(row=1, column=0, padx=20, pady=10)
+            btnPreviousGeneration.grid(row=1, column=1, padx=5, pady=10, sticky="we")
 
             btnNextGeneration = ct.CTkButton(self, text="Prochaine Génération", command=lambda:next(canvasR))
-            btnNextGeneration.grid(row=1, column=1, padx=20, pady=10)
+            btnNextGeneration.grid(row=1, column=2, padx=5, pady=10, sticky="we")
 
             btnLastGeneration = ct.CTkButton(self, text="Dernière Génération", command=lambda:last(canvasR))
-            btnLastGeneration.grid(row=1, column=2, padx=20, pady=10)
+            btnLastGeneration.grid(row=1, column=3, padx=5, pady=10, sticky="we")
 
             btnFirstGeneration = ct.CTkButton(self, text="Première Génération", command=lambda:first(canvasR))
-            btnFirstGeneration.grid(row=1, column=3, padx=20, pady=10)
+            btnFirstGeneration.grid(row=1, column=4, padx=5, pady=10, sticky="we")
 
-            # buttonDestroyGraph = ct.CTkButton(self, text="Remove Graph", command=remove_graph)
-            # buttonDestroyGraph.grid(row=2, column=0, padx=20, pady=10, sticky="we")
+            buttonDestroyGraph = ct.CTkButton(self, text="Remove Graph", command=lambda:remove_graph(canvasR))
+            buttonDestroyGraph.grid(row=1, column=0, padx=10, pady=10, sticky="we")
 
         btnGraph = ct.CTkButton(master=self.frame_1, text="Visualiser les graphiques", command=add_Graph)
         btnGraph.grid(row=9, column=1, padx=20, pady=10, sticky="we")
