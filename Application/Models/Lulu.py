@@ -24,10 +24,10 @@ class Lulu:
         map = Territory.getMap()
         foodInRange = []
         lulusInRange = []
+        energyCost = (self.size ** 3) * (self.speed ** 2);
         
         # ToDo : changer energy pour speed.
             # Variable qui garde l'énergie utilisée pour 1 tour
-        # ToDO : S'il a atteint sa nourriture, aller vers le côté (call moveToInitialPosition)
         while(self.foodAmount < 2 and self.energy > 0):
             foodInRange.clear()
             lulusInRange.clear()
@@ -49,6 +49,22 @@ class Lulu:
                 self.randomMove()
             else:
                 self.goToTargetPosition(targetPosition)
+            self.energy -= energyCost;
+        # ToDO : S'il a atteint sa nourriture, aller vers le côté (call moveToInitialPosition)
+        # À Modifier selon le comportement désiré (si on veut vérifier la présence d'ennemi, si on consomme de l'énergie ou non, etc.)
+        while(self.foodAmount == 2 and self.energy > 0): 
+            foodInRange.clear()
+            lulusInRange.clear()
+            self.__getItems(foodInRange, lulusInRange)
+            targetPosition = None
+            targetFound = False
+
+            if(len(lulusInRange) > 0):
+                targetPosition, targetFound = self.getClosestEnemy(lulusInRange)
+            if (not targetFound): 
+                self.moveToInitialPosition(False)
+            self.energy -= energyCost
+
 
     # move est callé pour un lulu une fois / vitesse écoulée
     # 1- Déterminer un point dans le sense (si il y en a un)
@@ -220,35 +236,60 @@ class Lulu:
     # ToDo : Changer le 1 pour la speed du lulu
     # ToDo : Si peut pas bouger, va qqpart random
     # Si la lulu a ses deux nourritures, elle se dirige vers le côté
-    def moveToInitialPosition(self):
+    def moveToInitialPosition(self, resetPosition = False):
         sizeX = Territory.getSizeX()
         sizeY = Territory.getSizeY()
+        minSizeXY = 1
         halfSizeX = sizeX / 2
         halfSizeY = sizeY / 2
         if(self.position.x <= halfSizeX and self.position.y <= halfSizeY): # vérifier si centre de la map?
             if(self.position.x > self.position.y):
-                Territory.tryMove(self.position, Position(self.position.x, self.position.y - 1)) # va vers y=min
+                if(not resetPosition):
+                    Territory.tryMove(self.position, Position(self.position.x, self.position.y - 1)) # va vers y=min
+                else:
+                    Territory.moveLulu(self.position, Position(self.position.x, minSizeXY))
             else:
-                Territory.tryMove(self.position, Position(self.position.x - 1, self.position.y)) # va vers x=min
+                if(not resetPosition):
+                    Territory.tryMove(self.position, Position(self.position.x - 1, self.position.y)) # va vers x=min
+                else:
+                    Territory.moveLulu(self.position, Position(minSizeXY, self.position.y))
         elif(self.position.x <= halfSizeX and self.position.y > halfSizeY):
             if((sizeY - self.position.y) < self.position.x):
-                Territory.tryMove(self.position, Position(self.position.x, self.position.y + 1)) # va vers y=max
+                if(not resetPosition):
+                    Territory.tryMove(self.position, Position(self.position.x, self.position.y + 1)) # va vers y=max
+                else:
+                    Territory.moveLulu(self.position, Position(self.position.x, sizeY))
             else:
-                Territory.tryMove(self.position, Position(self.position.x - 1, self.position.y)) # vs vers x=min
+                if(not resetPosition):
+                    Territory.tryMove(self.position, Position(self.position.x - 1, self.position.y)) # vs vers x=min
+                else:
+                    Territory.moveLulu(self.position, Position(minSizeXY, self.position.y))
         elif(self.position.x > halfSizeX and self.position.y <= halfSizeY):
             if((sizeX - self.position.x) < self.position.y):
-                Territory.tryMove(self.position, Position(self.position.x + 1, self.position.y)) # va vers x=max
+                if(not resetPosition):
+                    Territory.tryMove(self.position, Position(self.position.x + 1, self.position.y)) # va vers x=max
+                else:
+                    Territory.moveLulu(self.position, Position(sizeX, self.position.y))
             else:
-                Territory.tryMove(self.position, Position(self.position.x, self.position.y - 1)) # va vers y=min
+                if(not resetPosition):
+                    Territory.tryMove(self.position, Position(self.position.x, self.position.y - 1)) # va vers y=min
+                else:
+                    Territory.moveLulu(self.position, Position(self.position.x, minSizeXY))
         elif(self.position.x > halfSizeX and self.position.y > halfSizeY):
             if(self.position.x > self.position.y):
-                Territory.tryMove(self.position, Position(self.position.x + 1, self.position.y)) # va vers x=max
+                if(not resetPosition):
+                    Territory.tryMove(self.position, Position(self.position.x + 1, self.position.y)) # va vers x=max
+                else:
+                    Territory.moveLulu(self.position, Position(sizeX, self.position.y))
             else:
-                Territory.tryMove(self.position, Position(self.position.x, self.position.y + 1)) # vs vers y=max
+                if(not resetPosition):
+                    Territory.tryMove(self.position, Position(self.position.x, self.position.y + 1)) # vs vers y=max
+                else:
+                    Territory.moveLulu(self.position, Position(self.position.x, sizeY))
     
     # Téléporte la lulu sur le côté au début d'une round
     def resetPosition(self):
-        i = 3
+        self.moveToInitialPosition(True)
 
 
 
