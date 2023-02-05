@@ -80,6 +80,67 @@ def getSizeX():
 def getSizeY():
     return __sizeY
 
+def reproduceLulu(Lulu):
+    #50% Chance de mutation
+    newSpeed,newSense,newSize
+    if(bool(random.getrandbits(1))):
+        newSpeed = round(Lulu.speed * random.uniform(0.66,1.33))
+        newSense = round(Lulu.sense * random.uniform(0.66,1.33))
+        newSize = round(Lulu.size * random.uniform(0.66,1.33))
+    else:
+        newSpeed = Lulu.speed
+        newSense = Lulu.sense
+        newSize = Lulu.size
+
+    i = 1
+    rx,ry = 0
+    searchingPos = True
+    # Faire spawn le nouveau Lulu à côté de l'ancien
+    if (Lulu.position.x == 0 or Lulu.position.x == __sizeX):
+        rx = Lulu.position.x
+        while (searchingPos):
+            if(Lulu.position.y + i < __sizeY and getItem(Lulu.position.x, Lulu.position.y + i) != None):
+                ry = Lulu.position.y + i
+                searchingPos = False
+            elif (Lulu.position.y - i > 0 and getItem(Lulu.position.x, Lulu.position.y - i) != None):
+                ry = Lulu.position.y - i
+                searchingPos = False
+            elif (Lulu.position.y + i > __sizeY or Lulu.position.y - i < 0):
+                ry = Lulu.position.y
+                searchingPos = False
+            else:
+                i += 1
+                
+    else:
+        ry = Lulu.position.y
+        while (searchingPos):
+            if(Lulu.position.x + i < __sizeY and getItem(Lulu.position.x + i, Lulu.position.y) != None):
+                rx = Lulu.position.x + i
+                searchingPos = False
+            elif (Lulu.position.x - i > 0 and getItem(Lulu.position.x - i, Lulu.position.y) != None):
+                rx = Lulu.position.x - i
+                searchingPos = False
+            elif (Lulu.position.x + i > __sizeY or Lulu.position.x - i < 0):
+                rx = Lulu.position.x
+                searchingPos = False
+            else:
+                i += 1
+    
+    __CreateLulu(rx,ry,newSpeed,newSense,Lulu.energy,0,newSize,Position(rx,ry),False)
+            
+                
+
+
+
+
+
 # getItemsInSense(x, y, sense)
 # reproduceLulu()
-# dayResultLulu()
+def dayResultLulu():
+    for lulu in __lulus:
+        if (lulu.foodAmount == 0):
+            __lulus.remove(lulu)
+        elif (lulu.foodAmount == 1):
+            lulu.resetPosition()
+        elif (lulu.foodAmount > 1):
+            reproduceLulu(lulu) 
