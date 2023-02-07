@@ -2,6 +2,8 @@ import random
 from Models.Position import Position
 from Models.Lulu import Lulu
 from Models.Food import Food
+import time
+from manim import *
 
 __sizeX = None
 __sizeY = None
@@ -46,13 +48,7 @@ def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size):
                 luluCreated = __CreateLulu(
                     rx, ry, speed, sense, size, energy, 0, False)
 
-    # Ajouter de la nourriture partout sauf sur le côté
-    for _ in range(__foodCount):
-        foodCreated = False
-        while (not foodCreated and __numberOfFood < ((sizeX - 2) * (sizeY - 2))):
-            rx = random.randint(2, maxX - 1)
-            ry = random.randint(2, maxY - 1)
-            foodCreated = __CreateFood(rx, ry)
+    setFood()
 
 # private
 def __CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isDone) -> bool:
@@ -60,7 +56,7 @@ def __CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isD
     if (getItem(rx, ry) == None):
         rPos = Position(rx, ry)
         __map[rPos] = Lulu(rPos, speed, sense, size,
-                           energyRemaining, FoodCollected, rPos, isDone)
+                           energyRemaining, FoodCollected, isDone)
         # Ajouter la lulu dans la liste de lulus
         __lulus.append(__map[rPos])
         return True
@@ -139,27 +135,26 @@ def __addItem(position, item):
 
 def reproduceLulu(Lulu):
     # 50% Chance de mutation
-    newSpeed, newSense, newSize
+    newSpeed = Lulu.speed
+    newSense = Lulu.sense
+    newSize = Lulu.size
     if (bool(random.getrandbits(1))):
         newSpeed = round(Lulu.speed * random.uniform(0.66, 1.33))
         newSense = round(Lulu.sense * random.uniform(0.66, 1.33))
         newSize = round(Lulu.size * random.uniform(0.66, 1.33))
-    else:
-        newSpeed = Lulu.speed
-        newSense = Lulu.sense
-        newSize = Lulu.size
 
     i = 1
-    rx, ry = 0
+    rx = 0
+    ry = 0
     searchingPos = True
     # Faire spawn le nouveau Lulu à côté de l'ancien
     if (Lulu.position.x == 0 or Lulu.position.x == __sizeX):
         rx = Lulu.position.x
         while (searchingPos):
-            if (Lulu.position.y + i < __sizeY and getItem(Lulu.position.x, Lulu.position.y + i) != None):
+            if (Lulu.position.y + i < __sizeY and getItem(Lulu.position.x, Lulu.position.y + i) == None):
                 ry = Lulu.position.y + i
                 searchingPos = False
-            elif (Lulu.position.y - i > 0 and getItem(Lulu.position.x, Lulu.position.y - i) != None):
+            elif (Lulu.position.y - i > 0 and getItem(Lulu.position.x, Lulu.position.y - i) == None):
                 ry = Lulu.position.y - i
                 searchingPos = False
             elif (Lulu.position.y + i > __sizeY or Lulu.position.y - i < 0):
@@ -171,26 +166,30 @@ def reproduceLulu(Lulu):
     else:
         ry = Lulu.position.y
         while (searchingPos):
-            if (Lulu.position.x + i < __sizeY and getItem(Lulu.position.x + i, Lulu.position.y) != None):
+            if (Lulu.position.x + i < __sizeX and getItem(Lulu.position.x + i, Lulu.position.y) == None):
                 rx = Lulu.position.x + i
                 searchingPos = False
-            elif (Lulu.position.x - i > 0 and getItem(Lulu.position.x - i, Lulu.position.y) != None):
+            elif (Lulu.position.x - i > 0 and getItem(Lulu.position.x - i, Lulu.position.y) == None):
                 rx = Lulu.position.x - i
                 searchingPos = False
-            elif (Lulu.position.x + i > __sizeY or Lulu.position.x - i < 0):
+            elif (Lulu.position.x + i > __sizeX or Lulu.position.x - i < 0):
                 rx = Lulu.position.x
                 searchingPos = False
             else:
                 i += 1
 
     __CreateLulu(rx, ry, newSpeed, newSense, newSize, __energy,
-                 0, True)
+                 0, False)
 
 
 def moveAll():
-    lulusToMove = []
-    lulusToMove.append(__lulus.copy)
+    lulusToMove = __lulus.copy()
     while (lulusToMove.__len__() > 0):
+        
+        print("nombre de survivants: " + str(sum(lulu.foodAmount >= 1 for lulu in getLulus())))
+        time.sleep(0.2)
+        renderAnimation()
+        
         random.shuffle(lulusToMove)
         for lulu in lulusToMove:
             if not (lulu.move()):
@@ -200,16 +199,90 @@ def moveAll():
 def dayResultLulu():
     for lulu in __lulus:
         if (lulu.foodAmount == 0):
+            __deleteItem(lulu.position)
             __lulus.remove(lulu)
         elif (lulu.foodAmount == 1):
             lulu.resetPosition()
         elif (lulu.foodAmount > 1):
             reproduceLulu(lulu)
 
-# getItemsInSense(x, y, sense
-
 def printMap():
     print(__map)
 
 def getLulus():
     return __lulus
+
+def setFood():
+    maxX = __sizeX
+    maxY = __sizeY
+    
+    # Ajouter de la nourriture partout sauf sur le côté
+    for _ in range(__foodCount):
+        foodCreated = False
+        while (not foodCreated and __numberOfFood < ((__sizeX - 2) * (__sizeY - 2))):
+            rx = random.randint(2, maxX - 1)
+            ry = random.randint(2, maxY - 1)
+            foodCreated = __CreateFood(rx, ry)
+            
+def resetWorld():
+    __map.clear()
+    setFood()
+    for lulu in __lulus:
+        lulu.isDone = False
+        lulu.energy = __energy
+        lulu.resetPosition()
+        __map[lulu.position] = lulu
+
+class VisualizeLulus(Scene):
+    def construct(self):
+
+        items = getMap()
+        # SIZE = 1/5 du plus petit x ou y?
+        SIZE=getSizeX()/5 if getSizeX() < getSizeY() else getSizeY()/5
+        # CENTERX = /2
+        CENTERX = getSizeX()/2
+        # CENTERY = /2
+        CENTERY = getSizeY()/2
+
+        groupdots = VGroup()
+
+        maxSize = max(lulu.size for lulu in getLulus())
+        minSize = min(lulu.size for lulu in getLulus())
+        rangeOfSizes = maxSize - minSize
+
+        for position in items:
+            item = items.get(position)
+            if(type(item) == Lulu):
+                if(item.isDone):
+                    rangeOfColors = rangeOfSizes/6
+                    if item.size <= minSize + (rangeOfColors):
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=RED_A)
+                    elif item.size <= minSize + 2*(rangeOfColors):
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=RED_B)
+                    elif item.size <= minSize + 3*(rangeOfColors):
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=RED_C)
+                    elif item.size <= minSize + 4*(rangeOfColors):
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=RED_D)
+                    else:
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=RED_E)
+                else:
+                    rangeOfColors = rangeOfSizes/6
+                    if item.size <= minSize + (rangeOfColors):
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=BLUE_A)
+                    elif item.size <= minSize + 2*(rangeOfColors):
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=BLUE_B)
+                    elif item.size <= minSize + 3*(rangeOfColors):
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=BLUE_C)
+                    elif item.size <= minSize + 4*(rangeOfColors):
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=BLUE_D)
+                    else:
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=BLUE_E)
+            elif(type(item) == Food):
+                dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=GREEN)
+            groupdots.add(dot)
+
+        self.add(groupdots)
+
+def renderAnimation():
+    scene = VisualizeLulus()
+    scene.render()

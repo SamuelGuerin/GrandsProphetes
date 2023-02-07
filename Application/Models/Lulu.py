@@ -4,14 +4,13 @@ from Models.Position import Position
 from Models.Food import Food
 
 class Lulu:
-    def __init__(self, position, speed = 0,sense = 0,size = 0,energy = 0,foodAmount = 0,lastPos = None, isDone = False):
+    def __init__(self, position, speed = 0,sense = 0,size = 0,energy = 0,foodAmount = 0, isDone = False):
         self.position = position
         self.speed = speed
         self.sense = sense
         self.size = size
         self.energy = energy
         self.foodAmount = foodAmount
-        self.lastPos = lastPos
         self.isDone = isDone
         self.randomTargetPosition = self.newRandomPosition()
 
@@ -21,7 +20,7 @@ class Lulu:
     def move(self) -> bool:
         foodInRange = []
         lulusInRange = []
-        energyCost = ((self.size/100) ** 3) * (self.speed ** 2) + self.sense;
+        energyCost = ((self.size/100) ** 3) * (self.speed ** 2) + self.sense
         speedLeft = self.speed
 
         while(speedLeft > 0 and self.energy >= energyCost):
@@ -50,8 +49,8 @@ class Lulu:
                 self.goToTargetPosition(targetPosition)
             else:
                 self.goToTargetPosition(targetPosition)
-            self.energy -= energyCost;
-            speedLeft -= 1;
+            self.energy -= energyCost
+            speedLeft -= 1
 
         if(self.energy < energyCost):
             self.isDone = True

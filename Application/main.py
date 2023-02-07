@@ -64,14 +64,4 @@ def renderAnimation():
     scene.render()
 
 if __name__ == '__main__':
-    Territory.createMap(100, 100, 25, 100)
-
-    for _ in range(5000):
-
-        print("nombre de survivants: " + str(sum(lulu.foodAmount >= 1 for lulu in Territory.getLulus())))
-
-        time.sleep(0.2)
-        renderAnimation()
-
-        for l in Territory.__lulus:
-            l.move()
+    Simulation.__run__(100, 100, 500, 10, 25, 25, 10, 10000, 5)
