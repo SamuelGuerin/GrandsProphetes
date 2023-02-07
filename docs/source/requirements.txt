@@ -1,0 +1,4 @@
+manim
+customtkinter
+matplotlib
+numpy

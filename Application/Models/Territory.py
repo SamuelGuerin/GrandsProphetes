@@ -1,40 +1,41 @@
 """Territory (territoire) agit comme un singleton, il s'agit d'une instance de la carte (map)
-   où les Lulus et la nourriture seront placés aléatoirement
+où les Lulus et la nourriture seront placés aléatoirement
 
-   Territory contient les paramètres nécessaire à la génération de la carte:
-   ====================  ====================
-   Nom du paramètre      Définition
-   ====================  ====================
-   __sizeX               Taille de la carte sur l'axe des X
-   __sizeY               Taille de la carte sur l'axe des Y
-   __lulusCount          Le nombre de Lulus total
-   __foodCount           Le nombre de nourriture total
-   __lulus               Liste contenant toutes les Lulus
-   __map                 Dictionnaire contenant les Lulus et la nourriture à chaque position de la carte
-   __numberOfFood        Nombre de nourriture qui ont été créée jusqu'à présent
-   EATING_RATIO          Valeur constante pour définir le ratio de grandeur a avoir pour manger une Lulu ou être mangé par une autre Lulu
-   STARTING_ENERGY       Valeur constante pour définir l'énergie de départ pour chaque Lulu
+| Territory contient les paramètres nécessaire à la génération de la carte:
 
+================    ================================================================================================================
+Nom du paramètre    Définition
+================    ================================================================================================================
+__sizeX             Taille de la carte sur l'axe des X
+__sizeY             Taille de la carte sur l'axe des Y
+__lulusCount        Le nombre de Lulus total
+__foodCount         Le nombre de nourriture total
+__lulus             Liste contenant toutes les Lulus
+__map               Dictionnaire contenant les Lulus et la nourriture à chaque position de la carte
+__numberOfFood      Nombre de nourriture qui ont été créée jusqu'à présent
+EATING_RATIO        Valeur constante pour définir le ratio de grandeur a avoir pour manger une Lulu ou être mangé par une autre Lulu
+STARTING_ENERGY     Valeur constante pour définir l'énergie de départ pour chaque Lulu
+================    ================================================================================================================
 
-   Offre aussi plusieurs méthodes utiles accessibles dans les autres classes:
-   ====================          ====================
-   Méthodes                      Actions             
-   ====================          ====================
-   :meth:`createMap`           Crée une carte (map) avec les paramètres donnés (__sizeX, sizeY, __foodCount, __lulusCount)
-   :meth:`__CreateLulu`        Crée une Lulu avec les paramètres donnés (rx, ry, speed, sense, size, energyRemaining, FoodCollected, isDone)
-   :meth:`__CreateFood`        Ajoute une nourriture sur la carte (map) à la position donnée en paramètres (rx, ry)
-   :meth:`__addItem`           Ajoute un item (Lulu ou nourriture) sur la carte à la :class:`Position` donnée en paramètres (item, :class:`Position`)
-   :meth:`__deleteItem`        Retire un item (Lulu ou nourriture) sur la carte à la :class:`Position` donnée en paramètres (item, :class:`Position`)
-   :meth:`getItem`             Obtient un item (Lulu ou nourriture) sur la carte à la :class:`Position` donnée en paramètres (item, :class:`Position`)
-   :meth:`getMap`              Retourne la carte (map)
-   :meth:`getSizeX`            Retourne la taille de l'axe des X de la carte (__sizeX)
-   :meth:`getSizeY`            Retourne la taille de l'axe des Y de la carte (__sizeY)
-   :meth:`getLulus`            Retourne la liste contenant toutes les Lulus
-   :meth:`printMap`            Affiche tous les items de la carte avec leur :class:`Position` dans la console (outil de débogage)
-   :meth:`tryMove`             Vérifie si la Lulu peut se déplacer d'un point A à un point B en faisant toutes les validations et confirmations nécessaires, retourne un booléen
-   :meth:`moveLulu`            Effectue le mouvement précédemment testé par la méthode :meth:`tryMove`
+| Offre aussi plusieurs méthodes utiles accessibles dans les autres classes:
 
-
+=====================       =================================================================================================================================================
+Méthode                     Action
+=====================       =================================================================================================================================================      
+:meth:`createMap`           Crée une carte (map) avec les paramètres donnés (__sizeX, sizeY, __foodCount, __lulusCount)
+:meth:`__CreateLulu`        Crée une Lulu avec les paramètres donnés (rx, ry, speed, sense, size, energyRemaining, FoodCollected, isDone)
+:meth:`__CreateFood`        Ajoute une nourriture sur la carte (map) à la position donnée en paramètres (rx, ry)
+:meth:`__addItem`           Ajoute un item (Lulu ou nourriture) sur la carte à la :class:`Position` donnée en paramètres (item, :class:`Position`)
+:meth:`__deleteItem`        Retire un item (Lulu ou nourriture) sur la carte à la :class:`Position` donnée en paramètres (item, :class:`Position`)
+:meth:`getItem`             Obtient un item (Lulu ou nourriture) sur la carte à la :class:`Position` donnée en paramètres (item, :class:`Position`)
+:meth:`getMap`              Retourne la carte (map)
+:meth:`getSizeX`            Retourne la taille de l'axe des X de la carte (__sizeX)
+:meth:`getSizeY`            Retourne la taille de l'axe des Y de la carte (__sizeY)
+:meth:`getLulus`            Retourne la liste contenant toutes les Lulus
+:meth:`printMap`            Affiche tous les items de la carte avec leur :class:`Position` dans la console (outil de débogage)
+:meth:`tryMove`             Vérifie si la Lulu peut se déplacer d'un point A à un point B en faisant toutes les validations et confirmations nécessaires, retourne un booléen
+:meth:`moveLulu`            Effectue le mouvement précédemment testé par la méthode :meth:`tryMove`
+=====================       =================================================================================================================================================    
 
 :return: N/A
 :rtype: Module
