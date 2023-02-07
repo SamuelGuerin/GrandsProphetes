@@ -39,12 +39,12 @@ def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size):
                 rx = random.choice([1, maxX])
                 ry = random.randint(1, maxY)
                 luluCreated = __CreateLulu(
-                    rx, ry, speed, sense, size, energy, 0, True)
+                    rx, ry, speed, sense, size, energy, 0, False)
             else:
                 ry = random.choice([1, maxY])
                 rx = random.randint(1, maxX)
                 luluCreated = __CreateLulu(
-                    rx, ry, speed, sense, size, energy, 0, True)
+                    rx, ry, speed, sense, size, energy, 0, False)
 
     # Ajouter de la nourriture partout sauf sur le côté
     for _ in range(__foodCount):
@@ -54,14 +54,13 @@ def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size):
             ry = random.randint(2, maxY - 1)
             foodCreated = __CreateFood(rx, ry)
 
-
 # private
-def __CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isEnabled) -> bool:
+def __CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isDone) -> bool:
     # Créer une lulu si la case est vide
     if (getItem(rx, ry) == None):
         rPos = Position(rx, ry)
         __map[rPos] = Lulu(rPos, speed, sense, size,
-                           energyRemaining, FoodCollected, rPos, isEnabled)
+                           energyRemaining, FoodCollected, rPos, isDone)
         # Ajouter la lulu dans la liste de lulus
         __lulus.append(__map[rPos])
         return True
@@ -122,7 +121,6 @@ def tryMove(oldPosition, newPosition) -> bool:
 def moveLulu(oldPosition, newPosition):
     # S'il y avait qqch sur la nouvelle case, l'enlever et ajouter 1 de nourriture
     currentLulu = __map[oldPosition]
-    currentLulu.energy -= 1
     if (getItem(newPosition.x, newPosition.y) != None):
         currentLulu.foodAmount += 1
         # ToDo : Valider que la liste lulus ne la contient plus
@@ -208,4 +206,10 @@ def dayResultLulu():
         elif (lulu.foodAmount > 1):
             reproduceLulu(lulu)
 
-# getItemsInSense(x, y, sense)
+# getItemsInSense(x, y, sense
+
+def printMap():
+    print(__map)
+
+def getLulus():
+    return __lulus
