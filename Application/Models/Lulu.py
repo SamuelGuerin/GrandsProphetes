@@ -2,6 +2,7 @@ import Models.Territory as Territory
 import random
 from Models.Position import Position
 from Models.Food import Food
+from Models.Move import Move
 
 
 # ToDo: rajouter une propriété: isSafe (Bool) ? (est = true quand la Lulu est dans un bord de map (safe zone), seulement au premier tour)
@@ -30,6 +31,9 @@ class Lulu:
         
         # ToDo : changer energy pour speed.
         # Variable qui garde l'énergie utilisée pour 1 tour
+
+        startPt = self.position
+
         while(speedLeft > 0 and self.energy > 0):
             foodInRange.clear()
             lulusInRange.clear()
@@ -53,6 +57,8 @@ class Lulu:
                 self.goToTargetPosition(targetPosition)
             self.energy -= energyCost;
             speedLeft -= 1;
+        endPt = self.position
+        Territory.addMove(Move(self.speed, self.sense, self.size, startPt, endPt))
 
         # ToDO : S'il a atteint sa nourriture, aller vers le côté (call moveToInitialPosition)
         # À Modifier selon le comportement désiré (si on veut vérifier la présence d'ennemi, si on consomme de l'énergie ou non, etc.)

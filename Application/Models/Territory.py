@@ -9,6 +9,7 @@ __lulusCount = None
 __foodCount = None
 __lulus = []
 __map = {}
+__moves = []
 __numberOfFood = 0
 
 EATING_RATIO = 1.2
@@ -124,6 +125,9 @@ def moveLulu(oldPosition, newPosition):
         __deleteItem(newPosition)
     __addItem(newPosition, currentLulu)
     __deleteItem(oldPosition)
+
+def addMove(move):
+    __moves.append(move)
 
 def printMap():
     print(__map)
