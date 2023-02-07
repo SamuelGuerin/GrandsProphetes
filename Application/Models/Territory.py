@@ -201,8 +201,6 @@ def dayResultLulu():
         if (lulu.foodAmount == 0):
             __deleteItem(lulu.position)
             __lulus.remove(lulu)
-        elif (lulu.foodAmount == 1):
-            lulu.resetPosition()
         elif (lulu.foodAmount > 1):
             reproduceLulu(lulu)
 
@@ -230,8 +228,8 @@ def resetWorld():
     for lulu in __lulus:
         lulu.isDone = False
         lulu.energy = __energy
-        lulu.resetPosition()
-        __map[lulu.position] = lulu
+        __addItem(lulu.position, lulu)
+        lulu.resetPosition() # Plante
 
 class VisualizeLulus(Scene):
     def construct(self):
