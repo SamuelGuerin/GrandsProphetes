@@ -4,7 +4,7 @@ from Models.Position import Position
 from Models.Food import Food
 
 
-# Rajouter une propriété: isSafe (Bool) ? (est = true quand la Lulu est dans un bord de map (safe zone))
+# ToDo: rajouter une propriété: isSafe (Bool) ? (est = true quand la Lulu est dans un bord de map (safe zone), seulement au premier tour)
 class Lulu:
     def __init__(self, position, speed = 0,sense = 0,size = 0,energy = 0,foodAmount = 0,lastPos = None, isDone = False):
         self.position = position
@@ -23,14 +23,14 @@ class Lulu:
         # Sauf si 2 nourritures
     # Return true si le Lulu peut encore bouger (énergie > 0) sinon false
     def move(self) -> bool:
-        map = Territory.getMap()
         foodInRange = []
         lulusInRange = []
-        energyCost = (self.size ** 3) * (self.speed ** 2);
+        energyCost = ((self.size/100) ** 3) * (self.speed ** 2) + self.sense;
+        speedLeft = self.speed
         
         # ToDo : changer energy pour speed.
-            # Variable qui garde l'énergie utilisée pour 1 tour
-        while(self.foodAmount < 2 and self.energy > 0):
+        # Variable qui garde l'énergie utilisée pour 1 tour
+        while(speedLeft > 0 and self.energy > 0):
             foodInRange.clear()
             lulusInRange.clear()
             self.__getItems(foodInRange, lulusInRange)
@@ -52,24 +52,26 @@ class Lulu:
             else:
                 self.goToTargetPosition(targetPosition)
             self.energy -= energyCost;
+            speedLeft -= 1;
+
         # ToDO : S'il a atteint sa nourriture, aller vers le côté (call moveToInitialPosition)
         # À Modifier selon le comportement désiré (si on veut vérifier la présence d'ennemi, si on consomme de l'énergie ou non, etc.)
-        while(self.foodAmount == 2 and self.energy > energyCost): 
-            foodInRange.clear()
-            lulusInRange.clear()
-            self.__getItems(foodInRange, lulusInRange)
-            targetPosition = None
-            targetFound = False
+        # while(self.foodAmount == 2 and self.energy > energyCost): 
+        #     foodInRange.clear()
+        #     lulusInRange.clear()
+        #     self.__getItems(foodInRange, lulusInRange)
+        #     targetPosition = None
+        #     targetFound = False
 
-            if(len(lulusInRange) > 0):
-                targetPosition, targetFound = self.getClosestEnemy(lulusInRange)
-            if (not targetFound): 
-                self.moveToInitialPosition(False)
-            self.energy -= energyCost
-        if(self.energy >= energyCost):
-            return True
-        else:
-            return False
+        #     if(len(lulusInRange) > 0):
+        #         targetPosition, targetFound = self.getClosestEnemy(lulusInRange)
+        #     if (not targetFound): 
+        #         self.moveToInitialPosition(False)
+        #     self.energy -= energyCost
+        # if(self.energy >= energyCost):
+        #     return True
+        # else:
+        #     return False
 
 
     # move est callé pour un lulu une fois / vitesse écoulée

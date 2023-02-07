@@ -30,26 +30,16 @@ class VisualizeLulus(Scene):
 
         self.add(groupdots)
 
+def renderAnimation():
+    scene = VisualizeLulus()
+    scene.render()
+
 if __name__ == '__main__':
-    Territory.createMap(3, 3, 1, 1)
-    Territory.printMap()
-    # scene = VisualizeLulus()
-    # scene.render()
+    Territory.createMap(100, 100, 25, 100)
 
-    # for l in Territory.__lulus:
-    #     Territory.moveLulu(l.position, Position(random.randint(2,9),random.randint(2,9)))
+    while(True):
+        input("Press Enter to continue...")
+        renderAnimation()
 
-    # for l in Territory.__lulus:
-    #     print(l.position)
-    #     l.resetPosition()
-    #     print(l.position)
-
-    t0 = time.time()
-    for l in Territory.__lulus:
-        l.move()
-
-    Territory.printMap()
-
-    t1 = time.time()
-    total = t1-t0
-    print(str(total) + " secondes")
+        for l in Territory.__lulus:
+            l.move()
