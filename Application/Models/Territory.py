@@ -127,3 +127,6 @@ def moveLulu(oldPosition, newPosition):
 
 def printMap():
     print(__map)
+
+def getLulus():
+    return __lulus
