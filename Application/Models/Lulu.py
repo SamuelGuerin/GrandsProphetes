@@ -3,8 +3,6 @@ import random
 from Models.Position import Position
 from Models.Food import Food
 
-
-# ToDo: rajouter une propriété: isSafe (Bool) ? (est = true quand la Lulu est dans un bord de map (safe zone), seulement au premier tour)
 class Lulu:
     def __init__(self, position, speed = 0,sense = 0,size = 0,energy = 0,foodAmount = 0,lastPos = None, isDone = False):
         self.position = position
@@ -20,17 +18,12 @@ class Lulu:
     def __repr__(self) -> str:
         return ("Lulu")
 
-    # ToDo : Ne pas bouger ou manger dans un side (périmètre) (safe zone)
-        # Sauf si 2 nourritures
-    # Return true si le Lulu peut encore bouger (énergie > 0) sinon false
     def move(self) -> bool:
         foodInRange = []
         lulusInRange = []
         energyCost = ((self.size/100) ** 3) * (self.speed ** 2) + self.sense;
         speedLeft = self.speed
-        
-        # ToDo : changer energy pour speed.
-        # Variable qui garde l'énergie utilisée pour 1 tour
+
         while(speedLeft > 0 and self.energy >= energyCost):
             foodInRange.clear()
             lulusInRange.clear()
@@ -62,26 +55,9 @@ class Lulu:
 
         if(self.energy < energyCost):
             self.isDone = True
-
-        # ToDO : S'il a atteint sa nourriture, aller vers le côté (call moveToInitialPosition)
-        # À Modifier selon le comportement désiré (si on veut vérifier la présence d'ennemi, si on consomme de l'énergie ou non, etc.)
-        # while(self.foodAmount == 2 and self.energy > energyCost): 
-        #     foodInRange.clear()
-        #     lulusInRange.clear()
-        #     self.__getItems(foodInRange, lulusInRange)
-        #     targetPosition = None
-        #     targetFound = False
-
-        #     if(len(lulusInRange) > 0):
-        #         targetPosition, targetFound = self.getClosestEnemy(lulusInRange)
-        #     if (not targetFound): 
-        #         self.moveToInitialPosition(False)
-        #     self.energy -= energyCost
-        # if(self.energy >= energyCost):
-        #     return True
-        # else:
-        #     return False
-
+            return False
+        else:
+            return True
 
     # move est callé pour un lulu une fois / vitesse écoulée
     # 1- Déterminer un point dans le sense (si il y en a un)
@@ -91,7 +67,9 @@ class Lulu:
 
     def isCloseToTargetPosition(self) -> bool:
         currentDistance = max(abs(self.position.x - self.randomTargetPosition.x), abs(self.position.y - self.randomTargetPosition.y))
-        return True if currentDistance <= 1 else False
+        randomSense = ((Territory.getSizeX() + Territory.getSizeY())/ 2 / 20)
+        randomSense = 1 if randomSense < 1 else randomSense
+        return True if currentDistance <= randomSense else False
         
 
     def goToTargetPosition(self, targetPosition) -> bool:
