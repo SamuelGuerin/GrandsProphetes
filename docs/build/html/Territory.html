@@ -153,42 +153,118 @@ où les Lulus et la nourriture seront placés aléatoirement</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="Territory.getItem">
 <span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">getItem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Territory.getItem" title="Lien permanent vers cette définition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Obtiens un item (<a class="reference internal" href="Lulu.html#module-Lulu" title="Lulu"><code class="xref py py-class docutils literal notranslate"><span class="pre">Lulu</span></code></a> ou  nourriture (<a class="reference internal" href="Food.html#module-Food" title="Food"><code class="xref py py-class docutils literal notranslate"><span class="pre">Food</span></code></a>)) dans le dictionnaire __map (carte) selon sa <a class="reference internal" href="Position.html#module-Position" title="Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a> et retourne l’item trouvé</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>int</em>) – Emplacement sur l’axe des X</p></li>
+<li><p><strong>y</strong> (<em>int</em>) – Emplacement sur l’axe des Y</p></li>
+</ul>
+</dd>
+<dt class="field-even">Renvoie<span class="colon">:</span></dt>
+<dd class="field-even"><p>Retourne un item (<a class="reference internal" href="Lulu.html#module-Lulu" title="Lulu"><code class="xref py py-class docutils literal notranslate"><span class="pre">Lulu</span></code></a> ou  nourriture (<a class="reference internal" href="Food.html#module-Food" title="Food"><code class="xref py py-class docutils literal notranslate"><span class="pre">Food</span></code></a>))</p>
+</dd>
+<dt class="field-odd">Type renvoyé<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="Position.html#module-Position" title="Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Territory.getLulus">
 <span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">getLulus</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Territory.getLulus" title="Lien permanent vers cette définition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retourne la liste contenant toutes les Lulus</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Liste de toutes les Lulus</p>
+</dd>
+<dt class="field-even">Type renvoyé<span class="colon">:</span></dt>
+<dd class="field-even"><p>Liste</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Territory.getMap">
 <span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">getMap</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Territory.getMap" title="Lien permanent vers cette définition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retourne la map (carte) y permettant l’accès depuis d’autres classes du projet</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Retourne l’objet __map</p>
+</dd>
+<dt class="field-even">Type renvoyé<span class="colon">:</span></dt>
+<dd class="field-even"><p>dictionnary</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Territory.getSizeX">
 <span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">getSizeX</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Territory.getSizeX" title="Lien permanent vers cette définition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retourne la taille de l’axe des X de la carte (map)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Retourne __sizeX</p>
+</dd>
+<dt class="field-even">Type renvoyé<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Territory.getSizeY">
 <span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">getSizeY</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Territory.getSizeY" title="Lien permanent vers cette définition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Retourne la taille de l’axe des Y de la carte (map)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Retourne __sizeY</p>
+</dd>
+<dt class="field-even">Type renvoyé<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Territory.moveLulu">
 <span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">moveLulu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oldPosition</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newPosition</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Territory.moveLulu" title="Lien permanent vers cette définition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Déplace la <a class="reference internal" href="Lulu.html#module-Lulu" title="Lulu"><code class="xref py py-class docutils literal notranslate"><span class="pre">Lulu</span></code></a> d’une <a class="reference internal" href="Position.html#module-Position" title="Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a> A à une <a class="reference internal" href="Position.html#module-Position" title="Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a> B</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>oldPosition</strong> (<a class="reference internal" href="Position.html#module-Position" title="Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a>) – L’ancienne <a class="reference internal" href="Position.html#module-Position" title="Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a> de la <a class="reference internal" href="Lulu.html#module-Lulu" title="Lulu"><code class="xref py py-class docutils literal notranslate"><span class="pre">Lulu</span></code></a></p></li>
+<li><p><strong>newPosition</strong> (<a class="reference internal" href="Position.html#module-Position" title="Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a>) – La nouvelle <a class="reference internal" href="Position.html#module-Position" title="Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a> de la <a class="reference internal" href="Lulu.html#module-Lulu" title="Lulu"><code class="xref py py-class docutils literal notranslate"><span class="pre">Lulu</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Territory.printMap">
 <span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">printMap</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Territory.printMap" title="Lien permanent vers cette définition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Affiche tous les items de la carte avec leur <a class="reference internal" href="Position.html#module-Position" title="Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a> dans la console (outil de débogage)</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Territory.tryMove">
 <span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">tryMove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oldPosition</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newPosition</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#Territory.tryMove" title="Lien permanent vers cette définition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Vérifie si la <a class="reference internal" href="Lulu.html#module-Lulu" title="Lulu"><code class="xref py py-class docutils literal notranslate"><span class="pre">Lulu</span></code></a> peut se déplacer d’une <a class="reference internal" href="Position.html#module-Position" title="Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a> A à une <a class="reference internal" href="Position.html#module-Position" title="Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a> B en faisant toutes les validations et confirmations nécessaires</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>oldPosition</strong> (<a class="reference internal" href="Position.html#module-Position" title="Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a>) – L’ancienne <a class="reference internal" href="Position.html#module-Position" title="Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a> de la Lulu</p></li>
+<li><p><strong>newPosition</strong> (<a class="reference internal" href="Position.html#module-Position" title="Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a>) – La nouvelle <a class="reference internal" href="Position.html#module-Position" title="Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a> de la Lulu</p></li>
+</ul>
+</dd>
+<dt class="field-even">Renvoie<span class="colon">:</span></dt>
+<dd class="field-even"><p>Retourne un booléen confirmant si la Lulu peut être déplacée ou non</p>
+</dd>
+<dt class="field-odd">Type renvoyé<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 
