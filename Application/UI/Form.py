@@ -26,7 +26,7 @@ class Form(ct.CTk):
         self.title("Sélection naturel Form.py")
         self.resizable(True, True)
         self.maxsize(self.width, self.height)
-        self.minsize(830, 950)
+        self.minsize(1000, 950)
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
 
