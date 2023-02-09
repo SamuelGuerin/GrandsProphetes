@@ -2,16 +2,17 @@ import customtkinter as ct
 from PIL import Image
 import os
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from mpl_toolkits.mplot3d import axes3d
-import matplotlib.pyplot as plt
-import Graph2 as Graph
 import FormGraph as fg
-import ctypes
 
 ct.set_appearance_mode("dark")
 ct.set_default_color_theme("blue")
 
 class Form(ct.CTk):
+    """_summary_
+
+    """
+
+
     width = 1920
     height = 1080
 
@@ -208,6 +209,11 @@ class Form(ct.CTk):
 
         # Enter 1 -- Validation
         def get_inputMapSizeX():
+            """_summary_
+
+            Returns:
+                _type_: _description_
+            """
             try:
                 mapSizeXValue = int(txtMapSizeX.get())
                 if(mapSizeXValue < 0):
@@ -219,6 +225,7 @@ class Form(ct.CTk):
                     return mapSizeXValue
             except ValueError:
                 lblMapSizeXGood.configure(text="Ce n'est pas un nombre entier positif", text_color="red")
+
 
         # Enter 2 -- Validation
         def get_inputMapSizeY():
