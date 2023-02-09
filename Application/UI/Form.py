@@ -280,7 +280,12 @@ class Form(ct.CTk):
         # Graph
         def add_Graph():
             global canvasR
-            fig = fg.graphGeneration.first(index)
+            graphData = fg.graphGeneration.first(index)
+            index.elev = 30
+            index.azim = 130
+            global ax
+            ax = graphData[1]
+            fig = graphData[0]
             canvasR = FigureCanvasTkAgg() 
             canvasG = FigureCanvasTkAgg(fig, self)
             canvasG.get_tk_widget().grid(row=0, column=0, columnspan=5, sticky="wesn")
@@ -289,45 +294,73 @@ class Form(ct.CTk):
             def previous(canvas):
                 if index.isMin():
                     return
+                global ax
                 canvas.get_tk_widget().destroy()
-                fig = fg.graphGeneration.previous(index)
-                canvasN = FigureCanvasTkAgg(fig, self)
-                canvasN.get_tk_widget().grid(row=0, column=0, columnspan=5, sticky="wesn")
-                global canvasR
-                canvasR = canvasN
+                index.elev = ax.elev
+                index.azim = ax.azim
+                graphData = fg.graphGeneration.previous(index)
+                updateGraph(canvas, graphData)
+                refreshButtons() 
 
             def next(canvas):
                 if index.isMax():
                     return
+                global ax
                 canvas.get_tk_widget().destroy()
-                fig = fg.graphGeneration.next(index)
-                canvasN = FigureCanvasTkAgg(fig, self)
-                canvasN.get_tk_widget().grid(row=0, column=0, columnspan=5, sticky="wesn")
-                global canvasR
-                canvasR = canvasN
-                i = 10
+                index.elev = ax.elev
+                index.azim = ax.azim
+                graphData = fg.graphGeneration.next(index)
+                updateGraph(canvas, graphData)
+                refreshButtons() 
 
             def last(canvas):
                 if index.isMax():
                     return
-                global canvasR
+                global ax
                 canvas.get_tk_widget().destroy()
-                fig = fg.graphGeneration.last(index)
-                canvasN = FigureCanvasTkAgg(fig, self)
-                canvasN.get_tk_widget().grid(row=0, column=0, columnspan=5, sticky="wesn")
-                global canvasR
-                canvasR = canvasN
+                index.elev = ax.elev
+                index.azim = ax.azim
+                graphData = fg.graphGeneration.last(index)
+                updateGraph(canvas, graphData)
+                refreshButtons() 
 
             def first(canvas):
                 if index.isMin():
                     return
+                global ax
                 canvas.get_tk_widget().destroy()
-                fig = fg.graphGeneration.first(index)
-                canvasN = FigureCanvasTkAgg(fig, self)
-                canvasN.get_tk_widget().grid(row=0, column=0, columnspan=5, sticky="wesn")
-                global canvasR
-                canvasR = canvasN
-                i = 10
+                index.elev = ax.elev
+                index.azim = ax.azim
+                graphData = fg.graphGeneration.first(index)
+                updateGraph(canvas, graphData)
+                refreshButtons() 
+            
+            def speedSize(canvas):
+                global ax
+                canvas.get_tk_widget().destroy()
+                index.elev = ax.elev
+                index.azim = ax.azim
+                graphData = fg.graphGeneration.speedSize(index)
+                updateGraph(canvas, graphData)
+                refreshButtons()
+            
+            def sizeSense(canvas):
+                global ax
+                canvas.get_tk_widget().destroy()
+                index.elev = ax.elev
+                index.azim = ax.azim
+                graphData = fg.graphGeneration.sizeSense(index)
+                updateGraph(canvas, graphData)
+                refreshButtons() 
+
+            def senseSpeed(canvas):
+                global ax
+                canvas.get_tk_widget().destroy()
+                index.elev = ax.elev
+                index.azim = ax.azim
+                graphData = fg.graphGeneration.senseSpeed(index)
+                updateGraph(canvas, graphData)
+                refreshButtons() 
 
             def remove_graph(canvas):
                 canvas.get_tk_widget().destroy()
@@ -336,22 +369,59 @@ class Form(ct.CTk):
                 btnLastGeneration.destroy()
                 btnFirstGeneration.destroy()
                 buttonDestroyGraph.destroy()
+                buttonSpeedSize.destroy()
+                buttonSenseSize.destroy()
+                buttonSpeedSense.destroy()
 
+            def updateGraph(canvas, graphData):
+                global ax
+                canvas.get_tk_widget().destroy()
+                index.elev = ax.elev
+                index.azim = ax.azim
+                fig = graphData[0]
+                ax = graphData[1]
+                canvasN = FigureCanvasTkAgg(fig, self)
+                canvasN.get_tk_widget().grid(row=0, column=0, columnspan=5, sticky="wesn")
+                global canvasR
+                canvasR = canvasN
+            
+            def refreshButtons():
+                global buttonSpeedSize
+                global buttonSenseSize
+                global buttonSpeedSense
+                if (buttonSpeedSize is not None):
+                    buttonSpeedSize.destroy()
+                if (buttonSenseSize is not None):
+                    buttonSenseSize.destroy()
+                if (buttonSpeedSense is not None):
+                    buttonSpeedSense.destroy()
+                buttonSpeedSize = ct.CTkButton(self, text="Vitesse - Taille", command=lambda:speedSize(canvasR), corner_radius=0)
+                buttonSenseSize = ct.CTkButton(self, text="Taille - Vision", command=lambda:sizeSense(canvasR), corner_radius=0)
+                buttonSpeedSense = ct.CTkButton(self, text="Vision - Vitesse", command=lambda:senseSpeed(canvasR), corner_radius=0)
+                buttonSpeedSize.grid_configure(row=0, column=2, sticky="se", padx=5, pady=5)
+                buttonSenseSize.grid_configure(row=0, column=3, sticky="se", padx=5, pady=5)
+                buttonSpeedSense.grid_configure(row=0, column=4, sticky="se", padx=5, pady=5)
+
+            def createButtons():
+                btnPreviousGeneration.grid(row=1, column=3, padx=5, pady=10, sticky="we")
+                btnNextGeneration.grid(row=1, column=4, padx=5, pady=10, sticky="we")
+                btnLastGeneration.grid(row=1, column=2, padx=5, pady=10, sticky="we")
+                btnFirstGeneration.grid(row=1, column=1, padx=5, pady=10, sticky="we")
+                buttonDestroyGraph.grid(row=1, column=0, padx=10, pady=10, sticky="we")
 
             btnPreviousGeneration = ct.CTkButton(self, text="Génération Précédente", command=lambda:previous(canvasR))
-            btnPreviousGeneration.grid(row=1, column=3, padx=5, pady=10, sticky="we")
-
             btnNextGeneration = ct.CTkButton(self, text="Prochaine Génération", command=lambda:next(canvasR))
-            btnNextGeneration.grid(row=1, column=4, padx=5, pady=10, sticky="we")
-
             btnLastGeneration = ct.CTkButton(self, text="Dernière Génération", command=lambda:last(canvasR))
-            btnLastGeneration.grid(row=1, column=2, padx=5, pady=10, sticky="we")
-
             btnFirstGeneration = ct.CTkButton(self, text="Première Génération", command=lambda:first(canvasR))
-            btnFirstGeneration.grid(row=1, column=1, padx=5, pady=10, sticky="we")
-
             buttonDestroyGraph = ct.CTkButton(self, text="Remove Graph", command=lambda:remove_graph(canvasR))
-            buttonDestroyGraph.grid(row=1, column=0, padx=10, pady=10, sticky="we")
+            global buttonSpeedSize
+            global buttonSenseSize
+            global buttonSpeedSense
+            buttonSpeedSize = None
+            buttonSenseSize = None
+            buttonSpeedSense = None
+            createButtons()
+            refreshButtons()            
 
         btnGraph = ct.CTkButton(master=self.frame_1, text="Visualiser les graphiques", command=add_Graph)
         btnGraph.grid(row=9, column=1, padx=20, pady=10, sticky="we")

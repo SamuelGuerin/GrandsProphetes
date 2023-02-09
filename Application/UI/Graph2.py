@@ -4,24 +4,10 @@ from matplotlib.widgets import Button
 import threading
 import Form
 
-def generateLulus():
-    i = 0
-    array1 = []
-    array2 = []
-    while i < 5:
-        i += 1
-        cpt = 0 
-        array1.clear()
-        while cpt < 100:
-            array1.append(Lulu(np.random.normal(50,10, size=None),np.random.normal(50,6, size=None),np.random.normal(50,7, size=None)))
-            cpt += 1
-        array2.append(array1.copy())
-    return array2
-
 def generateColors(speeds, senses, sizes, colors):
     colors.clear()
     for i in range(len(speeds)):
-        colors.append([speeds[i]/100, senses[i]/100, sizes[i]/100])
+        colors.append([speeds[i]/(max(speeds) * 1.3), senses[i]/(max(senses) * 1.3), sizes[i]/(max(sizes) * 1.5)])
 
 def calculateCoordinates(generation, speeds, senses, sizes):
     speeds.clear()
@@ -37,10 +23,10 @@ def setAxesLabel(ax):
     ax.set_ylabel('Vision', color='green', fontweight='semibold')
     ax.set_zlabel('Taille', color='red', fontweight='semibold') 
 
-def setAxesSize(ax):
-    ax.set_xlim([0,100])
-    ax.set_ylim([0,100])
-    ax.set_zlim([0,100])
+def setAxesSize(ax, sx, sy, sz):
+    ax.set_xlim([0,sx])
+    ax.set_ylim([0,sy])
+    ax.set_zlim([0,sz])
 
 def setStats(ax, generation):
     ax.clear()
@@ -106,13 +92,14 @@ class Lulu:
         self.Sense = sense
         self.Size = size
 
-def generateGraph(generation, currentGeneration):
+def generateGraph(generation, currentGeneration, elev, azim):
     fig, ax = plt.subplots(figsize=(16, 9))
     plt.axis('off')
     ax = plt.axes(projection="3d")
     plt.subplots_adjust(left=0.25)
     ax.set_title('Génération ' + str(currentGeneration))
-    setAxesSize(ax)
+    ax.elev = elev
+    ax.azim = azim
     fig.subplots_adjust(bottom=0.2)
 
     speeds = []
@@ -123,7 +110,9 @@ def generateGraph(generation, currentGeneration):
     calculateCoordinates(generation, speeds, senses, sizes)
     generateColors(speeds,senses,sizes,colors)
 
+    setAxesSize(ax, max(speeds) * 1.5, max(senses) * 1.5, max(sizes) * 1.5)
     setAxesLabel(ax)
+
     ax.scatter(speeds, senses, sizes, c=colors)
 
     # Stats
@@ -131,7 +120,7 @@ def generateGraph(generation, currentGeneration):
     setStats(ax_stats, generation)
 
     #plt.show()
-    return fig
+    return [fig, ax]
 
 #test = generateLulus()
 #generateGraph(test[0], 1)

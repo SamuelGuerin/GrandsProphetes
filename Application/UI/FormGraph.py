@@ -27,6 +27,8 @@ class Lulu:
 
 class Index:
     ind = 0
+    elev = 30
+    azim = 130
 
     def isMax(self):
         if self.ind == len(generations) - 1:
@@ -43,22 +45,31 @@ class graphGeneration:
             index.ind += 1
             if index.ind > len(generations) - 1:
                 index.ind = len(generations) - 1
-            return Graph.generateGraph(generations[index.ind], index.ind + 1)
+            return Graph.generateGraph(generations[index.ind], index.ind + 1, index.elev, index.azim)
             
         def previous(index):
             index.ind -= 1
             if index.ind < 0:
                 index.ind = 0
-            return Graph.generateGraph(generations[index.ind], index.ind + 1)
+            return Graph.generateGraph(generations[index.ind], index.ind + 1, index.elev, index.azim)
 
         def first(index):
             index.ind = 0
-            return Graph.generateGraph(generations[index.ind], index.ind + 1)
+            return Graph.generateGraph(generations[index.ind], index.ind + 1, index.elev, index.azim)
         
         def last(index):
             index.ind = len(generations) - 1
-            return Graph.generateGraph(generations[index.ind], index.ind + 1)
-
+            return Graph.generateGraph(generations[index.ind], index.ind + 1, index.elev, index.azim)
+        
+        def speedSize(index):
+            return Graph.generateGraph(generations[index.ind], index.ind + 1, 0, 90)
+        
+        def sizeSense(index):
+            return Graph.generateGraph(generations[index.ind], index.ind + 1, 0, 0)
+        
+        def senseSpeed(index):
+            return Graph.generateGraph(generations[index.ind], index.ind + 1, -92, 0.44)
+        
 generations = generateLulus()
 
 

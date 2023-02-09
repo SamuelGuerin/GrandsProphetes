@@ -3,6 +3,11 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import Form
 
+#Camera
+# Vitesse - Vision : elev=-92, azim=0.44
+# Vision - Taille : elev=0.205, azim=-180
+# Vision - Taille : elev=-360, azim=-1349.66
+
 def generateLulus():
     i = 0
     array1 = []
@@ -120,12 +125,18 @@ def generateGraph():
     generations = generateLulus()
 
 
-    fig, ax = plt.subplots(figsize=(Form.Form.width / 10, Form.Form.height / 10))
+    fig, ax = plt.subplots()
     plt.axis('off')
     ax = plt.axes(projection="3d")
     plt.subplots_adjust(left=0.25)
     ax.set_title('Génération ' + str(1))
     setAxesSize(ax)
+    #Camera
+    # Vitesse - Vision : elev=-92, azim=0.44
+    # Vision - Taille : elev=0.205, azim=-180
+    # Vision - Taille : elev=-360, azim=-1349.66
+    ax.elev = 30
+    ax.azim = 130
     fig.subplots_adjust(bottom=0.2)
 
     speeds = []
@@ -168,6 +179,21 @@ def generateGraph():
             updateGraph(ax, speeds, senses, sizes, generations, self.ind, colors)
             setStats(ax_stats, generations, self.ind)
 
+        # Vitesse - Vision : elev=-92, azim=0.44
+        def elev(self, event):
+            ax.elev = -92
+            ax.azim = 0.44
+
+        # Vision - Taille : elev=0.205, azim=-180
+        def azim(self, event):
+            ax.elev = 0
+            ax.azim = 0
+
+        # Vitesse - Taille : elev=-360, azim=-1349.66
+        def autre(self, event):
+            ax.elev = 0
+            ax.azim = 90
+
     # Buttons
     callback = Index()
 
@@ -176,22 +202,22 @@ def generateGraph():
     bPrev.on_clicked(callback.prev)
 
     axNext = fig.add_axes([0.81, 0.05, 0.14, 0.078])
-    bNext = Button(axNext, 'Prochaine \nGénération')
-    bNext.on_clicked(callback.next)
+    bNext = Button(axNext, 'autre')
+    bNext.on_clicked(callback.autre)
 
     axLast = fig.add_axes([0.50, 0.05, 0.14, 0.078])
-    bLast = Button(axLast, 'Dernière \nGénération')
-    bLast.on_clicked(callback.last)
+    bLast = Button(axLast, 'azim')
+    bLast.on_clicked(callback.azim)
 
     axFirst = fig.add_axes([0.35, 0.05, 0.14, 0.078])
-    bFirst = Button(axFirst, 'Première \nGénération')
-    bFirst.on_clicked(callback.first)
+    bFirst = Button(axFirst, 'elev')
+    bFirst.on_clicked(callback.elev)
 
     # Stats
     ax_stats = plt.axes([0.005, 0.05, 0.23, 0.9])
     setStats(ax_stats, generations, callback.ind)
     
-    #plt.show()
+    plt.show()
     return fig
 
-#generateGraph()
+generateGraph()
