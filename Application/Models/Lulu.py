@@ -4,37 +4,29 @@ from Models.Position import Position
 from Models.Food import Food
 from Models.Move import Move
 
-
-# ToDo: rajouter une propriété: isSafe (Bool) ? (est = true quand la Lulu est dans un bord de map (safe zone), seulement au premier tour)
 class Lulu:
-    def __init__(self, position, speed = 0,sense = 0,size = 0,energy = 0,foodAmount = 0,lastPos = None, isDone = False):
+    def __init__(self, position, speed = 0,sense = 0,size = 0,energy = 0,foodAmount = 0, isDone = False):
         self.position = position
         self.speed = speed
         self.sense = sense
         self.size = size
         self.energy = energy
         self.foodAmount = foodAmount
-        self.lastPos = lastPos
         self.isDone = isDone
+        self.started = False
+        self.randomTargetPosition = self.newRandomPosition()
 
     def __repr__(self) -> str:
         return ("Lulu")
 
-    # ToDo : Ne pas bouger ou manger dans un side (périmètre) (safe zone)
-        # Sauf si 2 nourritures
-    # Return true si le Lulu peut encore bouger (énergie > 0) sinon false
     def move(self) -> bool:
         foodInRange = []
         lulusInRange = []
-        energyCost = ((self.size/100) ** 3) * (self.speed ** 2) + self.sense;
+        energyCost = ((self.size/100) ** 3) * (self.speed ** 2) + self.sense
         speedLeft = self.speed
-        
-        # ToDo : changer energy pour speed.
-        # Variable qui garde l'énergie utilisée pour 1 tour
-
         startPt = self.position
-
-        while(speedLeft > 0 and self.energy > 0):
+        
+        while(speedLeft > 0 and self.energy >= energyCost):
             foodInRange.clear()
             lulusInRange.clear()
             self.__getItems(foodInRange, lulusInRange)
@@ -52,40 +44,40 @@ class Lulu:
             if(not targetFound and len(lulusInRange) > 0):
                 targetPosition, targetFound = self.getClosestPrey(lulusInRange)
             if(not targetFound):
-                self.randomMove()
+                if(self.isCloseToTargetPosition()):
+                    targetPosition = self.newRandomPosition()
+                    self.randomTargetPosition = targetPosition
+                else:
+                    targetPosition = self.randomTargetPosition
+                self.goToTargetPosition(targetPosition)
             else:
                 self.goToTargetPosition(targetPosition)
-            self.energy -= energyCost;
-            speedLeft -= 1;
+            self.energy -= energyCost
+            speedLeft -= 1
+        
         endPt = self.position
         Territory.addMove(Move(self.speed, self.sense, self.size, startPt, endPt))
 
-        # ToDO : S'il a atteint sa nourriture, aller vers le côté (call moveToInitialPosition)
-        # À Modifier selon le comportement désiré (si on veut vérifier la présence d'ennemi, si on consomme de l'énergie ou non, etc.)
-        # while(self.foodAmount == 2 and self.energy > energyCost): 
-        #     foodInRange.clear()
-        #     lulusInRange.clear()
-        #     self.__getItems(foodInRange, lulusInRange)
-        #     targetPosition = None
-        #     targetFound = False
-
-        #     if(len(lulusInRange) > 0):
-        #         targetPosition, targetFound = self.getClosestEnemy(lulusInRange)
-        #     if (not targetFound): 
-        #         self.moveToInitialPosition(False)
-        #     self.energy -= energyCost
-        # if(self.energy >= energyCost):
-        #     return True
-        # else:
-        #     return False
-
+        self.started = True
+        if(self.energy < energyCost):
+            self.isDone = True
+            return False
+        else:
+            return True
 
     # move est callé pour un lulu une fois / vitesse écoulée
     # 1- Déterminer un point dans le sense (si il y en a un)
     # 2- Aller au point directement jusqu'à écouler sa speed
     # 3- S'il reste de la speed après avoir atteint son point, il va refaire le scan
     # 4- S'il ne détecte rien, il va vers 1 point random et refait son scan à chaque point
+
+    def isCloseToTargetPosition(self) -> bool:
+        currentDistance = max(abs(self.position.x - self.randomTargetPosition.x), abs(self.position.y - self.randomTargetPosition.y))
+        randomSense = ((Territory.getSizeX() + Territory.getSizeY())/ 2 / 20)
+        randomSense = 1 if randomSense < 1 else randomSense
+        return True if currentDistance <= randomSense else False
         
+
     def goToTargetPosition(self, targetPosition) -> bool:
         xDiff = targetPosition.x - self.position.x
         yDiff = targetPosition.y - self.position.y
@@ -99,17 +91,17 @@ class Lulu:
                 if(not Territory.tryMove(self.position, Position(nextPos.x - 1, nextPos.y))):
                     if(not Territory.tryMove(self.position, Position(nextPos.x + 1, nextPos.y))):
                         # random
-                        self.randomMove()
+                        self.goToTargetPosition(self.newRandomPosition())
             elif(yMove == 0): # ligne horizontale
                 if(not Territory.tryMove(self.position, Position(nextPos.x, nextPos.y - 1))):
                     if(not Territory.tryMove(self.position, Position(nextPos.x, nextPos.y + 1))):
                         # random
-                        self.randomMove()
+                        self.goToTargetPosition(self.newRandomPosition())
             else: # diagonnale
                 if(not Territory.tryMove(self.position, Position(nextPos.x - xMove, nextPos.y))):
                     if(not Territory.tryMove(self.position, Position(nextPos.x, nextPos.y - yMove))):
                         # random
-                        self.randomMove()
+                        self.goToTargetPosition(self.newRandomPosition())
                 
         # if (Territory.getItem(nextPos.x, nextPos.y) == None):
         #     return Territory.tryMove(self, nextPos)
@@ -120,56 +112,63 @@ class Lulu:
         # return False
 
     # dernier recours d'un lulu : fait un move random
-    def randomMove(self):
-        
-        moveChoices = [1, 2, 3, 4, 5, 6, 7, 8]
-        foundMove = False
+    
+    def newRandomPosition(self) -> Position:
+        # 1 - point random sur la map (2 à maxX-1), 2 à maxY-1
+        randomPosition = Position((random.randint(2, Territory.getSizeX())), random.randint(2, Territory.getSizeY()))
+        return randomPosition
+        # return le point
 
-        while(not foundMove and len(moveChoices) > 0):
-            move = random.choice(moveChoices)
-            moveChoices.remove(move)
+    # def randomMove(self):
+        
+    #     moveChoices = [1, 2, 3, 4, 5, 6, 7, 8]
+    #     foundMove = False
+
+    #     while(not foundMove and len(moveChoices) > 0):
+    #         move = random.choice(moveChoices)
+    #         moveChoices.remove(move)
             
-            match move:
-                case 1:
-                    # bas-gauche
-                    item = Territory.getItem(self.position.x - 1, self.position.y - 1)
-                    if(item == None):
-                        foundMove = Territory.tryMove(self.position, Position(self.position.x - 1, self.position.y - 1))
-                case 2:
-                    # gauche
-                    item = Territory.getItem(self.position.x - 1, self.position.y)
-                    if(item == None):
-                        foundMove = Territory.tryMove(self.position, Position(self.position.x - 1, self.position.y))
-                case 3:
-                    # haut gauche
-                    item = Territory.getItem(self.position.x - 1, self.position.y + 1)
-                    if(item == None):
-                        foundMove = Territory.tryMove(self.position, Position(self.position.x - 1, self.position.y + 1))
-                case 4:
-                    # haut
-                    item = Territory.getItem(self.position.x, self.position.y + 1)
-                    if(item == None):
-                        foundMove = Territory.tryMove(self.position, Position(self.position.x, self.position.y + 1))
-                case 5:
-                    # haut droite
-                    item = Territory.getItem(self.position.x + 1, self.position.y + 1)
-                    if(item == None):
-                        foundMove = Territory.tryMove(self.position, Position(self.position.x + 1, self.position.y + 1))
-                case 6:
-                    # droite
-                    item = Territory.getItem(self.position.x + 1, self.position.y)
-                    if(item == None):
-                        foundMove = Territory.tryMove(self.position, Position(self.position.x + 1, self.position.y))
-                case 7:
-                    # bas droite
-                    item = Territory.getItem(self.position.x + 1, self.position.y - 1)
-                    if(item == None):
-                        foundMove = Territory.tryMove(self.position, Position(self.position.x + 1, self.position.y - 1))
-                case 8:
-                    # bas
-                    item = Territory.getItem(self.position.x, self.position.y - 1)
-                    if(item == None):
-                        foundMove = Territory.tryMove(self.position, Position(self.position.x, self.position.y - 1))
+    #         match move:
+    #             case 1:
+    #                 # bas-gauche
+    #                 item = Territory.getItem(self.position.x - 1, self.position.y - 1)
+    #                 if(item == None):
+    #                     foundMove = Territory.tryMove(self.position, Position(self.position.x - 1, self.position.y - 1))
+    #             case 2:
+    #                 # gauche
+    #                 item = Territory.getItem(self.position.x - 1, self.position.y)
+    #                 if(item == None):
+    #                     foundMove = Territory.tryMove(self.position, Position(self.position.x - 1, self.position.y))
+    #             case 3:
+    #                 # haut gauche
+    #                 item = Territory.getItem(self.position.x - 1, self.position.y + 1)
+    #                 if(item == None):
+    #                     foundMove = Territory.tryMove(self.position, Position(self.position.x - 1, self.position.y + 1))
+    #             case 4:
+    #                 # haut
+    #                 item = Territory.getItem(self.position.x, self.position.y + 1)
+    #                 if(item == None):
+    #                     foundMove = Territory.tryMove(self.position, Position(self.position.x, self.position.y + 1))
+    #             case 5:
+    #                 # haut droite
+    #                 item = Territory.getItem(self.position.x + 1, self.position.y + 1)
+    #                 if(item == None):
+    #                     foundMove = Territory.tryMove(self.position, Position(self.position.x + 1, self.position.y + 1))
+    #             case 6:
+    #                 # droite
+    #                 item = Territory.getItem(self.position.x + 1, self.position.y)
+    #                 if(item == None):
+    #                     foundMove = Territory.tryMove(self.position, Position(self.position.x + 1, self.position.y))
+    #             case 7:
+    #                 # bas droite
+    #                 item = Territory.getItem(self.position.x + 1, self.position.y - 1)
+    #                 if(item == None):
+    #                     foundMove = Territory.tryMove(self.position, Position(self.position.x + 1, self.position.y - 1))
+    #             case 8:
+    #                 # bas
+    #                 item = Territory.getItem(self.position.x, self.position.y - 1)
+    #                 if(item == None):
+    #                     foundMove = Territory.tryMove(self.position, Position(self.position.x, self.position.y - 1))
 
     def getMoveFromDiff(self, diff):
         if diff > 0:
@@ -184,7 +183,7 @@ class Lulu:
         sizeToBeEnemy = self.size * Territory.EATING_RATIO
         enemyFound = False
         for i in items:
-            if(i.size > sizeToBeEnemy):
+            if(i.size > sizeToBeEnemy and not i.isDone):
                 currentDistance = max(abs(self.position.x - i.position.x), abs(self.position.y - i.position.y))
                 if(not enemyFound):
                     enemyFound = True
@@ -205,7 +204,7 @@ class Lulu:
         sizeToBePrey = self.size / Territory.EATING_RATIO
         preyFound = False
         for i in items:
-            if(i.size < sizeToBePrey):
+            if(i.size < sizeToBePrey and i.started):
                 currentDistance = max(abs(self.position.x - i.position.x), abs(self.position.y - i.position.y))
                 if(not preyFound):
                     preyFound = True
