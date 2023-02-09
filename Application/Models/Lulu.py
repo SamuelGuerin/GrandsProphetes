@@ -96,73 +96,12 @@ class Lulu:
                     if(not Territory.tryMove(self.position, Position(nextPos.x, nextPos.y - yMove))):
                         # random
                         self.goToTargetPosition(self.newRandomPosition())
-                
-        # if (Territory.getItem(nextPos.x, nextPos.y) == None):
-        #     return Territory.tryMove(self, nextPos)
-        # # tenter une autre path pour aller à l'objectif
-        # elif(Territory.getItem(nextPos.x, nextPos.y) == None):
-
-        # elif():
-        # return False
-
-    # dernier recours d'un lulu : fait un move random
     
     def newRandomPosition(self) -> Position:
         # 1 - point random sur la map (2 à maxX-1), 2 à maxY-1
         randomPosition = Position((random.randint(2, Territory.getSizeX())), random.randint(2, Territory.getSizeY()))
         return randomPosition
         # return le point
-
-    # def randomMove(self):
-        
-    #     moveChoices = [1, 2, 3, 4, 5, 6, 7, 8]
-    #     foundMove = False
-
-    #     while(not foundMove and len(moveChoices) > 0):
-    #         move = random.choice(moveChoices)
-    #         moveChoices.remove(move)
-            
-    #         match move:
-    #             case 1:
-    #                 # bas-gauche
-    #                 item = Territory.getItem(self.position.x - 1, self.position.y - 1)
-    #                 if(item == None):
-    #                     foundMove = Territory.tryMove(self.position, Position(self.position.x - 1, self.position.y - 1))
-    #             case 2:
-    #                 # gauche
-    #                 item = Territory.getItem(self.position.x - 1, self.position.y)
-    #                 if(item == None):
-    #                     foundMove = Territory.tryMove(self.position, Position(self.position.x - 1, self.position.y))
-    #             case 3:
-    #                 # haut gauche
-    #                 item = Territory.getItem(self.position.x - 1, self.position.y + 1)
-    #                 if(item == None):
-    #                     foundMove = Territory.tryMove(self.position, Position(self.position.x - 1, self.position.y + 1))
-    #             case 4:
-    #                 # haut
-    #                 item = Territory.getItem(self.position.x, self.position.y + 1)
-    #                 if(item == None):
-    #                     foundMove = Territory.tryMove(self.position, Position(self.position.x, self.position.y + 1))
-    #             case 5:
-    #                 # haut droite
-    #                 item = Territory.getItem(self.position.x + 1, self.position.y + 1)
-    #                 if(item == None):
-    #                     foundMove = Territory.tryMove(self.position, Position(self.position.x + 1, self.position.y + 1))
-    #             case 6:
-    #                 # droite
-    #                 item = Territory.getItem(self.position.x + 1, self.position.y)
-    #                 if(item == None):
-    #                     foundMove = Territory.tryMove(self.position, Position(self.position.x + 1, self.position.y))
-    #             case 7:
-    #                 # bas droite
-    #                 item = Territory.getItem(self.position.x + 1, self.position.y - 1)
-    #                 if(item == None):
-    #                     foundMove = Territory.tryMove(self.position, Position(self.position.x + 1, self.position.y - 1))
-    #             case 8:
-    #                 # bas
-    #                 item = Territory.getItem(self.position.x, self.position.y - 1)
-    #                 if(item == None):
-    #                     foundMove = Territory.tryMove(self.position, Position(self.position.x, self.position.y - 1))
 
     def getMoveFromDiff(self, diff):
         if diff > 0:
@@ -239,60 +178,6 @@ class Lulu:
                         foodInRange.append(item)
                     elif(type(item) == Lulu):
                         lulusInRange.append(item)
-
-    # ToDo : Changer le 1 pour la speed du lulu
-    # ToDo : Si peut pas bouger, va qqpart random
-    # Si la lulu a ses deux nourritures, elle se dirige vers le côté
-    def moveToInitialPosition(self, resetPosition = False):
-        sizeX = Territory.getSizeX()
-        sizeY = Territory.getSizeY()
-        minSizeXY = 1
-        halfSizeX = sizeX / 2
-        halfSizeY = sizeY / 2
-        if(self.position.x <= halfSizeX and self.position.y <= halfSizeY): # vérifier si centre de la map?
-            if(self.position.x > self.position.y):
-                # if(not resetPosition):
-                    Territory.tryMove(self.position, Position(self.position.x, self.position.y - 1)) # va vers y=min
-                # else:
-                #     Territory.moveLulu(self.position, Position(self.position.x, minSizeXY))
-            else:
-                # if(not resetPosition):
-                    Territory.tryMove(self.position, Position(self.position.x - 1, self.position.y)) # va vers x=min
-                # else:
-                #     Territory.moveLulu(self.position, Position(minSizeXY, self.position.y))
-        elif(self.position.x <= halfSizeX and self.position.y > halfSizeY):
-            if((sizeY - self.position.y) < self.position.x):
-                # if(not resetPosition):
-                    Territory.tryMove(self.position, Position(self.position.x, self.position.y + 1)) # va vers y=max
-                # else:
-                #     Territory.moveLulu(self.position, Position(self.position.x, sizeY))
-            else:
-                # if(not resetPosition):
-                    Territory.tryMove(self.position, Position(self.position.x - 1, self.position.y)) # vs vers x=min
-                # else:
-                #     Territory.moveLulu(self.position, Position(minSizeXY, self.position.y))
-        elif(self.position.x > halfSizeX and self.position.y <= halfSizeY):
-            if((sizeX - self.position.x) < self.position.y):
-                # if(not resetPosition):
-                    Territory.tryMove(self.position, Position(self.position.x + 1, self.position.y)) # va vers x=max
-                # else:
-                #     Territory.moveLulu(self.position, Position(sizeX, self.position.y))
-            else:
-                # if(not resetPosition):
-                    Territory.tryMove(self.position, Position(self.position.x, self.position.y - 1)) # va vers y=min
-                # else:
-                #     Territory.moveLulu(self.position, Position(self.position.x, minSizeXY))
-        elif(self.position.x > halfSizeX and self.position.y > halfSizeY):
-            if(self.position.x > self.position.y):
-                # if(not resetPosition):
-                    Territory.tryMove(self.position, Position(self.position.x + 1, self.position.y)) # va vers x=max
-                # else:
-                #     Territory.moveLulu(self.position, Position(sizeX, self.position.y))
-            else:
-                # if(not resetPosition):
-                    Territory.tryMove(self.position, Position(self.position.x, self.position.y + 1)) # vs vers y=max
-                # else:
-                #     Territory.moveLulu(self.position, Position(self.position.x, sizeY))
     
     # Téléporte la lulu sur le côté au début d'une round
     def resetPosition(self):
