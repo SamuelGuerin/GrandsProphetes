@@ -583,8 +583,6 @@ class Form(ct.CTk):
         btnPreview = ct.CTkButton(master=self.frame_1, text="Prévisualiser", command=preview)
         btnPreview.grid(row=11, column=0, columnspan=3, padx=20, pady=10, sticky="we")
 
-        
-
         lblErrorInForm = ct.CTkLabel(master=self.frame_1, height=100, justify=ct.CENTER, text="")
         lblErrorInForm.grid(row=13, column=0, columnspan=3, padx=20, pady=10)
 
