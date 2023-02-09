@@ -31,3 +31,4 @@ language = 'fr'
 
 html_theme = 'piccolo_theme'
 html_theme_path = ["."]
+

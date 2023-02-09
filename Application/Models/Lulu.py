@@ -5,6 +5,7 @@ from Models.Food import Food
 
 class Lulu:
     def __init__(self, position, speed = 0,sense = 0,size = 0,energy = 0,foodAmount = 0, isDone = False):
+
         self.position = position
         self.speed = speed
         self.sense = sense
@@ -27,7 +28,7 @@ class Lulu:
         while(speedLeft > 0 and self.energy >= energyCost):
             foodInRange.clear()
             lulusInRange.clear()
-            self.__getItems(foodInRange, lulusInRange)
+            self.getItems(foodInRange, lulusInRange)
             targetPosition = None
             targetFound = False
 
@@ -110,7 +111,14 @@ class Lulu:
             return -1
         return 0
 
-    def getClosestEnemy(self, items): # Retourne la position de l'ennemi le plus proche
+    def getClosestEnemy(self, items):
+        """Retourne la position de la :class:`Lulu` au moins 1.2 fois plus grande la plus proche dans la liste fournie
+
+        :param items: Toutes les :class:`Lulu` à vérifier
+        :type items: list
+        :return: La :class:`Position` de la :class:`Lulu` la plus proche
+        :rtype: :class:`Position`
+        """
         position = None
         closestDistance = None
         sizeToBeEnemy = self.size * Territory.EATING_RATIO
@@ -131,7 +139,14 @@ class Lulu:
         else:
             return None, False
     
-    def getClosestPrey(self, items): # Retourne la position de la proie la plus proche
+    def getClosestPrey(self, items):
+        """Retourne la position de la :class:`Lulu` au moins 1.2 fois plus petite la plus proche dans la liste fournie
+
+        :param items: Toutes les :class:`Lulu` à vérifier
+        :type items: list
+        :return: La :class:`Position` de la :class:`Lulu` la plus proche
+        :rtype: :class:`Position`
+        """
         position = None
         closestDistance = None
         sizeToBePrey = self.size / Territory.EATING_RATIO
@@ -148,7 +163,14 @@ class Lulu:
                     closestDistance = currentDistance
         return position, preyFound
 
-    def getClosestFood(self, items): # Retourne la position de la nourriture la plus proche
+    def getClosestFood(self, items):
+        """Retourne la position de la :class:`Food` le plus proche dans la liste fournie
+
+        :param items: Tous les :class:`Food` à vérifier
+        :type items: list
+        :return: La :class:`Position` de la :class:`Food` la plus proche
+        :rtype: :class:`Position`
+        """
         position = None
         closestDistance = None
         foodFound = False
@@ -163,7 +185,14 @@ class Lulu:
                 closestDistance = currentDistance
         return position, foodFound
                 
-    def __getItems(self, foodInRange, lulusInRange):
+    def getItems(self, foodInRange, lulusInRange):
+        """Recherche les :class:`Food` et les :class:`Lulu` qui sont dans sa vision (sense)
+
+        :param foodInRange: contient toutes les nourritures dans la vision (sense) de la lulu
+        :type foodInRange: list
+        :param lulusInRange: contient toutes les nourritures dans la vision (sense) de la lulu
+        :type lulusInRange: list
+        """
         map = Territory.getMap()
         minX = self.position.x - self.sense
         maxX = self.position.x + self.sense
@@ -181,6 +210,8 @@ class Lulu:
     
     # Téléporte la lulu sur le côté au début d'une round
     def resetPosition(self):
+        """Téléporte une lulu sur le côté de la carte (map) à la fin d'une génération, pour la préparer à la reproduction
+        """
         #self.moveToInitialPosition(True)
         sizeX = Territory.getSizeX()
         sizeY = Territory.getSizeY()
