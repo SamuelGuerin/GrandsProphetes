@@ -58,6 +58,8 @@ class VisualizeLulus(Scene):
         self.add(groupdots)
 
 def renderAnimation():
+    """Génère une image de l'état actuel du :class:`Territory`
+    """
     scene = VisualizeLulus()
     scene.render()
 
