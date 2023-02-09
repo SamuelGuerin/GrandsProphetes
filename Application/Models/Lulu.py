@@ -12,6 +12,7 @@ class Lulu:
         self.energy = energy
         self.foodAmount = foodAmount
         self.isDone = isDone
+        self.started = False
         self.randomTargetPosition = self.newRandomPosition()
 
     def __repr__(self) -> str:
@@ -51,7 +52,7 @@ class Lulu:
                 self.goToTargetPosition(targetPosition)
             self.energy -= energyCost
             speedLeft -= 1
-
+        self.started = True
         if(self.energy < energyCost):
             self.isDone = True
             return False
@@ -197,7 +198,7 @@ class Lulu:
         sizeToBePrey = self.size / Territory.EATING_RATIO
         preyFound = False
         for i in items:
-            if(i.size < sizeToBePrey):
+            if(i.size < sizeToBePrey and i.started):
                 currentDistance = max(abs(self.position.x - i.position.x), abs(self.position.y - i.position.y))
                 if(not preyFound):
                     preyFound = True
