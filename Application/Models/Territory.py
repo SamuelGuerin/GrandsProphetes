@@ -208,6 +208,9 @@ def dayResultLulu():
 def addMove(move):
     __moves.append(move)
 
+def getMoves():
+    return __moves
+
 def printMap():
     print(__map)
 

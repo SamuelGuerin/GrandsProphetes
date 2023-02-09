@@ -3,6 +3,7 @@ import Models.Territory as Territory
 # À enlever -> pour test
 import random
 
+generationMoves = []
 
 def __run__(sizeX, sizeY, foodCount, lulusCount, speed, sense, size, energy, nbGeneration):
     Territory.createMap(sizeX, sizeY, foodCount, lulusCount,
@@ -13,3 +14,4 @@ def __run__(sizeX, sizeY, foodCount, lulusCount, speed, sense, size, energy, nbG
         Territory.moveAll()
         Territory.resetWorld()
         Territory.dayResultLulu()
+        generationMoves.append(Territory.getMoves())
