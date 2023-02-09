@@ -132,7 +132,7 @@ def __CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isD
     # Créer une lulu si la case est vide
     if (getItem(rx, ry) == None):
         rPos = Position(rx, ry)
-        __map[rPos] = Lulu(rPos, speed, sense, size, energyRemaining, FoodCollected, rPos, isDone)
+        __map[rPos] = Lulu(rPos, speed, sense, size, energyRemaining, FoodCollected, isDone)
         # Ajouter la lulu dans la liste de lulus
         __lulus.append(__map[rPos])
         return True

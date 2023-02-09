@@ -4,15 +4,15 @@ from Models.Position import Position
 from Models.Food import Food
 
 class Lulu:
-    def __init__(self, position, speed = 0,sense = 0,size = 0,energy = 0,foodAmount = 0,lastPos = None, isDone = False):
+    def __init__(self, position, speed = 0,sense = 0,size = 0,energy = 0,foodAmount = 0, isDone = False):
         self.position = position
         self.speed = speed
         self.sense = sense
         self.size = size
         self.energy = energy
         self.foodAmount = foodAmount
-        self.lastPos = lastPos
         self.isDone = isDone
+        self.started = False
         self.randomTargetPosition = self.newRandomPosition()
 
     def __repr__(self) -> str:
@@ -52,7 +52,7 @@ class Lulu:
                 self.goToTargetPosition(targetPosition)
             self.energy -= energyCost;
             speedLeft -= 1;
-
+        self.started = True
         if(self.energy < energyCost):
             self.isDone = True
             return False
@@ -137,7 +137,7 @@ class Lulu:
         sizeToBePrey = self.size / Territory.EATING_RATIO
         preyFound = False
         for i in items:
-            if(i.size < sizeToBePrey):
+            if(i.size < sizeToBePrey and i.started):
                 currentDistance = max(abs(self.position.x - i.position.x), abs(self.position.y - i.position.y))
                 if(not preyFound):
                     preyFound = True
