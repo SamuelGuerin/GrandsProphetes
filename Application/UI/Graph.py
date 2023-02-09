@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
-import Form
 
 #Camera
 # Vitesse - Vision : elev=-92, azim=0.44
