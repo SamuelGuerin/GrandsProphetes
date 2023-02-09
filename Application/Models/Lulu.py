@@ -4,8 +4,25 @@ from Models.Position import Position
 from Models.Food import Food
 
 class Lulu:
-    def __init__(self, position, speed = 0,sense = 0,size = 0,energy = 0,foodAmount = 0, isDone = False):
+    """Classe contenant toutes les informations propre à une :class:`Lulu`
 
+        :param position: :class:`Position` sur l'axe des X et Y de la :class:`Lulu` dans la carte (map)
+        :type position: :class:`Position`
+        :param speed: Vitesse de la :class:`Lulu`, relatif au nombre de cases que la :class:`Lulu` va parcourir pendant son tour 
+        :type speed: int
+        :param sense: Vision de la :class:`Lulu`, définit la portée en nombre de cases dans laquelle la :class:`Lulu` peut apercevoir d'autres :class:`Lulu` ou de la nourriture (:class:`Food`)
+        :type sense: int
+        :param size: Taille de la :class:`Lulu`, définit sa force pour calculer si la :class:`Lulu` peut manger une :class:`Lulu` ou se faire manger par une autre :class:`Lulu`
+        :type size: int
+        :param energy: Énergie de la :class:`Lulu`, permet à la :class:`Lulu` de se déplacer tant qu'elle a assez d'énergie, l'énergie se dépense à chaque mouvement occasionné par la :class:`Lulu`
+        :type energy: int
+        :param foodAmount: Nombre de nourriture (:class:`Food`) consommée par la :class:`Lulu` 
+        :type foodAmount: int
+        :param isDone: Détermine si la :class:`Lulu` est inactive et immobile, ce paramètre est égal à "True" quand la :class:`Lulu` n'a plus assez d'énergie pour se déplacer
+        :type isDone: bool
+    """
+    def __init__(self, position, speed = 0,sense = 0,size = 0,energy = 0,foodAmount = 0, isDone = False):
+        
         self.position = position
         self.speed = speed
         self.sense = sense
@@ -20,6 +37,11 @@ class Lulu:
         return ("Lulu")
 
     def move(self) -> bool:
+        """Algorithme qui détermine comment la :class:`Lulu` se déplacera dépendemment de ce qui est présent dans sa vision
+
+        :return: Retourne un booléen déterminant s'il reste assez d'énergie à la :class:`Lulu` pour effectuer un mouvement 
+        :rtype: bool
+        """
         foodInRange = []
         lulusInRange = []
         energyCost = ((self.size/100) ** 3) * (self.speed ** 2) + self.sense;
@@ -67,13 +89,23 @@ class Lulu:
     # 4- S'il ne détecte rien, il va vers 1 point random et refait son scan à chaque point
 
     def isCloseToTargetPosition(self) -> bool:
+        """Vérifie si la :class:`Lulu` est près de la position ciblée, la distance déterminant si la :class:`Lulu` est près ou non est équivalent à une distance de 5% du :class:`Territory` total
+
+        :return: Retourne un booléen déterminant si la :class:`Lulu` est près ou non de la position ciblée 
+        :rtype: bool
+        """
         currentDistance = max(abs(self.position.x - self.randomTargetPosition.x), abs(self.position.y - self.randomTargetPosition.y))
         randomSense = ((Territory.getSizeX() + Territory.getSizeY())/ 2 / 20)
         randomSense = 1 if randomSense < 1 else randomSense
         return True if currentDistance <= randomSense else False
         
 
-    def goToTargetPosition(self, targetPosition) -> bool:
+    def goToTargetPosition(self, targetPosition):
+        """Déplace la :class:`Lulu` en direction de la position ciblée 
+
+        :param targetPosition: :class:`Position` ciblée par la :class:`Lulu`
+        :type targetPosition: :class:`Position
+        """
         xDiff = targetPosition.x - self.position.x
         yDiff = targetPosition.y - self.position.y
         xMove = self.getMoveFromDiff(xDiff)
@@ -99,12 +131,24 @@ class Lulu:
                         self.goToTargetPosition(self.newRandomPosition())
     
     def newRandomPosition(self) -> Position:
+        """Détermine une nouvelle :class:`Position` aléatoire dans la carte (map) qui deviendra la nouvelle :class:`Position` ciblée de la :class:`Lulu`
+
+        :return: Retourne la nouvelle :class:`Position` aléatoire
+        :rtype: :class:`Position`
+        """
         # 1 - point random sur la map (2 à maxX-1), 2 à maxY-1
         randomPosition = Position((random.randint(2, Territory.getSizeX())), random.randint(2, Territory.getSizeY()))
         return randomPosition
         # return le point
 
     def getMoveFromDiff(self, diff):
+        """Détermine dans quelle direction la :class:`Lulu` doit se déplacer sur un certain axe de la carte (map) 
+
+        :param diff: Écart entre deux coordonnées selon un axe
+        :type diff: int
+        :return: Retourne un entier positif ou négatif déterminant dans quelle direction la :class:`Lulu` doit se déplacer
+        :rtype: int
+        """
         if diff > 0:
             return 1
         elif diff < 0:
