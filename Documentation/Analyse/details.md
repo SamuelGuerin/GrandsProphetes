@@ -7,6 +7,7 @@ skinparam linetype ortho
 package Entité {
     class "Lulu" as lulu {
         + bool isDone
+        + bool isNewBorn
         + int speed
         + int sense
         + int size
