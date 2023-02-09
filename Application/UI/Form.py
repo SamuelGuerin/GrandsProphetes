@@ -25,7 +25,7 @@ class Form(ct.CTk):
         self.title("Sélection naturel Form.py")
         self.resizable(True, True)
         self.maxsize(self.width, self.height)
-        self.minsize(830, 700)
+        self.minsize(830, 950)
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
 
@@ -501,11 +501,22 @@ class Form(ct.CTk):
             buttonDestroyGraph = ct.CTkButton(self, text="Revenir à l'entrer de données", command=lambda:remove_graph(canvasR))
             buttonDestroyGraph.grid(row=1, column=0, padx=10, pady=10, sticky="we")
 
+        def preview():
+            current_path = os.path.dirname(os.path.realpath(__file__))
+            preview = ct.CTkImage(Image.open(current_path + "/preview.png"), size=(500, 200))
+            previewImage = ct.CTkLabel(master=self.frame_1, text="", image=preview)
+            previewImage.grid(row=12, column=0, columnspan=3, padx=20, pady=10)
+
         btnGraph = ct.CTkButton(master=self.frame_1, text="Visualiser les graphiques", command=add_Graph)
         btnGraph.grid(row=10, column=2, padx=20, pady=10, sticky="we")
 
+        btnPreview = ct.CTkButton(master=self.frame_1, text="Prévisualiser", command=preview)
+        btnPreview.grid(row=11, column=0, columnspan=3, padx=20, pady=10, sticky="we")
+
+        
+
         lblErrorInForm = ct.CTkLabel(master=self.frame_1, height=100, justify=ct.CENTER, text="")
-        lblErrorInForm.grid(row=11, column=0, columnspan=3, padx=20, pady=10)
+        lblErrorInForm.grid(row=13, column=0, columnspan=3, padx=20, pady=10)
 
 if __name__ == "__main__":
     app = Form()
