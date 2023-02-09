@@ -50,7 +50,12 @@ def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size):
 
     setFood()
 
+    for lulu in __lulus:
+        lulu.isNewBorn = False
+
 # private
+
+
 def __CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isDone) -> bool:
     # Créer une lulu si la case est vide
     if (getItem(rx, ry) == None):
@@ -75,6 +80,8 @@ def __CreateFood(rx, ry) -> bool:
     return False
 
 # public
+
+
 def getItem(x, y):
     item = __map.get(Position(x, y))
     return item
@@ -97,6 +104,8 @@ def __deleteItem(position):
 
 # Vérifie s'il est possible de faire le mouvement demandé
 # return true si le move est fait, sinon false
+
+
 def tryMove(oldPosition, newPosition) -> bool:
     # Vérifier si le mouvement est dans la map
     if ((newPosition.x >= 1 and newPosition.x <= getSizeX()) and (newPosition.y >= 1 and newPosition.y <= getSizeY())):
@@ -114,13 +123,15 @@ def tryMove(oldPosition, newPosition) -> bool:
     return False
 
 # Todo : Gérer l'énergie avec la formule
+
+
 def moveLulu(oldPosition, newPosition):
     # S'il y avait qqch sur la nouvelle case, l'enlever et ajouter 1 de nourriture
     currentLulu = __map[oldPosition]
     if (getItem(newPosition.x, newPosition.y) != None):
         currentLulu.foodAmount += 1
         # ToDo : Valider que la liste lulus ne la contient plus
-        if (type(__map[newPosition]) == Lulu):
+        if (type(getItem(newPosition.x, newPosition.y)) == Lulu):
             __lulus.remove(__map[newPosition])
         __deleteItem(newPosition)
     __addItem(newPosition, currentLulu)
@@ -182,38 +193,61 @@ def reproduceLulu(Lulu):
                  0, False)
 
 
+def getLuluMap():
+    count = 0
+    for item in __map.values():
+        if (type(item) == Lulu):
+            count += 1
+
+    return count
+
+
 def moveAll():
     lulusToMove = __lulus.copy()
     while (lulusToMove.__len__() > 0):
-        
-        print("nombre de survivants: " + str(sum(lulu.foodAmount >= 1 for lulu in getLulus())))
-        time.sleep(0.2)
-        renderAnimation()
-        
+
+        print("nombre de survivants: " +
+              str(sum(lulu.foodAmount >= 1 for lulu in getLulus())))
+        print("nombre de lulu: " + str(getLulus().__len__()))
+        print("nombre de lulu map: " + str(getLuluMap()))
+        # time.sleep(0.2)
+        # renderAnimation()
+
         random.shuffle(lulusToMove)
-        for lulu in lulusToMove:
-            if not (lulu.move()):
+        for lulu in lulusToMove[:]:
+            if (getItem(lulu.position.x, lulu.position.y) == lulu):
+                if not (lulu.move()):
+                    lulusToMove.remove(lulu)
+                # time.sleep(0.2)
+                # renderAnimation()
+            else:
                 lulusToMove.remove(lulu)
 
 
 def dayResultLulu():
-    for lulu in __lulus:
-        if (lulu.foodAmount == 0):
+    for lulu in __lulus[:]:
+        if (lulu.foodAmount == 0 and not lulu.isNewBorn):
             __deleteItem(lulu.position)
             __lulus.remove(lulu)
         elif (lulu.foodAmount > 1):
             reproduceLulu(lulu)
 
+        lulu.foodAmount = 0
+        lulu.isNewBorn = False
+
+
 def printMap():
     print(__map)
+
 
 def getLulus():
     return __lulus
 
+
 def setFood():
     maxX = __sizeX
     maxY = __sizeY
-    
+
     # Ajouter de la nourriture partout sauf sur le côté
     for _ in range(__foodCount):
         foodCreated = False
@@ -221,22 +255,26 @@ def setFood():
             rx = random.randint(2, maxX - 1)
             ry = random.randint(2, maxY - 1)
             foodCreated = __CreateFood(rx, ry)
-            
+
+
 def resetWorld():
     __map.clear()
     setFood()
-    for lulu in __lulus:
+    for lulu in __lulus[:]:
         lulu.isDone = False
         lulu.energy = __energy
         __addItem(lulu.position, lulu)
-        lulu.resetPosition() # Plante
+        
+    for lulu in __lulus[:]:
+        lulu.resetPosition()
+
 
 class VisualizeLulus(Scene):
     def construct(self):
 
         items = getMap()
         # SIZE = 1/5 du plus petit x ou y?
-        SIZE=getSizeX()/5 if getSizeX() < getSizeY() else getSizeY()/5
+        SIZE = getSizeX()/5 if getSizeX() < getSizeY() else getSizeY()/5
         # CENTERX = /2
         CENTERX = getSizeX()/2
         # CENTERY = /2
@@ -250,36 +288,48 @@ class VisualizeLulus(Scene):
 
         for position in items:
             item = items.get(position)
-            if(type(item) == Lulu):
-                if(item.isDone):
+            if (type(item) == Lulu):
+                if (item.isDone):
                     rangeOfColors = rangeOfSizes/6
                     if item.size <= minSize + (rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=RED_A)
+                        dot = Dot([(position.x - CENTERX)/SIZE,
+                                  (position.y - CENTERY)/SIZE, 0], color=RED_A)
                     elif item.size <= minSize + 2*(rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=RED_B)
+                        dot = Dot([(position.x - CENTERX)/SIZE,
+                                  (position.y - CENTERY)/SIZE, 0], color=RED_B)
                     elif item.size <= minSize + 3*(rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=RED_C)
+                        dot = Dot([(position.x - CENTERX)/SIZE,
+                                  (position.y - CENTERY)/SIZE, 0], color=RED_C)
                     elif item.size <= minSize + 4*(rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=RED_D)
+                        dot = Dot([(position.x - CENTERX)/SIZE,
+                                  (position.y - CENTERY)/SIZE, 0], color=RED_D)
                     else:
-                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=RED_E)
+                        dot = Dot([(position.x - CENTERX)/SIZE,
+                                  (position.y - CENTERY)/SIZE, 0], color=RED_E)
                 else:
                     rangeOfColors = rangeOfSizes/6
                     if item.size <= minSize + (rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=BLUE_A)
+                        dot = Dot([(position.x - CENTERX)/SIZE,
+                                  (position.y - CENTERY)/SIZE, 0], color=BLUE_A)
                     elif item.size <= minSize + 2*(rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=BLUE_B)
+                        dot = Dot([(position.x - CENTERX)/SIZE,
+                                  (position.y - CENTERY)/SIZE, 0], color=BLUE_B)
                     elif item.size <= minSize + 3*(rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=BLUE_C)
+                        dot = Dot([(position.x - CENTERX)/SIZE,
+                                  (position.y - CENTERY)/SIZE, 0], color=BLUE_C)
                     elif item.size <= minSize + 4*(rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=BLUE_D)
+                        dot = Dot([(position.x - CENTERX)/SIZE,
+                                  (position.y - CENTERY)/SIZE, 0], color=BLUE_D)
                     else:
-                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=BLUE_E)
-            elif(type(item) == Food):
-                dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=GREEN)
+                        dot = Dot([(position.x - CENTERX)/SIZE,
+                                  (position.y - CENTERY)/SIZE, 0], color=BLUE_E)
+            elif (type(item) == Food):
+                dot = Dot([(position.x - CENTERX)/SIZE,
+                          (position.y - CENTERY)/SIZE, 0], color=GREEN)
             groupdots.add(dot)
 
         self.add(groupdots)
+
 
 def renderAnimation():
     scene = VisualizeLulus()

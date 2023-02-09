@@ -64,4 +64,4 @@ def renderAnimation():
     scene.render()
 
 if __name__ == '__main__':
-    Simulation.__run__(100, 100, 200, 10, 25, 25, 10, 10000, 5)
+    Simulation.__run__(100, 100, 50, 10, 25, 25, 10, 1000, 10000)
