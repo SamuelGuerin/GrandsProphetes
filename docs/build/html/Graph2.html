@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Models &#8212; Documentation LulusWorld 0.0.1</title>
+    <title>Graph Module &#8212; Documentation LulusWorld 0.0.1</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/basic_mod.css?v=0.7.0-1" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -17,8 +17,7 @@
     <script src="_static/js/petite-vue.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Recherche" href="search.html" />
-    <link rel="next" title="Food module" href="Food.html" />
-    <link rel="prev" title="main module" href="main.html" /> 
+    <link rel="prev" title="FormGraph Module" href="FormGraph.html" /> 
   </head><body data-dark_mode_code_blocks="true">
 
 <div id="top_nav">
@@ -125,14 +124,13 @@
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="main.html">main module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Models</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Food.html">Food module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Lulu.html">Lulu module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Position.html">Position module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html">Territory module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="UI.html">Interface</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Form.html">Form Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FormGraph.html">FormGraph Module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Graph Module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="UI.html">Interface</a></li>
 </ul>
 
         </div>
@@ -144,50 +142,55 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="models">
-<h1>Models<a class="headerlink" href="#models" title="Lien permanent vers cette rubrique">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="Food.html">Food module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Food.html#Food.Food"><code class="docutils literal notranslate"><span class="pre">Food</span></code></a></li>
+  <section id="module-Graph2">
+<span id="graph-module"></span><h1>Graph Module<a class="headerlink" href="#module-Graph2" title="Lien permanent vers cette rubrique">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="Graph2.Lulu">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Graph2.</span></span><span class="sig-name descname"><span class="pre">Lulu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">speed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sense</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Graph2.html#Lulu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Graph2.Lulu" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Graph2.calculateCoordinates">
+<span class="sig-prename descclassname"><span class="pre">Graph2.</span></span><span class="sig-name descname"><span class="pre">calculateCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">generation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speeds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">senses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sizes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Graph2.html#calculateCoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Graph2.calculateCoordinates" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Graph2.generateColors">
+<span class="sig-prename descclassname"><span class="pre">Graph2.</span></span><span class="sig-name descname"><span class="pre">generateColors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">speeds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">senses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sizes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Graph2.html#generateColors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Graph2.generateColors" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Cette fonction assigne une couleur à chaque axe soit la vitesse, la vision et la taille.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>speeds</strong> (<em>List&lt;float&gt;</em>) – Liste contenant les valeurs de la vitesse</p></li>
+<li><p><strong>senses</strong> (<em>List&lt;float&gt;</em>) – Liste contenant les valeurs de la vision</p></li>
+<li><p><strong>sizes</strong> (<em>List&lt;float&gt;</em>) – Liste contenant les valeurs de la taille</p></li>
+<li><p><strong>colors</strong> (<em>List&lt;float&gt;</em>) – Liste contenant les valeurs de la couleur (valeur de la couleur rgb)</p></li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="Lulu.html">Lulu module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Lulu.html#Lulu.Lulu"><code class="docutils literal notranslate"><span class="pre">Lulu</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.getClosestEnemy"><code class="docutils literal notranslate"><span class="pre">Lulu.getClosestEnemy()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.getClosestFood"><code class="docutils literal notranslate"><span class="pre">Lulu.getClosestFood()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.getClosestPrey"><code class="docutils literal notranslate"><span class="pre">Lulu.getClosestPrey()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.getItems"><code class="docutils literal notranslate"><span class="pre">Lulu.getItems()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.getMoveFromDiff"><code class="docutils literal notranslate"><span class="pre">Lulu.getMoveFromDiff()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.goToTargetPosition"><code class="docutils literal notranslate"><span class="pre">Lulu.goToTargetPosition()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.isCloseToTargetPosition"><code class="docutils literal notranslate"><span class="pre">Lulu.isCloseToTargetPosition()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.move"><code class="docutils literal notranslate"><span class="pre">Lulu.move()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.newRandomPosition"><code class="docutils literal notranslate"><span class="pre">Lulu.newRandomPosition()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.resetPosition"><code class="docutils literal notranslate"><span class="pre">Lulu.resetPosition()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="Position.html">Position module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Position.html#Position.Position"><code class="docutils literal notranslate"><span class="pre">Position</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="Territory.html">Territory module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.createMap"><code class="docutils literal notranslate"><span class="pre">createMap()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.dayResultLulu"><code class="docutils literal notranslate"><span class="pre">dayResultLulu()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.getItem"><code class="docutils literal notranslate"><span class="pre">getItem()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.getLulus"><code class="docutils literal notranslate"><span class="pre">getLulus()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.getMap"><code class="docutils literal notranslate"><span class="pre">getMap()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.getSizeX"><code class="docutils literal notranslate"><span class="pre">getSizeX()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.getSizeY"><code class="docutils literal notranslate"><span class="pre">getSizeY()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.moveLulu"><code class="docutils literal notranslate"><span class="pre">moveLulu()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.printMap"><code class="docutils literal notranslate"><span class="pre">printMap()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.reproduceLulu"><code class="docutils literal notranslate"><span class="pre">reproduceLulu()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.tryMove"><code class="docutils literal notranslate"><span class="pre">tryMove()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Graph2.generateGraph">
+<span class="sig-prename descclassname"><span class="pre">Graph2.</span></span><span class="sig-name descname"><span class="pre">generateGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">generation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currentGeneration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elev</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">azim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Graph2.html#generateGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Graph2.generateGraph" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Graph2.setAxesLabel">
+<span class="sig-prename descclassname"><span class="pre">Graph2.</span></span><span class="sig-name descname"><span class="pre">setAxesLabel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Graph2.html#setAxesLabel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Graph2.setAxesLabel" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Graph2.setAxesSize">
+<span class="sig-prename descclassname"><span class="pre">Graph2.</span></span><span class="sig-name descname"><span class="pre">setAxesSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sz</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Graph2.html#setAxesSize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Graph2.setAxesSize" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Graph2.setStats">
+<span class="sig-prename descclassname"><span class="pre">Graph2.</span></span><span class="sig-name descname"><span class="pre">setStats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Graph2.html#setStats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Graph2.setStats" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
 
 
@@ -196,6 +199,29 @@
         </div>
       </div>
     
+        <div id="show_right_sidebar">
+            <p><a class="toggle_right_sidebar" href="#"><span class="icon"><</span><span>Page contents<span></a></p>
+        </div>
+
+        <div id="right_sidebar">
+            <p><a class="toggle_right_sidebar" href="#"><span class="icon">></span><span>Page contents:<span></a></p>
+            <div class="page_toc">
+                <ul>
+<li><a class="reference internal" href="#">Graph Module</a><ul>
+<li><a class="reference internal" href="#Graph2.Lulu"><code class="docutils literal notranslate"><span class="pre">Lulu</span></code></a></li>
+<li><a class="reference internal" href="#Graph2.calculateCoordinates"><code class="docutils literal notranslate"><span class="pre">calculateCoordinates()</span></code></a></li>
+<li><a class="reference internal" href="#Graph2.generateColors"><code class="docutils literal notranslate"><span class="pre">generateColors()</span></code></a></li>
+<li><a class="reference internal" href="#Graph2.generateGraph"><code class="docutils literal notranslate"><span class="pre">generateGraph()</span></code></a></li>
+<li><a class="reference internal" href="#Graph2.setAxesLabel"><code class="docutils literal notranslate"><span class="pre">setAxesLabel()</span></code></a></li>
+<li><a class="reference internal" href="#Graph2.setAxesSize"><code class="docutils literal notranslate"><span class="pre">setAxesSize()</span></code></a></li>
+<li><a class="reference internal" href="#Graph2.setStats"><code class="docutils literal notranslate"><span class="pre">setStats()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+            </div>
+        </div>
+    
 
       <div class="clearer"></div>
     </div>
@@ -203,14 +229,12 @@
         <div class="button_nav">
             <div class="left">
                 
-                <a href="main.html">
-                    <span class="icon"><</span><span>main module</span></a>
+                <a href="FormGraph.html">
+                    <span class="icon"><</span><span>FormGraph Module</span></a>
                 
             </div>
 
             <div class="right">
-                
-                    <a href="Food.html"><span>Food module</span><span class="icon">></span></a>
                 
             </div>
         </div>

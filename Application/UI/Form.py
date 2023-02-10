@@ -8,32 +8,177 @@ ct.set_appearance_mode("dark")
 ct.set_default_color_theme("blue")
 
 class Form(ct.CTk):
-    """_summary_
+    """Méthode
+
+    .. code-block:: python
+
+        def show_info(
+            txt
+        )
+
+    La fonction est appelé lorsque l'utilisateur passe le curseur sur l'un des button info
+
+    :param txt: txt est le texte qui est afficher pour exposer à l'utilisateur ce qu'il doit entrer.
+    :type txt: string
+
+    .. code-block:: python
+
+        def hide_info()
+
+    La fonction est appelé lorsque le curseur de l'utilisateur quitte l'un des button info
+
+    .. code-block:: python
+
+        def get_inputMapSizeX()
+
+    C'est function valide que la valeur entrée pour la grandeur du territoire en X est bonne.
+
+    :return: Cette fonction retourne la valeur entrée dans le champ. (Taille du territoire en X)
+    :rtype: int 
+
+    .. code-block:: python
+
+        def get_inputMapSizeY()  
+
+    C'est function valide que la valeur entrée pour la grandeur du territoire en Y est bonne. 
+
+    :return: Cette fonction retourne la valeur entrée dans le champ. (Taille du territoire en Y)
+    :rtype: int 
+
+    .. code-block:: python
+
+        def get_inputStartFood()  
+
+    C'est function valide que la valeur entrée pour le nombre de nourriture présent lors du début d'une génération est bonne. 
+
+    :return: Cette fonction retourne la valeur entrée dans le champ. (Nourriture présent lors du début d'une génération)
+    :rtype: int 
+
+    .. code-block:: python
+
+        def get_infoStartFood()  
+    
+    Génère le texte pour indiquer à la l'utilisateur ce qu'il doit entré dans le champs nourriture.
+
+    :return: Cette fonction retourne les informations que l'on doit entrée dans le champ pour la nourriture.
+    :rtype: string
+
+    .. code-block:: python
+
+        def get_inputStartLulu()  
+
+    C'est function valide que la valeur entrée pour les Lulus présent lors du début de la simulation est bonne. 
+
+    :return: Cette fonction retourne la valeur entrée dans le champ. (Nombre de Lulus au début de la simmulation)
+    :rtype: int 
+     
+    .. code-block:: python
+
+        def get_infoStartLulu()  
+
+    Génère le texte pour indiquer à la l'utilisateur ce qu'il doit entré dans le champs qui indique les nombre de Lulu au départ.
+
+    :return: Cette fonction retourne les informations que l'on doit entrée dans le champ pour le nombre de Lulu au départ.
+    :rtype: string
+
+    .. code-block:: python
+
+        def get_inputEnergy()   
+
+    C'est function valide que la valeur entrée pour l'énergie est bonne. 
+
+    :return: Cette fonction retourne la valeur entrée dans le champ. (Énergie des Lulus au début de chaque génération)
+    :rtype: int 
+
+    .. code-block:: python
+
+        def get_inputSpeed()  
+        
+    C'est function valide que la valeur entrée pour le % de variation de la vitesse est bonne. 
+
+    :return: Cette fonction retourne la valeur entrée dans le champ. (% de variation de la vitesse)
+    :rtype: int 
+
+    .. code-block:: python
+
+        def get_inputSense() 
+
+    C'est function valide que la valeur entrée pour le % de variation de la vision est bonne. 
+
+    :return: Cette fonction retourne la valeur entrée dans le champ. (% de variation de la vision)
+    :rtype: int 
+ 
+    .. code-block:: python
+
+        def get_inputSize() 
+
+    C'est function valide que la valeur entrée pour le % de variation de la taille est bonne. 
+
+    :return: Cette fonction retourne la valeur entrée dans le champ. (% de variation de la taille)
+    :rtype: int 
+ 
+    .. code-block:: python
+
+        def get_inputMutation() 
+
+    C'est function valide que la valeur entrée pour le % de chance de mutation est bonne. 
+
+    :return: Cette fonction retourne la valeur entrée dans le champ. (% de chance de mutation)
+    :rtype: int 
+  
+    .. code-block:: python
+
+        def get_inputGeneration() 
+
+    C'est function valide que la valeur entrée pour le nombre de génération généré est bonne. 
+
+    :return: Cette fonction retourne la valeur entrée dans le champ. (Nombre de génération à simuler)
+    :rtype: int 
+   
+    .. code-block:: python
+
+        def get_allBeforeSimulation() 
+
+    C'est function appelle toute les fonctions pour valider chacun des champs et la fonction pour lancer la simulation.
+ 
+    .. code-block:: python
+
+        def add_Graph() 
+
+    Cette fonction permet de généré les graphiques pour chaque génération de plus des button généré,
+    pour pouvoir naviguer dans les différente génération ou pour changer l'angle de vue du graphique.
+            
+    .. code-block:: python
+
+        def preview() 
+
+    Cette fonction permet d'afficher la prévisualisation du commencement de la simulation
+ 
 
     """
-
-
-    width = 1920
-    height = 1080
 
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         index = fg.Index()
 
+        width = 1920
+        height = 1080
+        
+
         # Setup de base de l'interface
         self.geometry("900x700")
         self.title("Sélection naturel Form.py")
         self.resizable(True, True)
-        self.maxsize(self.width, self.height)
-        self.minsize(1000, 950)
+        self.maxsize(width, height)
+        self.minsize(830, 950)
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
 
         # Ajout du background
         current_path = os.path.dirname(os.path.realpath(__file__))
         self.bg_image = ct.CTkImage(Image.open(current_path + "/evo.jpeg"),
-                                               size=(self.width, self.height))
+                                               size=(width, height))
         self.bg_image = ct.CTkLabel(self, image=self.bg_image, text="")
         self.bg_image.grid(row=0, column=0, columnspan=5)
         self.bg_image.rowconfigure(0, weight=1)
@@ -205,15 +350,8 @@ class Form(ct.CTk):
         lblGenerationGood = ct.CTkLabel(master=self.frame_1, text="")
         lblGenerationGood.grid(row=9, column=3, pady=10, padx=10)
 
-
-
         # Enter 1 -- Validation
         def get_inputMapSizeX():
-            """_summary_
-
-            Returns:
-                _type_: _description_
-            """
             try:
                 mapSizeXValue = int(txtMapSizeX.get())
                 if(mapSizeXValue < 0):
@@ -383,7 +521,6 @@ class Form(ct.CTk):
             except ValueError:
                 lblMutationGood.configure(text="Ce n'est pas un nombre entier positif", text_color="red")
 
-
         # Enter 10 -- Validation
         def get_inputGeneration():
             try:
@@ -401,6 +538,9 @@ class Form(ct.CTk):
 
         # -------------------------------------------------
         def get_allBeforeSimulation():
+            """C'est function appelle toute les fonctions pour valider chacun des champs et la fonction pour lancer la simulation.
+            """
+
             validMapSizeX = get_inputMapSizeX()
             validMapSizeY = get_inputMapSizeY()
             validStartFood = get_inputStartFood()
@@ -434,6 +574,10 @@ class Form(ct.CTk):
     
         # Graph
         def add_Graph():
+            """Cette fonction permet de généré les graphiques pour chaque génération de plus des button généré,
+               pour pouvoir naviguer dans les différente génération ou pour changer l'angle de vue du graphique.
+            """
+
             global canvasR
             graphData = fg.graphGeneration.first(index)
             index.elev = 30
@@ -447,6 +591,11 @@ class Form(ct.CTk):
             canvasR = canvasG
 
             def previous(canvas):
+                """Est appelé lors du clic sur button précédent et affiche le graphique précédent.
+
+                Args:
+                    canvas (_type_): _description_
+                """
                 if index.isMin():
                     return
                 global ax

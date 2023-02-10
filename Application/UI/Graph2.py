@@ -2,6 +2,21 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 
 def generateColors(speeds, senses, sizes, colors):
+    """Cette fonction assigne une couleur à chaque axe soit la vitesse, la vision et la taille.
+
+    :param speeds: Liste contenant les valeurs de la vitesse
+    :type speeds: List<float>
+
+    :param senses: Liste contenant les valeurs de la vision
+    :type senses: List<float>
+
+    :param sizes: Liste contenant les valeurs de la taille
+    :type sizes: List<float>
+
+    :param colors: Liste contenant les valeurs de la couleur (valeur de la couleur rgb)
+    :type colors: List<float>
+    """
+    
     colors.clear()
     for i in range(len(speeds)):
         colors.append([speeds[i]/(max(speeds) * 1.3), senses[i]/(max(senses) * 1.3), sizes[i]/(max(sizes) * 1.5)])

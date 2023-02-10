@@ -2,3 +2,4 @@ manim
 customtkinter
 matplotlib
 numpy
+sphinx

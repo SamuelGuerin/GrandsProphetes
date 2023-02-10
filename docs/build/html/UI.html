@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Models &#8212; Documentation LulusWorld 0.0.1</title>
+    <title>Interface &#8212; Documentation LulusWorld 0.0.1</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/basic_mod.css?v=0.7.0-1" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -17,8 +17,8 @@
     <script src="_static/js/petite-vue.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Recherche" href="search.html" />
-    <link rel="next" title="Food module" href="Food.html" />
-    <link rel="prev" title="main module" href="main.html" /> 
+    <link rel="next" title="Form Module" href="Form.html" />
+    <link rel="prev" title="Territory module" href="Territory.html" /> 
   </head><body data-dark_mode_code_blocks="true">
 
 <div id="top_nav">
@@ -125,14 +125,13 @@
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="main.html">main module</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Models</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Food.html">Food module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Lulu.html">Lulu module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Position.html">Position module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html">Territory module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Models</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Form.html">Form Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FormGraph.html">FormGraph Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Graph2.html">Graph Module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="UI.html">Interface</a></li>
 </ul>
 
         </div>
@@ -144,46 +143,45 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="models">
-<h1>Models<a class="headerlink" href="#models" title="Lien permanent vers cette rubrique">¶</a></h1>
+  <section id="interface">
+<h1>Interface<a class="headerlink" href="#interface" title="Lien permanent vers cette rubrique">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Food.html">Food module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Food.html#Food.Food"><code class="docutils literal notranslate"><span class="pre">Food</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Form.html">Form Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Form.html#Form.Form"><code class="docutils literal notranslate"><span class="pre">Form</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="Lulu.html">Lulu module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Lulu.html#Lulu.Lulu"><code class="docutils literal notranslate"><span class="pre">Lulu</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.getClosestEnemy"><code class="docutils literal notranslate"><span class="pre">Lulu.getClosestEnemy()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.getClosestFood"><code class="docutils literal notranslate"><span class="pre">Lulu.getClosestFood()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.getClosestPrey"><code class="docutils literal notranslate"><span class="pre">Lulu.getClosestPrey()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.getItems"><code class="docutils literal notranslate"><span class="pre">Lulu.getItems()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.getMoveFromDiff"><code class="docutils literal notranslate"><span class="pre">Lulu.getMoveFromDiff()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.goToTargetPosition"><code class="docutils literal notranslate"><span class="pre">Lulu.goToTargetPosition()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.isCloseToTargetPosition"><code class="docutils literal notranslate"><span class="pre">Lulu.isCloseToTargetPosition()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.move"><code class="docutils literal notranslate"><span class="pre">Lulu.move()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.newRandomPosition"><code class="docutils literal notranslate"><span class="pre">Lulu.newRandomPosition()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="Lulu.html#Lulu.Lulu.resetPosition"><code class="docutils literal notranslate"><span class="pre">Lulu.resetPosition()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="FormGraph.html">FormGraph Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="FormGraph.html#FormGraph.Index"><code class="docutils literal notranslate"><span class="pre">Index</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="FormGraph.html#FormGraph.Index.azim"><code class="docutils literal notranslate"><span class="pre">Index.azim</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="FormGraph.html#FormGraph.Index.elev"><code class="docutils literal notranslate"><span class="pre">Index.elev</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="FormGraph.html#FormGraph.Index.ind"><code class="docutils literal notranslate"><span class="pre">Index.ind</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="FormGraph.html#FormGraph.Index.isMax"><code class="docutils literal notranslate"><span class="pre">Index.isMax()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="FormGraph.html#FormGraph.Index.isMin"><code class="docutils literal notranslate"><span class="pre">Index.isMin()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="FormGraph.html#FormGraph.Lulu"><code class="docutils literal notranslate"><span class="pre">Lulu</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="FormGraph.html#FormGraph.generateLulus"><code class="docutils literal notranslate"><span class="pre">generateLulus()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="FormGraph.html#FormGraph.graphGeneration"><code class="docutils literal notranslate"><span class="pre">graphGeneration</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="FormGraph.html#FormGraph.graphGeneration.first"><code class="docutils literal notranslate"><span class="pre">graphGeneration.first()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="FormGraph.html#FormGraph.graphGeneration.last"><code class="docutils literal notranslate"><span class="pre">graphGeneration.last()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="FormGraph.html#FormGraph.graphGeneration.next"><code class="docutils literal notranslate"><span class="pre">graphGeneration.next()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="FormGraph.html#FormGraph.graphGeneration.previous"><code class="docutils literal notranslate"><span class="pre">graphGeneration.previous()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="FormGraph.html#FormGraph.graphGeneration.senseSpeed"><code class="docutils literal notranslate"><span class="pre">graphGeneration.senseSpeed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="FormGraph.html#FormGraph.graphGeneration.sizeSense"><code class="docutils literal notranslate"><span class="pre">graphGeneration.sizeSense()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="FormGraph.html#FormGraph.graphGeneration.speedSize"><code class="docutils literal notranslate"><span class="pre">graphGeneration.speedSize()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="Position.html">Position module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Position.html#Position.Position"><code class="docutils literal notranslate"><span class="pre">Position</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="Territory.html">Territory module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.createMap"><code class="docutils literal notranslate"><span class="pre">createMap()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.dayResultLulu"><code class="docutils literal notranslate"><span class="pre">dayResultLulu()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.getItem"><code class="docutils literal notranslate"><span class="pre">getItem()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.getLulus"><code class="docutils literal notranslate"><span class="pre">getLulus()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.getMap"><code class="docutils literal notranslate"><span class="pre">getMap()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.getSizeX"><code class="docutils literal notranslate"><span class="pre">getSizeX()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.getSizeY"><code class="docutils literal notranslate"><span class="pre">getSizeY()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.moveLulu"><code class="docutils literal notranslate"><span class="pre">moveLulu()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.printMap"><code class="docutils literal notranslate"><span class="pre">printMap()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.reproduceLulu"><code class="docutils literal notranslate"><span class="pre">reproduceLulu()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="Territory.html#Territory.tryMove"><code class="docutils literal notranslate"><span class="pre">tryMove()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Graph2.html">Graph Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Graph2.html#Graph2.Lulu"><code class="docutils literal notranslate"><span class="pre">Lulu</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Graph2.html#Graph2.calculateCoordinates"><code class="docutils literal notranslate"><span class="pre">calculateCoordinates()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Graph2.html#Graph2.generateColors"><code class="docutils literal notranslate"><span class="pre">generateColors()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Graph2.html#Graph2.generateGraph"><code class="docutils literal notranslate"><span class="pre">generateGraph()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Graph2.html#Graph2.setAxesLabel"><code class="docutils literal notranslate"><span class="pre">setAxesLabel()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Graph2.html#Graph2.setAxesSize"><code class="docutils literal notranslate"><span class="pre">setAxesSize()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="Graph2.html#Graph2.setStats"><code class="docutils literal notranslate"><span class="pre">setStats()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -203,14 +201,14 @@
         <div class="button_nav">
             <div class="left">
                 
-                <a href="main.html">
-                    <span class="icon"><</span><span>main module</span></a>
+                <a href="Territory.html">
+                    <span class="icon"><</span><span>Territory module</span></a>
                 
             </div>
 
             <div class="right">
                 
-                    <a href="Food.html"><span>Food module</span><span class="icon">></span></a>
+                    <a href="Form.html"><span>Form Module</span><span class="icon">></span></a>
                 
             </div>
         </div>
