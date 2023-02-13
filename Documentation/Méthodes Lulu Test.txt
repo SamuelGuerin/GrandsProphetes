@@ -1,0 +1,44 @@
+Classe Lulu
+
+- méthode __init__(self,position,speed,sense,size,energy,foodAmount,isDone) + paramètres initialisés sans paramètres: self.started = False, self.randomTargetPosition = self.newRandomPosition()
+	Tester si la Lulu s'initialise correctement
+----------------------------------------------------------------------------
+- méthode move(self) -> bool: ✔️
+	Tester si la priorité ennemi, nourriture, proie est respectée
+	Tester si le coût d'énergie est bien respecté/utilisé
+	Tester si isDone est changé au bon moment
+	Tester si vitesse/nombre de cases à parcourir concorde bien au résultat attendu
+-------------------------------------------------------------------------------
+- méthode isCloseToTargetPosition(self) -> bool:✔️
+	Tester si on est près de la targetPosition, tester voir si on retourne le bon résultat
+-------------------------------------------------------------------------------
+- méthode goToTargetPosition(self, targetPosition):✔️
+	Tester si la Lulu se dirige bel et bien vers la targetPosition
+-----------------------------------------------------------------------------------------------
+- méthode newRandomPosition(self) -> Position:✔️
+	Tester si une nouvelle targetPosition est généré aléatoirement et attribué à la Lulu
+---------------------------------------------------------------------------------------
+- méthode getMoveFromDiff(self, diff):
+	Tester si l'écart est bon
+-------------------------------------------------------------------------------
+- méthode getClosestEnemy(self, items):
+	currentDistance = max(abs(self.position.x - i.position.x), abs(self.position.y - i.position.y))
+	Tester si on détecte l'ennemi le plus près (utiliser getMoveFromDiff?) -> non
+	Tester si on détecte bien un ennemi et non une proie par exemple
+-------------------------------------------------------------------------------
+- méthode getClosestFood(self, items):
+	currentDistance = max(abs(self.position.x - i.position.x), abs(self.position.y - i.position.y))
+	Tester si on détecte la nourriture la plus près (utiliser getMoveFromDiff?) -> non
+------------------------------------------------------------------------------
+- méthode getClosestPrey(self, items):
+	currentDistance = max(abs(self.position.x - i.position.x), abs(self.position.y - i.position.y))
+	Tester si on détecte l'ennemi le plus près (utiliser getMoveFromDiff?) -> non
+	Tester si on détecte bien une proie et non un ennemi par exemple
+------------------------------------------------------------------------------
+- méthode getItems(self, foodInRange, lulusInRange)	
+	Tester si on détecte bien tous les items dans le sense de la Lulu
+------------------------------------------------------------------------------
+- méthode resetPosition(self):
+	Tester si toutes les Lulus sont bien repositionnées sur les bords de map
+	Tester si aucune Lulu n'est perdue (remplacer par une autre)
+	Tester si les Lulu dans un même cadrant et dans un même ratio des axes X et Y sont placés côte à côte et non remplacés

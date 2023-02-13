@@ -11,7 +11,20 @@ import time
 Territory.createMap(3,3,0,2) #  3x3, 0 nourriture, 2 Lulus
 distanceCloseToTarget = 2
 
-# Utiliser self ou Lulu? *
+# Utiliser self ou Lulu? ************
+lulu = Lulu(Position(1,1), 3, 3, 50, 100, 0, False)
+foodInRange = []
+lulusInRange = []
+
+
+class TestMove(unittest.TestCase):
+    def test_move(self):
+        self.assertTrue(lulu.move())
+    def test_getMovefromDiff(self):
+        self.assertEqual(lulu.getMoveFromDiff(5) == 1)
+        self.assertEqual(lulu.getMoveFromDiff(-5) == -1)
+        self.assertEqual(lulu.getMoveFromDiff(0) == 0)
+
 
 class TestPriorityMovement(unittest.TestCase):
     def test_enemy(self):
@@ -35,5 +48,10 @@ class TestTargetPosition(unittest.TestCase):
         # Attendre 1 tour/1 move
         currentDistance = max(abs(position.x - targetPosition.x), abs(position.y - targetPosition.y))
         self.assertLessEqual(currentDistance, oldDistance)
+
+class TestItems(unittest.TestCase): # Tester avec un territoire 3x3, 1 food et X lulus
+    def test_getItems(self, foodInRange, lulusInRange):
+        lulu.getItems(foodInRange, lulusInRange)
+        self.assertEqual(len(foodInRange) == 1)
 
         
