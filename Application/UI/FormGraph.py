@@ -8,11 +8,11 @@ def generateLulus():
     i = 0
     array1 = []
     array2 = []
-    while i < 200:
+    while i < 100:
         i += 1
         cpt = 0 
         array1.clear()
-        while cpt < 200:
+        while cpt < 100:
             array1.append(Lulu(np.random.normal(50,10, size=None),np.random.normal(50,6, size=None),np.random.normal(50,7, size=None)))
             cpt += 1
         array2.append(array1.copy())

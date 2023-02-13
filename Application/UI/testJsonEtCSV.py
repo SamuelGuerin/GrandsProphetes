@@ -1,12 +1,9 @@
-import json
 import FormGraph as fg
-from pathlib import Path
-from os import listdir
 import re
+from JsonManager import saveData, loadData
 
 generationsObjects = fg.generateLulus()
 generations = []
-lulus = []
 
 speeds = []
 senses = []
@@ -29,26 +26,9 @@ def fileNumber(name):
     match = re.match("^save([1-9][0-9]{0,9}).json", name)
     return int(match.group(1))
 
-jsonString = json.dumps(generations, default=obj_dict)
+saveData(generations)
 
-Path("Save/").mkdir(parents=True, exist_ok=True)
+data = loadData()
 
-filenames = listdir("Save/")
-
-reggex = re.compile("^save[1-9][0-9]{0,9}.json")
-filenames = [name for name in filenames if reggex.match(name)]
-
-filenames = sorted(filenames, key=fileNumber)
-
-if (len(filenames) == 0):
-    test = 1
-else:
-    test = fileNumber(filenames[len(filenames) - 1]) + 1
-
-f = open("Save/save" + str(test) + ".json", "w")
-f.write(jsonString)
-f.close()
-
-# f = open("Save/save1.json")
-# test = json.load(f)
-# f.close()
+if data == None:
+    print("return")
