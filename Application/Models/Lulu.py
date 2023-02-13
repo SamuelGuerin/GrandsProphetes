@@ -232,9 +232,9 @@ class Lulu:
     def getItems(self, foodInRange, lulusInRange):
         """Recherche les :class:`Food` et les :class:`Lulu` qui sont dans sa vision (sense)
 
-        :param foodInRange: contient toutes les nourritures dans la vision (sense) de la lulu
+        :param foodInRange: contient toutes les nourritures dans la vision (sense) de la :class:`Lulu`
         :type foodInRange: list
-        :param lulusInRange: contient toutes les nourritures dans la vision (sense) de la lulu
+        :param lulusInRange: contient toutes les nourritures dans la vision (sense) de la :class:`Lulu`
         :type lulusInRange: list
         """
         map = Territory.getMap()
@@ -254,7 +254,7 @@ class Lulu:
     
     # Téléporte la lulu sur le côté au début d'une round
     def resetPosition(self):
-        """Téléporte une lulu sur le côté de la carte (map) à la fin d'une génération, pour la préparer à la reproduction
+        """Téléporte une :class:`Lulu` sur le côté de la carte (map) à la fin d'une génération, pour la préparer à la reproduction
         """
         #self.moveToInitialPosition(True)
         sizeX = Territory.getSizeX()
