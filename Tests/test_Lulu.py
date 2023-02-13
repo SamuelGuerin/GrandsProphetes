@@ -5,6 +5,7 @@ from Application.Models import Food
 from Application.Models import Position
 import numpy as np
 import time
+import random
 
 
 
@@ -21,8 +22,8 @@ class TestMove(unittest.TestCase):
     def test_move(self):
         self.assertTrue(lulu.move())
     def test_getMovefromDiff(self):
-        self.assertEqual(lulu.getMoveFromDiff(5) == 1)
-        self.assertEqual(lulu.getMoveFromDiff(-5) == -1)
+        self.assertEqual(lulu.getMoveFromDiff(random.randint(1,100)) == 1)
+        self.assertEqual(lulu.getMoveFromDiff(-random.randint(-100,-1)) == -1)
         self.assertEqual(lulu.getMoveFromDiff(0) == 0)
 
 
