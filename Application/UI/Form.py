@@ -736,12 +736,12 @@ class Form(ct.CTk):
             previewImage.destroy()
             btnClose.destroy()
 
-        btnGraph = ct.CTkButton(master=self.frame_1, text="Importer une simulation...", command=importSimulation)
+        btnGraph = ct.CTkButton(master=self.frame_1, text="Importer une Simulation...", command=importSimulation)
         btnGraph.grid(row=10, column=1, padx=20, pady=10, sticky="we")
         #btnGraph = ct.CTkButton(master=self.frame_1, text="Visualiser les graphiques", command=add_Graph)
         #btnGraph.grid(row=10, column=2, padx=20, pady=10, sticky="we")
 
-        btnPreview = ct.CTkButton(master=self.frame_1, text="Prévisualiser", command=preview)
+        btnPreview = ct.CTkButton(master=self.frame_1, text="Prévisualiser le Territoire", command=preview)
         btnPreview.grid(row=11, column=0, columnspan=3, padx=20, pady=10, sticky="we")
 
         lblErrorInForm = ct.CTkLabel(master=self.frame_1, height=100, justify=ct.CENTER, text="")
