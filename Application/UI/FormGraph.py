@@ -27,24 +27,36 @@ class Index:
     azim = 130
 
     def isMax(self):
+        """Fonction qui sert à savoir si ind est à la dernière génération.
+
+            :return: `True` si ind est à la dernière génération. 
+            :rtype: bool
+        """
         if self.ind == len(generations) - 1:
             return True
         return False
     
     def isMin(self):
+        """Fonction qui sert à savoir si ind est à la première génération.
+
+            :return: `True` si ind est à la première génération. 
+            :rtype: bool
+        """
+
         if self.ind == 0:
             return True
         return False
 
 class graphGeneration:
         def next(index):
-            """Cette fonction va chercher la prochaine génération.
+            """Va générer le graphique de la prochaine génération.
 
-            :param index: représente l'index de la génération actuelle
-            :type index: int
+                    :param index: L'index de type `Index` qui permet de garder en mémoire la génération actuelle.
+                    :type index: `Index`
 
-            :return: Renvoie la prochaine génération
-            :rtype: List<float>
+                    :return: `Figure`: Permet de dessiner le graphique.
+                            `Axes`: Permet de garder les données du graphique 3d en mémoire.
+                    :rtype: `[Figure, Axes]`
             """
 
             index.ind += 1
@@ -53,13 +65,14 @@ class graphGeneration:
             return Graph.generateGraph(generations[index.ind], index.ind + 1, index.elev, index.azim)
             
         def previous(index):
-            """Cette fonction va chercher la génération précédente.
+            """Va générer le graphique de la génération précédente.
 
-            :param index: représente l'index de la génération actuelle
-            :type index: int
+                    :param index: L'index de type `Index` qui permet de garder en mémoire la génération actuelle.
+                    :type index: `Index`
 
-            :return: Renvoie la génération précédente
-            :rtype: List<float>
+                    :return: `Figure`: Permet de dessiner le graphique.
+                            `Axes`: Permet de garder les données du graphique 3d en mémoire.
+                    :rtype: `[Figure, Axes]`
             """
 
             index.ind -= 1
@@ -68,71 +81,82 @@ class graphGeneration:
             return Graph.generateGraph(generations[index.ind], index.ind + 1, index.elev, index.azim)
 
         def first(index):
-            """Cette fonction va chercher la première génération.
+            """Va générer le graphique de la première génération.
 
-            :param index: représente l'index de la génération actuelle
-            :type index: int
+                    :param index: L'index de type `Index` qui permet de garder en mémoire la génération actuelle.
+                    :type index: `Index`
 
-            :return: Renvoie la première génération
-            :rtype: List<float>
+                    :return: `Figure`: Permet de dessiner le graphique.
+                            `Axes`: Permet de garder les données du graphique 3d en mémoire.
+                    :rtype: `[Figure, Axes]`
             """
 
             index.ind = 0
             return Graph.generateGraph(generations[index.ind], index.ind + 1, index.elev, index.azim)
         
         def last(index):
-            """Cette fonction va chercher la dernière génération.
+            """Va générer le graphique de la dernière génération.
 
-            :param index: représente l'index de la génération actuelle
-            :type index: int
+                    :param index: L'index de type `Index` qui permet de garder en mémoire la génération actuelle.
+                    :type index: `Index`
 
-            :return: Renvoie la dernière génération
-            :rtype: List<float>
+                    :return: `Figure`: Permet de dessiner le graphique.
+                            `Axes`: Permet de garder les données du graphique 3d en mémoire.
+                    :rtype: `[Figure, Axes]`
             """
 
             index.ind = len(generations) - 1
             return Graph.generateGraph(generations[index.ind], index.ind + 1, index.elev, index.azim)
         
         def speedSize(index):
-            """Cette fonction va chercher changer l'angle de vu de la génération actuelle.
+            """Cette fonction va changer l'angle de vu pour voir les axes Vitesse et Taille.
 
-            :param index: représente l'index de la génération actuelle
-            :type index: int
+                    :param index: L'index de type `Index` qui permet de garder en mémoire la génération actuelle.
+                    :type index: `Index`
 
-            :return: Renvoie la génération actuelle sous un autre angle soit axe de la vitesse et de la taille
-            :rtype: List<float>
+                    :return: `Figure`: Permet de dessiner le graphique.
+                            `Axes`: Permet de garder les données du graphique 3d en mémoire.
+                    :rtype: `[Figure, Axes]`
             """
 
             return Graph.generateGraph(generations[index.ind], index.ind + 1, 0, 90)
         
         def sizeSense(index):
-            """Cette fonction va chercher changer l'angle de vu de la génération actuelle.
+            """Cette fonction va changer l'angle de vu pour voir les axes Taille et Vision.
 
-            :param index: représente l'index de la génération actuelle
-            :type index: int
+                    :param index: L'index de type `Index` qui permet de garder en mémoire la génération actuelle.
+                    :type index: `Index`
 
-            :return: Renvoie la génération actuelle sous un autre angle soit axe de la taille et de la vision
-            :rtype: List<float>
+                    :return: `Figure`: Permet de dessiner le graphique.
+                            `Axes`: Permet de garder les données du graphique 3d en mémoire.
+                    :rtype: `[Figure, Axes]`
             """
 
             return Graph.generateGraph(generations[index.ind], index.ind + 1, 0, 0)
         
         def senseSpeed(index):
-            """Cette fonction va chercher changer l'angle de vu de la génération actuelle.
+            """Cette fonction va changer l'angle de vu pour voir les axes Vision et Vitesse.
 
-            :param index: représente l'index de la génération actuelle
-            :type index: int
+                    :param index: L'index de type `Index` qui permet de garder en mémoire la génération actuelle.
+                    :type index: `Index`
 
-            :return: Renvoie la génération actuelle sous un autre angle soit axe de la vision et de la vitesse
-            :rtype: List<float>
+                    :return: `Figure`: Permet de dessiner le graphique.
+                            `Axes`: Permet de garder les données du graphique 3d en mémoire.
+                    :rtype: `[Figure, Axes]`
             """
 
             return Graph.generateGraph(generations[index.ind], index.ind + 1, -92, 0.44)
-        
-generations = generateLulus()
-
-
+    
 def objectsToCoordinates(lulus):
+    """Cette fonction sert à transformer une liste de `Lulu` en liste de coordonnées.
+
+            :param lulus: Liste de `Lulu` à transformer.
+            :type lulus: `Lulu`
+
+            :return: Liste de coordonnées pour générer des graphiques.
+            :rtype: [[[float],[float],[float]]]
+    """
+
     gens = []
     
     speeds = []

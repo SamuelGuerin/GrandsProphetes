@@ -2,19 +2,19 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 
 def generateColors(speeds, senses, sizes, colors):
-    """Cette fonction assigne une couleur à chaque axe soit la vitesse, la vision et la taille.
+    """Cette fonction assigne une valeur RGB pour chaque points
 
     :param speeds: Liste contenant les valeurs de la vitesse
-    :type speeds: List<float>
+    :type speeds: [float]
 
     :param senses: Liste contenant les valeurs de la vision
-    :type senses: List<float>
+    :type senses: [float]
 
     :param sizes: Liste contenant les valeurs de la taille
-    :type sizes: List<float>
+    :type sizes: [float]
 
     :param colors: Liste contenant les valeurs de la couleur (valeur de la couleur rgb)
-    :type colors: List<List<float>>
+    :type colors: [[float]]
     """
     
     colors.clear()
@@ -22,22 +22,6 @@ def generateColors(speeds, senses, sizes, colors):
         colors.append([speeds[i]/(max(speeds) * 1.3), senses[i]/(max(senses) * 1.3), sizes[i]/(max(sizes) * 1.5)])
 
 def calculateCoordinates(generation, speeds, senses, sizes):
-    """Prend chaque propriété pertinente des Lulus et les assignent à une variable
-
-    :param generation: Liste contenant les Lulus et leur propriété
-    :type generation: List<`Lulu`>
-
-    :param speeds: Liste contenant la vitesse de chaque Lulu
-    :type speeds: List<float>
-
-    :param senses: Liste contenant la vision de chaque Lulu
-    :type senses: List<float>
-
-    :param sizes: Liste contenant la taille de chaque Lulu
-    :type sizes: List<float>
-    """
-
-
     speeds.clear()
     senses.clear()
     sizes.clear()
@@ -47,10 +31,10 @@ def calculateCoordinates(generation, speeds, senses, sizes):
         sizes.append(lulu.Size)
 
 def setAxesLabel(ax):
-    """Assigne des noms au axes du graphique
+    """Assigne les noms aux axes du graphique 3d.
 
-    :param ax: Représente les axes du graphique
-    :type ax:  matplotlib.axes._subplots.AxesSubplot
+    :param ax: Objet `Axes` du graphique 3d.
+    :type ax: `Axes`
     """
 
     ax.set_xlabel('Vitesse', color='blue', fontweight='semibold')
@@ -58,19 +42,19 @@ def setAxesLabel(ax):
     ax.set_zlabel('Taille', color='red', fontweight='semibold') 
 
 def setAxesSize(ax, sx, sy, sz):
-    """Assigne des noms au axes du graphique
+    """Assigne une grosseur aux axes du graphique 3d.
 
-    :param ax: Représente les axes du graphique
-    :type ax:  matplotlib.axes._subplots.AxesSubplot
+    :param ax: Objet `Axes` du graphique 3d.
+    :type ax: `Axes`
 
-    :param sx: Grandeur de l'axe en x
-    :type sx: Float
+    :param sx: Taille de l'axe X.
+    :type sx: float
 
-    :param sy: Grandeur de l'axe en y
-    :type sy: Float
+    :param sy: Taille de l'axe Y.
+    :type sy: float
 
-    :param sz: Grandeur de l'axe en z
-    :type sz: Float
+    :param sz: Taille de l'axe Z.
+    :type sz: float
     """
 
     ax.set_xlim([0,sx])
@@ -78,13 +62,13 @@ def setAxesSize(ax, sx, sy, sz):
     ax.set_zlim([0,sz])
 
 def setStats(ax, generation):
-    """Construit la partie à côté du graphique pour exposer à l'utilisateur les stats du graphique
+    """Génère les statistiques de la génération actuelle.
 
-    :param ax: Représente les axes du graphique
-    :type ax:  matplotlib.axes._subplots.AxesSubplot
+    :param ax: Objet `Axes` du graphique 2d servant de boîte pour les statistiques.
+    :type ax: `Axes`
 
-    :param generation: Liste contenant les Lulus et leur propriété
-    :type generation: List<`Lulu`>
+    :param generation: Liste des coordonnées de la génération actuelle.
+    :type generation: [[[float],[float],[float]]]
     """
     ax.clear()
     speed = [0,0,1000000]
@@ -150,26 +134,23 @@ class Lulu:
         self.Size = size
 
 def generateGraph(generation, currentGeneration, elev, azim):
-    """Créer le graphique
+    """Génère le graphique 3d et ses statistiques.
 
-    :param generation: Liste contenant les Lulus et leur propriété
-    :type generation: List<`Lulu`>
+    :param generation: Liste des coordonnées de la génération actuelle.
+    :type generation: `[[[float],[float],[float]]]`
 
-    :param currentGeneration: Index de la génération que nous allons afficher
-    :type currentGeneration: Int
+    :param currentGeneration: Numéro de la génération actuelle.
+    :type currentGeneration: int
 
-    :param elev: Angle que le graphique aura à l'affichage
-    :type elev: Float
+    :param elev: Angle de vue du graphique 3d.
+    :type elev: float
 
-    :param azim: Angle que le graphique aura à l'affichage
-    :type azim: Float
+    :param azim: Angle de vue du graphique 3d.
+    :type azim: float
 
-    :return: Cette function retourne la figure globale du graphique et ses axes
-    :rtype: List[matplotlib.figure.Figure, matplotlib.axes._subplots.AxesSubplot]
+    :return: Retourne une `Figure` et un `Axes` pour dessiner le graphique et ses statistiques.
+    :rtype: `[Figure, Axes]`
     """
-
-
-
 
     fig, ax = plt.subplots(figsize=(16, 9))
     plt.axis('off')
