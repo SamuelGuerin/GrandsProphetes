@@ -11,7 +11,7 @@ def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation,
     size = 1000
     sims = time.time()
     Territory.createMap(sizeX, sizeY, foodCount, lulusCount,
-                        speed, sense, energy, size, mutateChance, speedVariation, senseVariation, sizeVariation)
+                        speed, sense, energy * 10000, size, mutateChance, speedVariation, senseVariation, sizeVariation)
 
     for generation in range(nbGeneration):
         st = time.time()

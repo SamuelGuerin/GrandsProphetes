@@ -4,6 +4,12 @@ from PIL import Image
 import os
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import FormGraph as fg
+import sys
+import pathlib
+workingDirectory = pathlib.Path().resolve()
+sys.path.append(str(workingDirectory) + '\Application')
+import SimulationManager as Simulation
+
 
 ct.set_appearance_mode("dark")
 ct.set_default_color_theme("blue")
@@ -237,7 +243,7 @@ class Form(ct.CTk):
 
         infoStartFood = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoStartFood.grid(row=2, column=1, pady=10, padx=10)
-        infoStartFood.bind("<Enter>", lambda event: show_info(event, get_infoStartFood()))
+        infoStartFood.bind("<Enter>", lambda event: show_info(event, str(get_infoStartFood())))
         infoStartFood.bind("<Leave>", hide_info)
 
         txtStartFood = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
@@ -252,7 +258,7 @@ class Form(ct.CTk):
 
         infoStartLulu = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoStartLulu.grid(row=3, column=1, pady=10, padx=10)
-        infoStartLulu.bind("<Enter>", lambda event: show_info(event, get_infoStartLulu()))
+        infoStartLulu.bind("<Enter>", lambda event: show_info(event, str(get_infoStartLulu())))
         infoStartLulu.bind("<Leave>", hide_info)
 
         txtStartLulu = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
@@ -564,7 +570,7 @@ class Form(ct.CTk):
                 #Simule
                 #__run__(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration)
 
-                #__run__(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration, validMutation)
+                Simulation.__run__(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration, validMutation)
                 lblErrorInForm.configure(text="OK", text_color="green")
             else:
                 lblErrorInForm.configure(text="Error: Veuillez remplir convenablement le formulaire", text_color="red")
