@@ -1,10 +1,11 @@
-import numpy as np
 from manim import *
 from manim.utils.file_ops import open_file as open_media_file
 import Models.Territory as Territory
 from Models.Lulu import Lulu
 from Models.Food import Food
+from Models.Position import Position
 import time
+import random
 
 class VisualizeLulus(Scene):
     def construct(self):
@@ -19,22 +20,58 @@ class VisualizeLulus(Scene):
 
         groupdots = VGroup()
 
+        maxSize = max(lulu.size for lulu in Territory.getLulus())
+        minSize = min(lulu.size for lulu in Territory.getLulus())
+        rangeOfSizes = maxSize - minSize
+
         for position in items:
-            if(type(items.get(position)) == Lulu):
-                dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=RED)
-            elif(type(items.get(position)) == Food):
+            item = items.get(position)
+            if(type(item) == Lulu):
+                if(item.isDone):
+                    rangeOfColors = rangeOfSizes/6
+                    if item.size <= minSize + (rangeOfColors):
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=RED_A)
+                    elif item.size <= minSize + 2*(rangeOfColors):
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=RED_B)
+                    elif item.size <= minSize + 3*(rangeOfColors):
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=RED_C)
+                    elif item.size <= minSize + 4*(rangeOfColors):
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=RED_D)
+                    else:
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=RED_E)
+                else:
+                    rangeOfColors = rangeOfSizes/6
+                    if item.size <= minSize + (rangeOfColors):
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=BLUE_A)
+                    elif item.size <= minSize + 2*(rangeOfColors):
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=BLUE_B)
+                    elif item.size <= minSize + 3*(rangeOfColors):
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=BLUE_C)
+                    elif item.size <= minSize + 4*(rangeOfColors):
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=BLUE_D)
+                    else:
+                        dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=BLUE_E)
+            elif(type(item) == Food):
                 dot = Dot([(position.x - CENTERX)/SIZE, (position.y - CENTERY)/SIZE, 0], color=GREEN)
             groupdots.add(dot)
 
         self.add(groupdots)
 
-if __name__ == '__main__':
-    t0 = time.time()
-    Territory.createMap(1000, 1000, 100, 100)
-    t1 = time.time()
-    total = t1-t0
-    print(str(total) + " secondes")
-
-    print(Territory.getMap())
+def renderAnimation():
+    """Génère une image de l'état actuel du :class:`Territory`
+    """
     scene = VisualizeLulus()
     scene.render()
+
+if __name__ == '__main__':
+    Territory.createMap(100, 100, 25, 100)
+
+    for _ in range(5000):
+
+        print("nombre de survivants: " + str(sum(lulu.foodAmount >= 1 for lulu in Territory.getLulus())))
+
+        time.sleep(0.2)
+        renderAnimation()
+
+        for l in Territory.__lulus:
+            l.move()
