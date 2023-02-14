@@ -1,5 +1,4 @@
 import customtkinter as ct
-import tkinter
 from PIL import Image
 import os
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -323,7 +322,7 @@ class Form(ct.CTk):
         lblSizeGood.grid(row=7, column=3, pady=10, padx=10)
 
         # Entrer 9 -- Mutation
-        lblMutation = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="% de chance de mutation lors de la reproduction")
+        lblMutation = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="% de chance de mutation\r lors de la reproduction")
         lblMutation.grid(row=8, column=0, pady=10, padx=10)
 
         infoMutation = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
@@ -566,14 +565,24 @@ class Form(ct.CTk):
                 #__run__(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration)
 
                 #__run__(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration, validMutation)
+                fg.generations = fg.objectsToCoordinates(fg.generateLulus())
+                btnGraph.grid(row=11, column=0, columnspan=2, padx=20, pady=10, sticky="we")
+                btnSave.grid(row=11, column=2, padx=20, pady=10, sticky="we")
+
                 lblErrorInForm.configure(text="OK", text_color="green")
             else:
-                lblErrorInForm.configure(text="Error: Veuillez remplir convenablement le formulaire", text_color="red")
+                #fg.generations = fg.objectsToCoordinates(fg.generateLulus())
+                #btnGraph.grid(row=11, column=0, columnspan=2, padx=20, pady=10, sticky="we")
+                #btnSave.grid(row=11, column=2, padx=20, pady=10, sticky="we")
+                lblErrorInForm.configure(text="Erreur: Veuillez remplir convenablement le formulaire", text_color="red")
                   
         btnSimulate = ct.CTkButton(master=self.frame_1, text="Lancer la simulation", command=get_allBeforeSimulation)
-        btnSimulate.grid(row=10, column=0, padx=20, pady=10, sticky="we")
+        btnSimulate.grid(row=10, column=0, columnspan=2, padx=20, pady=10, sticky="we")
 
         def importSimulation():
+            btnGraph.grid_remove()
+            btnSave.grid_remove()
+
             fg.generations = loadData()
             if fg.generations is not None:
                 add_Graph()
@@ -736,13 +745,14 @@ class Form(ct.CTk):
             previewImage.destroy()
             btnClose.destroy()
 
-        btnGraph = ct.CTkButton(master=self.frame_1, text="Importer une Simulation...", command=importSimulation)
-        btnGraph.grid(row=10, column=1, padx=20, pady=10, sticky="we")
-        #btnGraph = ct.CTkButton(master=self.frame_1, text="Visualiser les graphiques", command=add_Graph)
-        #btnGraph.grid(row=10, column=2, padx=20, pady=10, sticky="we")
+        btnImport = ct.CTkButton(master=self.frame_1, text="Importer une Simulation...", command=importSimulation)
+        btnImport.grid(row=10, column=2, padx=20, pady=10, sticky="we")
+
+        btnGraph = ct.CTkButton(master=self.frame_1, text="Visualiser les graphiques", command=add_Graph)
+        btnSave = ct.CTkButton(master=self.frame_1, text="Sauvegarder la simulation", command=lambda:saveData(fg.generations))
 
         btnPreview = ct.CTkButton(master=self.frame_1, text="Prévisualiser le Territoire", command=preview)
-        btnPreview.grid(row=11, column=0, columnspan=3, padx=20, pady=10, sticky="we")
+        btnPreview.grid(row=12, column=0, columnspan=3, padx=20, pady=10, sticky="we")
 
         lblErrorInForm = ct.CTkLabel(master=self.frame_1, height=100, justify=ct.CENTER, text="")
         lblErrorInForm.grid(row=13, column=0, columnspan=3, padx=20, pady=10)
