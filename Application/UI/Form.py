@@ -576,16 +576,24 @@ class Form(ct.CTk):
                 btnSave.grid(row=11, column=2, padx=20, pady=10, sticky="we")
                 lblErrorInForm.configure(text="Erreur: Veuillez remplir convenablement le formulaire", text_color="red")
                   
-        btnSimulate = ct.CTkButton(master=self.frame_1, text="Lancer la simulation", command=get_allBeforeSimulation)
+        btnSimulate = ct.CTkButton(master=self.frame_1, text="Lancer la Simulation", command=get_allBeforeSimulation)
         btnSimulate.grid(row=10, column=0, columnspan=2, padx=20, pady=10, sticky="we")
 
-        def importSimulation(lblErrorInForm):
+        def importSimulation():
             btnGraph.grid_remove()
             btnSave.grid_remove()
 
-            fg.generations = loadData(lblErrorInForm)
+            fg.generations = loadData()
             if fg.generations is not None:
                 add_Graph()
+            else:
+                lblErrorInForm.configure(text="Erreur: Fichier non valide", text_color="red")
+
+        def save():
+            saveData(fg.generations)
+            lblErrorInForm.configure(text="Le fichier a été sauvegardé.", text_color="green")
+
+                
     
         # Graph
         def add_Graph():
@@ -745,11 +753,11 @@ class Form(ct.CTk):
             previewImage.destroy()
             btnClose.destroy()
 
-        btnImport = ct.CTkButton(master=self.frame_1, text="Importer une Simulation...", command=lambda:importSimulation(lblErrorInForm))
+        btnImport = ct.CTkButton(master=self.frame_1, text="Importer une Simulation...", command=importSimulation)
         btnImport.grid(row=10, column=2, padx=20, pady=10, sticky="we")
 
-        btnGraph = ct.CTkButton(master=self.frame_1, text="Visualiser les graphiques", command=add_Graph)
-        btnSave = ct.CTkButton(master=self.frame_1, text="Sauvegarder la simulation", command=lambda:saveData(fg.generations, lblErrorInForm))
+        btnGraph = ct.CTkButton(master=self.frame_1, text="Visualiser les Graphiques", command=add_Graph)
+        btnSave = ct.CTkButton(master=self.frame_1, text="Sauvegarder la simulation", command=save)
 
         btnPreview = ct.CTkButton(master=self.frame_1, text="Prévisualiser le Territoire", command=preview)
         btnPreview.grid(row=12, column=0, columnspan=3, padx=20, pady=10, sticky="we")

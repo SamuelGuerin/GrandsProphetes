@@ -13,7 +13,7 @@ def fileNumber(name):
     match = re.match("^save([1-9][0-9]{0,9}).json", name)
     return int(match.group(1))
 
-def saveData(data, lblErrorInForm):
+def saveData(data):
     jsonString = json.dumps(data, default=obj_dict)
 
     Path("Save/").mkdir(parents=True, exist_ok=True)
@@ -33,10 +33,8 @@ def saveData(data, lblErrorInForm):
     f = open("Save/save" + str(test) + ".json", "w")
     f.write(jsonString)
     f.close()
-    lblErrorInForm.configure(text="Le fichier a été sauvegardé.", text_color="green")
 
-
-def loadData(lblErrorInForm):
+def loadData():
     schema = {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "array",
@@ -96,7 +94,6 @@ def loadData(lblErrorInForm):
     except:
         data = None
         print("fichier non valide")
-        lblErrorInForm.configure(text="Erreur: Fichier non valide", text_color="red")
     return data
 
 def validateData(data):
