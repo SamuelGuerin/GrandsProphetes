@@ -31,6 +31,7 @@ class Lulu:
         self.foodAmount = foodAmount
         self.isDone = isDone
         self.started = False
+        self.isNewBorn = True
         self.randomTargetPosition = self.newRandomPosition()
 
     def __repr__(self) -> str:
@@ -44,7 +45,7 @@ class Lulu:
         """
         foodInRange = []
         lulusInRange = []
-        energyCost = ((self.size/100) ** 3) * (self.speed ** 2) + self.sense;
+        energyCost = ((self.size/100) ** 3) * (self.speed ** 2) + self.sense
         speedLeft = self.speed
 
         while(speedLeft > 0 and self.energy >= energyCost):
@@ -73,8 +74,8 @@ class Lulu:
                 self.goToTargetPosition(targetPosition)
             else:
                 self.goToTargetPosition(targetPosition)
-            self.energy -= energyCost;
-            speedLeft -= 1;
+            self.energy -= energyCost
+            speedLeft -= 1
         self.started = True
         if(self.energy < energyCost):
             self.isDone = True
@@ -117,18 +118,18 @@ class Lulu:
             if(xMove == 0): # ligne verticale
                 if(not Territory.tryMove(self.position, Position(nextPos.x - 1, nextPos.y))):
                     if(not Territory.tryMove(self.position, Position(nextPos.x + 1, nextPos.y))):
-                        # random
-                        self.goToTargetPosition(self.newRandomPosition())
+                        # ne bouge pas et trouve nouvelle cible random
+                        self.randomTargetPosition = self.newRandomPosition()
             elif(yMove == 0): # ligne horizontale
                 if(not Territory.tryMove(self.position, Position(nextPos.x, nextPos.y - 1))):
                     if(not Territory.tryMove(self.position, Position(nextPos.x, nextPos.y + 1))):
-                        # random
-                        self.goToTargetPosition(self.newRandomPosition())
+                        # ne bouge pas et trouve nouvelle cible random
+                        self.randomTargetPosition = self.newRandomPosition()
             else: # diagonnale
                 if(not Territory.tryMove(self.position, Position(nextPos.x - xMove, nextPos.y))):
                     if(not Territory.tryMove(self.position, Position(nextPos.x, nextPos.y - yMove))):
-                        # random
-                        self.goToTargetPosition(self.newRandomPosition())
+                        # ne bouge pas et trouve nouvelle cible random
+                        self.randomTargetPosition = self.newRandomPosition()
     
     def newRandomPosition(self) -> Position:
         """Détermine une nouvelle :class:`Position` aléatoire dans la carte (map) qui deviendra la nouvelle :class:`Position` ciblée de la :class:`Lulu`
@@ -232,9 +233,9 @@ class Lulu:
     def getItems(self, foodInRange, lulusInRange):
         """Recherche les :class:`Food` et les :class:`Lulu` qui sont dans sa vision (sense)
 
-        :param foodInRange: contient toutes les nourritures dans la vision (sense) de la lulu
+        :param foodInRange: contient toutes les nourritures dans la vision (sense) de la :class:`Lulu`
         :type foodInRange: list
-        :param lulusInRange: contient toutes les nourritures dans la vision (sense) de la lulu
+        :param lulusInRange: contient toutes les nourritures dans la vision (sense) de la :class:`Lulu`
         :type lulusInRange: list
         """
         map = Territory.getMap()
@@ -254,7 +255,7 @@ class Lulu:
     
     # Téléporte la lulu sur le côté au début d'une round
     def resetPosition(self):
-        """Téléporte une lulu sur le côté de la carte (map) à la fin d'une génération, pour la préparer à la reproduction
+        """Téléporte une :class:`Lulu` sur le côté de la carte (map) à la fin d'une génération, pour la préparer à la reproduction
         """
         #self.moveToInitialPosition(True)
         sizeX = Territory.getSizeX()
@@ -273,86 +274,101 @@ class Lulu:
                     item = Territory.getItem(self.position.x + searchRangeX, minSizeXY)
                     if(type(item) == Lulu):
                         searchRangeX += 1
+                        
                 searchRangeX = 0
                 while(type(item) == Lulu and (self.position.x - searchRangeX) <= minSizeXY):
                     item = Territory.getItem(self.position.x - searchRangeX, minSizeXY)
                     if(type(item) == Lulu):
                         searchRangeX += 1
                 Territory.moveLulu(self.position, Position(self.position.x + searchRangeX, minSizeXY)) # va vers y=min
+                
             else:
                 while(type(item) == Lulu and (self.position.y + searchRangeY) <= sizeY):
                     item = Territory.getItem(minSizeXY, self.position.y + searchRangeY)
                     if(type(item) == Lulu):
                         searchRangeY += 1
+                        
                 searchRangeY = 0
                 while(type(item) == Lulu and (self.position.y - searchRangeY) >= minSizeXY):
                     item = Territory.getItem(minSizeXY, self.position.y - searchRangeY)
                     if(type(item) == Lulu):
                         searchRangeY += 1
                 Territory.moveLulu(self.position, Position(minSizeXY, self.position.y + searchRangeY)) # va vers x=min
+                
         elif(self.position.x <= halfSizeX and self.position.y > halfSizeY):
             if((sizeY - self.position.y) < self.position.x):
                 while(type(item) == Lulu and (self.position.x + searchRangeX) <= sizeX):
                     item = Territory.getItem(self.position.x + searchRangeX, sizeY)
                     if(type(item) == Lulu):
                         searchRangeX += 1
+                        
                 searchRangeX = 0
                 while(type(item) == Lulu and (self.position.x - searchRangeX) >= minSizeXY):
                     item = Territory.getItem(self.position.x - searchRangeX, sizeY)
                     if(type(item) == Lulu):
                         searchRangeX += 1
                 Territory.moveLulu(self.position, Position(self.position.x, sizeY)) # va vers y=max
+                
             else:
                 while(type(item) == Lulu and (self.position.y + searchRangeY) <= sizeY):
                     item = Territory.getItem(minSizeXY, self.position.y + searchRangeY)
                     if(type(item) == Lulu):
                         searchRangeY += 1
+                        
                 searchRangeY = 0
                 while(type(item) == Lulu and (self.position.y - searchRangeY) >= minSizeXY):
                     item = Territory.getItem(minSizeXY, self.position.y - searchRangeY)
                     if(type(item) == Lulu):
                         searchRangeY += 1
                 Territory.moveLulu(self.position, Position(minSizeXY, self.position.y)) # va vers x=min
+                
         elif(self.position.x > halfSizeX and self.position.y <= halfSizeY):
             if((sizeX - self.position.x) < self.position.y):
                 while(type(item) == Lulu and (self.position.y + searchRangeY) <= sizeY):
                     item = Territory.getItem(sizeX, self.position.y + searchRangeY)
                     if(type(item) == Lulu):
                         searchRangeY += 1
+                        
                 searchRangeY = 0
                 while(type(item) == Lulu and (self.position.y - searchRangeY) >= minSizeXY):
                     item = Territory.getItem(sizeX, self.position.y - searchRangeY)
                     if(type(item) == Lulu):
                         searchRangeY += 1
                 Territory.moveLulu(self.position, Position(sizeX, self.position.y)) # va vers x=max
+                
             else:
                 while(type(item) == Lulu and (self.position.x + searchRangeX) <= sizeX):
                     item = Territory.getItem(self.position.x + searchRangeX, minSizeXY)
                     if(type(item) == Lulu):
                         searchRangeX += 1
+                        
                 searchRangeX = 0
                 while(type(item) == Lulu and (self.position.x - searchRangeX) <= minSizeXY):
                     item = Territory.getItem(self.position.x - searchRangeX, minSizeXY)
                     if(type(item) == Lulu):
                         searchRangeX += 1
                 Territory.moveLulu(self.position, Position(self.position.x, minSizeXY)) # va vers y=min
+                
         elif(self.position.x > halfSizeX and self.position.y > halfSizeY):
             if(self.position.x > self.position.y):
                 while(type(item) == Lulu and (self.position.y + searchRangeY) <= sizeY):
                     item = Territory.getItem(sizeX, self.position.y + searchRangeY)
                     if(type(item) == Lulu):
                         searchRangeY += 1
+                        
                 searchRangeY = 0
                 while(type(item) == Lulu and (self.position.y - searchRangeY) >= minSizeXY):
                     item = Territory.getItem(sizeX, self.position.y - searchRangeY)
                     if(type(item) == Lulu):
                         searchRangeY += 1
                 Territory.moveLulu(self.position, Position(sizeX, self.position.y)) # va vers x=max
+                
             else:
                 while(type(item) == Lulu and (self.position.x + searchRangeX) <= sizeX):
                     item = Territory.getItem(self.position.x + searchRangeX, sizeY)
                     if(type(item) == Lulu):
                         searchRangeX += 1
+                        
                 searchRangeX = 0
                 while(type(item) == Lulu and (self.position.x - searchRangeX) >= minSizeXY):
                     item = Territory.getItem(self.position.x - searchRangeX, sizeY)

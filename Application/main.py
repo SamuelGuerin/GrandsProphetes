@@ -1,5 +1,6 @@
 from manim import *
 from manim.utils.file_ops import open_file as open_media_file
+import SimulationManager as Simulation
 import Models.Territory as Territory
 from Models.Lulu import Lulu
 from Models.Food import Food
@@ -64,14 +65,4 @@ def renderAnimation():
     scene.render()
 
 if __name__ == '__main__':
-    Territory.createMap(100, 100, 25, 100)
-
-    for _ in range(5000):
-
-        print("nombre de survivants: " + str(sum(lulu.foodAmount >= 1 for lulu in Territory.getLulus())))
-
-        time.sleep(0.2)
-        renderAnimation()
-
-        for l in Territory.__lulus:
-            l.move()
+    Simulation.__run__(100, 100, 50, 10, 25, 25, 10, 10000000, 100, 50)
