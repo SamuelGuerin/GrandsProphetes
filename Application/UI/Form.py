@@ -1,4 +1,5 @@
 import customtkinter as ct
+import tkinter as tk
 from PIL import Image
 import os
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
