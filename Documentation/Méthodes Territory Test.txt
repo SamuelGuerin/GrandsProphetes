@@ -1,37 +1,37 @@
 Fichier Territory
 
 - méthode createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, mutateChance):
-	Tester si la map est bien créée selon le maxX et maxY
-	Tester si la map est créée avec le bon nombre de nourriture
-	Tester si la map est créée avec le bon nombre de Lulus
-	Tester si les Lulus sont bien initialisées avec les paramètres de speed, sense, size et energy
-	Tester si les mutations arrivent autant que le paramètre de mutateChance
+	Tester si la map est bien créée selon le maxX et maxY ✔️
+	Tester si la map est créée avec le bon nombre de nourriture ✔️
+	Tester si la map est créée avec le bon nombre de Lulus ✔️
+	Tester si les Lulus sont bien initialisées avec les paramètres de speed, sense, size et energy ✔️
+	Tester si les mutations arrivent autant que le paramètre de mutateChance [X]
 --------------------------------------------------------------------------------------
 - méthode __CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isDone) -> bool:
-	Tester si la Lulu a bien été créée dans une case vide --> retourne True
-	Tester la création forcée d'une Lulu sur une case occupée par une autre Food ou Lulu --> retourne False
-	Tester que la Lulu est bien ajoutée à la liste de Lulus
+	Tester si la Lulu a bien été créée dans une case vide --> retourne True ✔️
+	Tester la création forcée d'une Lulu sur une case occupée par une autre Food ou Lulu --> retourne False ✔️
+	Tester que la Lulu est bien ajoutée à la liste de Lulus ✔️
 --------------------------------------------------------------------------------------
 - méthode __CreateFood(rx, ry) -> bool:
-	Tester si la Food a bien été créée dans une case vide --> retourne True
-	Tester la création forcée d'une Food sur une case occupée par une autre Food ou Lulu --> retourne False
-	Tester si le compteur de Food a bien été incrémenté
+	Tester si la Food a bien été créée dans une case vide --> retourne True ✔️
+	Tester la création forcée d'une Food sur une case occupée par une autre Food ou Lulu --> retourne False ✔️
+	Tester si le compteur de Food a bien été incrémenté ✔️
 ---------------------------------------------------------------------------------------
 - méthode getMap():
-	Tester si la méthode retourne bien la map actuelle
+	Tester si la méthode retourne bien la map actuelle ✔️
 ---------------------------------------------------------------------------------------
 - méthode getSizeX():
-	Tester si la méthode retourne bien la sizeX de la map
+	Tester si la méthode retourne bien la sizeX de la map ✔️
 ---------------------------------------------------------------------------------------
 - méthode getSizeY():
-	Tester si la méthode retourne bien la sizeY de la map
+	Tester si la méthode retourne bien la sizeY de la map ✔️
 ---------------------------------------------------------------------------------------
 - méthode __addItem(position, item):
-	Tester si l'item est bien ajouté dans le dictionnaire
-	Tester si la position de la lulu a bien été mise à jour/la nouvelle position contient bien le nouvel item
+	Tester si l'item est bien ajouté dans le dictionnaire ✔️
+	Tester si la position de la lulu a bien été mise à jour/la nouvelle position contient bien le nouvel item ✔️
 --------------------------------------------------------------------------------------
 - méthode __deleteItem(position):
-	Tester si l'item est bien retiré du dictionnaire
+	Tester si l'item est bien retiré du dictionnaire ✔️
 -------------------------------------------------------------------------------------
 - méthode tryMove(oldPosition, newPosition) -> bool: (True si la Lulu peut bouger, false si non)
 	Tester de bouger avec une position en dehors de la map --> retourne False
