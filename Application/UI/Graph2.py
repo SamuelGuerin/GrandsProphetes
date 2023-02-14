@@ -14,7 +14,7 @@ def generateColors(speeds, senses, sizes, colors):
     :type sizes: List<float>
 
     :param colors: Liste contenant les valeurs de la couleur (valeur de la couleur rgb)
-    :type colors: List<float>
+    :type colors: List<List<float>>
     """
     
     colors.clear()
@@ -22,6 +22,22 @@ def generateColors(speeds, senses, sizes, colors):
         colors.append([speeds[i]/(max(speeds) * 1.3), senses[i]/(max(senses) * 1.3), sizes[i]/(max(sizes) * 1.5)])
 
 def calculateCoordinates(generation, speeds, senses, sizes):
+    """Prend chaque propriété pertinente des Lulus et les assignent à une variable
+
+    :param generation: Liste contenant les Lulus et leur propriété
+    :type generation: List<`Lulu`>
+
+    :param speeds: Liste contenant la vitesse de chaque Lulu
+    :type speeds: List<float>
+
+    :param senses: Liste contenant la vision de chaque Lulu
+    :type senses: List<float>
+
+    :param sizes: Liste contenant la taille de chaque Lulu
+    :type sizes: List<float>
+    """
+
+
     speeds.clear()
     senses.clear()
     sizes.clear()
@@ -31,16 +47,45 @@ def calculateCoordinates(generation, speeds, senses, sizes):
         sizes.append(lulu.Size)
 
 def setAxesLabel(ax):
+    """Assigne des noms au axes du graphique
+
+    :param ax: Représente les axes du graphique
+    :type ax:  matplotlib.axes._subplots.AxesSubplot
+    """
+
     ax.set_xlabel('Vitesse', color='blue', fontweight='semibold')
     ax.set_ylabel('Vision', color='green', fontweight='semibold')
     ax.set_zlabel('Taille', color='red', fontweight='semibold') 
 
 def setAxesSize(ax, sx, sy, sz):
+    """Assigne des noms au axes du graphique
+
+    :param ax: Représente les axes du graphique
+    :type ax:  matplotlib.axes._subplots.AxesSubplot
+
+    :param sx: Grandeur de l'axe en x
+    :type sx: Float
+
+    :param sy: Grandeur de l'axe en y
+    :type sy: Float
+
+    :param sz: Grandeur de l'axe en z
+    :type sz: Float
+    """
+
     ax.set_xlim([0,sx])
     ax.set_ylim([0,sy])
     ax.set_zlim([0,sz])
 
 def setStats(ax, generation):
+    """Construit la partie à côté du graphique pour exposer à l'utilisateur les stats du graphique
+
+    :param ax: Représente les axes du graphique
+    :type ax:  matplotlib.axes._subplots.AxesSubplot
+
+    :param generation: Liste contenant les Lulus et leur propriété
+    :type generation: List<`Lulu`>
+    """
     ax.clear()
     speed = [0,0,1000000]
     sense = [0,0,1000000]
@@ -105,6 +150,27 @@ class Lulu:
         self.Size = size
 
 def generateGraph(generation, currentGeneration, elev, azim):
+    """Créer le graphique
+
+    :param generation: Liste contenant les Lulus et leur propriété
+    :type generation: List<`Lulu`>
+
+    :param currentGeneration: Index de la génération que nous allons afficher
+    :type currentGeneration: Int
+
+    :param elev: Angle que le graphique aura à l'affichage
+    :type elev: Float
+
+    :param azim: Angle que le graphique aura à l'affichage
+    :type azim: Float
+
+    :return: Cette function retourne la figure globale du graphique et ses axes
+    :rtype: List[matplotlib.figure.Figure, matplotlib.axes._subplots.AxesSubplot]
+    """
+
+
+
+
     fig, ax = plt.subplots(figsize=(16, 9))
     plt.axis('off')
     ax = plt.axes(projection="3d")

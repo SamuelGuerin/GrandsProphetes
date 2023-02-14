@@ -1,4 +1,5 @@
 import customtkinter as ct
+import tkinter
 from PIL import Image
 import os
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -167,11 +168,11 @@ class Form(ct.CTk):
         
 
         # Setup de base de l'interface
-        self.geometry("900x700")
+        self.geometry("900x800")
         self.title("Sélection naturel Form.py")
         self.resizable(True, True)
         self.maxsize(width, height)
-        self.minsize(830, 950)
+        self.minsize(830, 700)
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
 
@@ -538,9 +539,6 @@ class Form(ct.CTk):
 
         # -------------------------------------------------
         def get_allBeforeSimulation():
-            """C'est function appelle toute les fonctions pour valider chacun des champs et la fonction pour lancer la simulation.
-            """
-
             validMapSizeX = get_inputMapSizeX()
             validMapSizeY = get_inputMapSizeY()
             validStartFood = get_inputStartFood()
@@ -565,6 +563,8 @@ class Form(ct.CTk):
                 
                 #Simule
                 #__run__(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration)
+
+                #__run__(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration, validMutation)
                 lblErrorInForm.configure(text="OK", text_color="green")
             else:
                 lblErrorInForm.configure(text="Error: Veuillez remplir convenablement le formulaire", text_color="red")
@@ -574,10 +574,6 @@ class Form(ct.CTk):
     
         # Graph
         def add_Graph():
-            """Cette fonction permet de généré les graphiques pour chaque génération de plus des button généré,
-               pour pouvoir naviguer dans les différente génération ou pour changer l'angle de vue du graphique.
-            """
-
             global canvasR
             graphData = fg.graphGeneration.first(index)
             index.elev = 30
@@ -591,11 +587,6 @@ class Form(ct.CTk):
             canvasR = canvasG
 
             def previous(canvas):
-                """Est appelé lors du clic sur button précédent et affiche le graphique précédent.
-
-                Args:
-                    canvas (_type_): _description_
-                """
                 if index.isMin():
                     return
                 global ax
@@ -729,9 +720,15 @@ class Form(ct.CTk):
 
         def preview():
             current_path = os.path.dirname(os.path.realpath(__file__))
-            preview = ct.CTkImage(Image.open(current_path + "/preview.png"), size=(500, 200))
-            previewImage = ct.CTkLabel(master=self.frame_1, text="", image=preview)
-            previewImage.grid(row=12, column=0, columnspan=3, padx=20, pady=10)
+            preview = ct.CTkImage(Image.open(current_path + "/preview.png"), size=(700, 350))
+            previewImage = ct.CTkLabel(master=self, text="", image=preview)
+            previewImage.grid(row=0, column=0, sticky="snwe")
+            btnClose = ct.CTkButton(master=self, text="Fermer la prévisualisation", command=lambda:closePreview(previewImage, btnClose))
+            btnClose.grid(row=1, column=0, padx=20, pady=10, sticky="we")
+
+        def closePreview(previewImage, btnClose):
+            previewImage.destroy()
+            btnClose.destroy()
 
         btnGraph = ct.CTkButton(master=self.frame_1, text="Visualiser les graphiques", command=add_Graph)
         btnGraph.grid(row=10, column=2, padx=20, pady=10, sticky="we")
