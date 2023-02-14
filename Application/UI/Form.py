@@ -6,6 +6,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import FormGraph as fg
 import sys
 import pathlib
+import math
 workingDirectory = pathlib.Path().resolve()
 sys.path.append(str(workingDirectory) + '\Application')
 import SimulationManager as Simulation
@@ -243,7 +244,7 @@ class Form(ct.CTk):
 
         infoStartFood = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoStartFood.grid(row=2, column=1, pady=10, padx=10)
-        infoStartFood.bind("<Enter>", lambda event: show_info(event, str(get_infoStartFood())))
+        infoStartFood.bind("<Enter>", lambda event: show_info(event, get_infoStartFood()))
         infoStartFood.bind("<Leave>", hide_info)
 
         txtStartFood = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
@@ -258,7 +259,7 @@ class Form(ct.CTk):
 
         infoStartLulu = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoStartLulu.grid(row=3, column=1, pady=10, padx=10)
-        infoStartLulu.bind("<Enter>", lambda event: show_info(event, str(get_infoStartLulu())))
+        infoStartLulu.bind("<Enter>", lambda event: show_info(event, get_infoStartLulu()))
         infoStartLulu.bind("<Leave>", hide_info)
 
         txtStartLulu = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
@@ -416,7 +417,7 @@ class Form(ct.CTk):
                 if(mapSizeXValue < 0 or mapSizeYValue < 0):
                     raise ValueError
                 maxFood = mapSizeXValue * mapSizeYValue * 0.50
-                return "Ce champs représente le nombre\r de nourriture présent sur le territoire.\r (Le nombre de nourriture doit être inférieur ou égal\r à 50% du territoire soit " + str(int(maxFood) + ")")
+                return "Ce champs représente le nombre\r de nourriture présent sur le territoire.\r (Le nombre de nourriture doit être inférieur ou égal\r à 50% du territoire soit " + str(math.floor(maxFood)) + ")"
             except ValueError:
                 return "Ce champs représente le nombre\r de nourriture présent sur le territoire.\r (Le nombre de nourriture doit être inférieur ou égal\r à 50% du territoire\r(Les valeur en X et Y doivent être mise\r pour pouvoir savoir la valeur maximal))"
 
@@ -450,7 +451,7 @@ class Form(ct.CTk):
                 if(mapSizeXValue < 0 or mapSizeYValue < 0):
                     raise ValueError
                 maxLulu = mapSizeXValue * mapSizeYValue * 0.75
-                return "Ce champs représente le nombre\r de Lulus présent sur le territoire au début.\r (Le nombre de Lulus doit être inférieur ou égal\r à 75% du territoire soit " + str(int(maxLulu) + ")")
+                return "Ce champs représente le nombre\r de Lulus présent sur le territoire au début.\r (Le nombre de Lulus doit être inférieur ou égal\r à 75% du territoire soit " + str(math.floor(maxLulu)) + ")"
             except ValueError:
                 return "Ce champs représente le nombre\r de Lulus présent sur le territoire au début.\r (Le nombre de Lulus doit être inférieur ou égal\r à 75% du territoire\r(Les valeur en X et Y doivent être mise\r pour pouvoir savoir la valeur maximal))"
 
