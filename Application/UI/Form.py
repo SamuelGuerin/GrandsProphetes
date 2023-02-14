@@ -1,5 +1,5 @@
 import customtkinter as ct
-import tkinter
+import tkinter as tk
 from PIL import Image
 import os
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -209,7 +209,7 @@ class Form(ct.CTk):
         infoMapSizeX.bind("<Enter>", lambda event: show_info(event, "Ce champs va déterminer la grandeur du territoire en X.\r (Cette valeur doit être entre 100 et 1 000 000)"))
         infoMapSizeX.bind("<Leave>", hide_info)
 
-        txtMapSizeX = ct.CTkEntry(master=self.frame_1)
+        txtMapSizeX = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="100"))
         txtMapSizeX.grid(row=0, column=2, padx=20, pady=10, sticky="ew")
 
         lblMapSizeXGood = ct.CTkLabel(master=self.frame_1, text="")
@@ -225,7 +225,7 @@ class Form(ct.CTk):
         infoMapSizeY.bind("<Enter>", lambda event: show_info(event, "Ce champs va déterminer la grandeur du territoire en Y.\r (Cette valeur doit être entre 100 et 1 000 000)"))
         infoMapSizeY.bind("<Leave>", hide_info)
 
-        txtMapSizeY = ct.CTkEntry(master=self.frame_1)
+        txtMapSizeY = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="100"))
         txtMapSizeY.grid(row=1, column=2, padx=20, pady=10, sticky="ew")
 
         lblMapSizeYGood = ct.CTkLabel(master=self.frame_1, text="")
@@ -240,7 +240,7 @@ class Form(ct.CTk):
         infoStartFood.bind("<Enter>", lambda event: show_info(event, get_infoStartFood()))
         infoStartFood.bind("<Leave>", hide_info)
 
-        txtStartFood = ct.CTkEntry(master=self.frame_1)
+        txtStartFood = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
         txtStartFood.grid(row=2, column=2, padx=20, pady=10, sticky="ew")
 
         lblStartFoodGood = ct.CTkLabel(master=self.frame_1, text="")
@@ -255,7 +255,7 @@ class Form(ct.CTk):
         infoStartLulu.bind("<Enter>", lambda event: show_info(event, get_infoStartLulu()))
         infoStartLulu.bind("<Leave>", hide_info)
 
-        txtStartLulu = ct.CTkEntry(master=self.frame_1)
+        txtStartLulu = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
         txtStartLulu.grid(row=3, column=2, padx=20, pady=10, sticky="ew")
 
         lblStartLuluGood = ct.CTkLabel(master=self.frame_1, text="")
@@ -270,7 +270,7 @@ class Form(ct.CTk):
         infoEnergy.bind("<Enter>", lambda event: show_info(event, "Ce champs représente le nombre mouvement\r que les Lulus pourront faire lors d'une génération.\r (Cette valeur doit être entre 100 et 1 000 000)"))
         infoEnergy.bind("<Leave>", hide_info)
 
-        txtEnergy = ct.CTkEntry(master=self.frame_1)
+        txtEnergy = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="1000"))
         txtEnergy.grid(row=4, column=2, padx=20, pady=10, sticky="ew")
 
         lblEnergyGood = ct.CTkLabel(master=self.frame_1, text="")
@@ -285,7 +285,7 @@ class Form(ct.CTk):
         infoSpeed.bind("<Enter>", lambda event: show_info(event, "Ce champs représente la variation\r de leur vitesse en % si une mutation est effectuée.\r (Cette valeur doit être inférieur ou égal à 33)"))
         infoSpeed.bind("<Leave>", hide_info)
 
-        txtSpeed = ct.CTkEntry(master=self.frame_1)
+        txtSpeed = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
         txtSpeed.grid(row=5, column=2, padx=20, pady=10, sticky="ew")
 
         lblSpeedGood = ct.CTkLabel(master=self.frame_1, text="")
@@ -300,7 +300,7 @@ class Form(ct.CTk):
         infoSense.bind("<Enter>", lambda event: show_info(event, "Ce champs représente la variation\r de leur vision en % si une mutation est effectuée.\r (Cette valeur doit être inférieur ou égal à 33)"))
         infoSense.bind("<Leave>", hide_info)
 
-        txtSense = ct.CTkEntry(master=self.frame_1)
+        txtSense = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
         txtSense.grid(row=6, column=2, padx=20, pady=10, sticky="ew")
 
         lblSenseGood = ct.CTkLabel(master=self.frame_1, text="")
@@ -315,7 +315,7 @@ class Form(ct.CTk):
         infoSize.bind("<Enter>", lambda event: show_info(event, "Ce champs représente la variation\r de leur taille en % si une mutation est effectuée.\r (Cette valeur doit être inférieur ou égal à 33)"))
         infoSize.bind("<Leave>", hide_info)
 
-        txtSize = ct.CTkEntry(master=self.frame_1)
+        txtSize = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
         txtSize.grid(row=7, column=2, padx=20, pady=10, sticky="ew")
 
         lblSizeGood = ct.CTkLabel(master=self.frame_1, text="")
@@ -330,7 +330,7 @@ class Form(ct.CTk):
         infoMutation.bind("<Enter>", lambda event: show_info(event, "Ce champs représente le % de chance qu'une mutation\r soit effectuée lors de la reproduction.\r (Cette valeur doit être entre 1 et 100)"))
         infoMutation.bind("<Leave>", hide_info)
 
-        txtMutation = ct.CTkEntry(master=self.frame_1)
+        txtMutation = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="50"))
         txtMutation.grid(row=8, column=2, padx=20, pady=10, sticky="ew")
 
         lblMutationGood = ct.CTkLabel(master=self.frame_1, text="")
@@ -345,7 +345,7 @@ class Form(ct.CTk):
         infoGeneration.bind("<Enter>", lambda event: show_info(event, "Ce champs représente le nombre de générations\r qui sera effectuées lors de la simulation.\r (Cette valeur doit être entre 1 et 1 000 000)"))
         infoGeneration.bind("<Leave>", hide_info)
 
-        txtGeneration = ct.CTkEntry(master=self.frame_1)
+        txtGeneration = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
         txtGeneration.grid(row=9, column=2, padx=20, pady=10, sticky="ew")
 
         lblGenerationGood = ct.CTkLabel(master=self.frame_1, text="")
