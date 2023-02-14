@@ -118,18 +118,18 @@ class Lulu:
             if(xMove == 0): # ligne verticale
                 if(not Territory.tryMove(self.position, Position(nextPos.x - 1, nextPos.y))):
                     if(not Territory.tryMove(self.position, Position(nextPos.x + 1, nextPos.y))):
-                        # random
-                        self.goToTargetPosition(self.newRandomPosition())
+                        # ne bouge pas et trouve nouvelle cible random
+                        self.randomTargetPosition = self.newRandomPosition()
             elif(yMove == 0): # ligne horizontale
                 if(not Territory.tryMove(self.position, Position(nextPos.x, nextPos.y - 1))):
                     if(not Territory.tryMove(self.position, Position(nextPos.x, nextPos.y + 1))):
-                        # random
-                        self.goToTargetPosition(self.newRandomPosition())
+                        # ne bouge pas et trouve nouvelle cible random
+                        self.randomTargetPosition = self.newRandomPosition()
             else: # diagonnale
                 if(not Territory.tryMove(self.position, Position(nextPos.x - xMove, nextPos.y))):
                     if(not Territory.tryMove(self.position, Position(nextPos.x, nextPos.y - yMove))):
-                        # random
-                        self.goToTargetPosition(self.newRandomPosition())
+                        # ne bouge pas et trouve nouvelle cible random
+                        self.randomTargetPosition = self.newRandomPosition()
     
     def newRandomPosition(self) -> Position:
         """Détermine une nouvelle :class:`Position` aléatoire dans la carte (map) qui deviendra la nouvelle :class:`Position` ciblée de la :class:`Lulu`
