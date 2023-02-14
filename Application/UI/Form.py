@@ -571,19 +571,19 @@ class Form(ct.CTk):
 
                 lblErrorInForm.configure(text="OK", text_color="green")
             else:
-                #fg.generations = fg.objectsToCoordinates(fg.generateLulus())
-                #btnGraph.grid(row=11, column=0, columnspan=2, padx=20, pady=10, sticky="we")
-                #btnSave.grid(row=11, column=2, padx=20, pady=10, sticky="we")
+                fg.generations = fg.objectsToCoordinates(fg.generateLulus())
+                btnGraph.grid(row=11, column=0, columnspan=2, padx=20, pady=10, sticky="we")
+                btnSave.grid(row=11, column=2, padx=20, pady=10, sticky="we")
                 lblErrorInForm.configure(text="Erreur: Veuillez remplir convenablement le formulaire", text_color="red")
                   
         btnSimulate = ct.CTkButton(master=self.frame_1, text="Lancer la simulation", command=get_allBeforeSimulation)
         btnSimulate.grid(row=10, column=0, columnspan=2, padx=20, pady=10, sticky="we")
 
-        def importSimulation():
+        def importSimulation(lblErrorInForm):
             btnGraph.grid_remove()
             btnSave.grid_remove()
 
-            fg.generations = loadData()
+            fg.generations = loadData(lblErrorInForm)
             if fg.generations is not None:
                 add_Graph()
     
@@ -745,15 +745,16 @@ class Form(ct.CTk):
             previewImage.destroy()
             btnClose.destroy()
 
-        btnImport = ct.CTkButton(master=self.frame_1, text="Importer une Simulation...", command=importSimulation)
+        btnImport = ct.CTkButton(master=self.frame_1, text="Importer une Simulation...", command=lambda:importSimulation(lblErrorInForm))
         btnImport.grid(row=10, column=2, padx=20, pady=10, sticky="we")
 
         btnGraph = ct.CTkButton(master=self.frame_1, text="Visualiser les graphiques", command=add_Graph)
-        btnSave = ct.CTkButton(master=self.frame_1, text="Sauvegarder la simulation", command=lambda:saveData(fg.generations))
+        btnSave = ct.CTkButton(master=self.frame_1, text="Sauvegarder la simulation", command=lambda:saveData(fg.generations, lblErrorInForm))
 
         btnPreview = ct.CTkButton(master=self.frame_1, text="Prévisualiser le Territoire", command=preview)
         btnPreview.grid(row=12, column=0, columnspan=3, padx=20, pady=10, sticky="we")
 
+        global lblErrorInForm
         lblErrorInForm = ct.CTkLabel(master=self.frame_1, height=100, justify=ct.CENTER, text="")
         lblErrorInForm.grid(row=13, column=0, columnspan=3, padx=20, pady=10)
 
