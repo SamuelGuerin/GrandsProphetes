@@ -1,19 +1,30 @@
 import json
-import FormGraph as fg
 import re
 from pathlib import Path
 from os import listdir
 from jsonschema import validate
 from customtkinter import filedialog
 
-def obj_dict(obj):
-    return obj.__dict__
-
 def fileNumber(name):
+    """Permet de savoir le numéro du fichier save.
+
+    :return: Retourne le numéro du fichier save.
+    :rtype: int
+    """
+
     match = re.match("^save([1-9][0-9]{0,9}).json", name)
     return int(match.group(1))
 
 def saveData(data):
+    """Enregistre les données des coordonnées dans un fichier Json dans le dossier "Save".
+
+    :param data: Liste des coordonnées des générations de la simulation.
+    :type data: `[[[float],[float],[float]]]`
+    """
+
+    def obj_dict(obj):
+        return obj.__dict__
+
     jsonString = json.dumps(data, default=obj_dict)
 
     Path("Save/").mkdir(parents=True, exist_ok=True)
@@ -35,6 +46,12 @@ def saveData(data):
     f.close()
 
 def loadData():
+    """Permet à un utilisateur de choisir un fichier json à importer et de retourner les valeurs.
+
+    :return: Retourne une liste de coordonnées pour le graphique 3d.
+    :rtype: [[[float],[float],[float]]]
+    """
+
     schema = {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "array",
@@ -97,6 +114,14 @@ def loadData():
     return data
 
 def validateData(data):
+    """Permet à un utilisateur de choisir un fichier json à importer et de retourner les valeurs.
+
+    :param data: Liste des coordonnées des générations de la simulation.
+    :type data: `[[[float],[float],[float]]]`
+
+    :return: Retourne `True` si les données sont valides.
+    :rtype: bool
+    """
     for generation in data:
         if not (len(generation[0]) == len(generation[1]) == len(generation[2])):
             return False
