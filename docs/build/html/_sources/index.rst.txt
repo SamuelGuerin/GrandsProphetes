@@ -14,6 +14,7 @@ Bienvenue à la documentation de LulusWorld!
    examples
    main
    modules
+   UI
 
 Indices and tables
 ==================
