@@ -59,7 +59,7 @@ __numberOfFood = 0
 EATING_RATIO = 1.2
 
 
-def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size):
+def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, mutateChance):
     """Crée (instancie) une carte (map) avec une taille X et Y ainsi qu'un nombre donné de nourriture et de Lulus
 
     :param sizeX: Taille de la carte sur l'axe des X
@@ -76,11 +76,19 @@ def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size):
     global __foodCount
     global __lulusCount
     global __energy
+    global __mutateChance
+    global __speedVariation
+    global __senseVariation
+    global __sizeVariation
     __sizeX = sizeX
     __sizeY = sizeY
     __foodCount = foodCount
     __lulusCount = lulusCount
     __energy = energy
+    __mutateChance = mutateChance
+    __speedVariation = speed
+    __senseVariation = sense
+    __sizeVariation = size
 
     # Créer x lulus dans la map (La map va de 0 à maxX ou maxY)
     # Les mettre sur le côté
@@ -280,14 +288,13 @@ def moveLulu(oldPosition, newPosition):
 
 
 def reproduceLulu(Lulu):
-    # 50% Chance de mutation
     newSpeed = Lulu.speed
     newSense = Lulu.sense
     newSize = Lulu.size
-    if (bool(random.getrandbits(1))):
-        newSpeed = round(Lulu.speed * random.uniform(0.66, 1.33))
-        newSense = round(Lulu.sense * random.uniform(0.66, 1.33))
-        newSize = round(Lulu.size * random.uniform(0.66, 1.33))
+    if (random.randint(1,100) < __mutateChance):
+        newSpeed = round(Lulu.speed * random.uniform(1 - __speedVariation, 1 + __speedVariation))
+        newSense = round(Lulu.sense * random.uniform(1 - __senseVariation, 1 + __senseVariation))
+        newSize = round(Lulu.size * random.uniform(1 - __sizeVariation, 1 + __sizeVariation))
 
     i = 1
     rx = 0
