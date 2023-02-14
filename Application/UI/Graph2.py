@@ -120,7 +120,6 @@ def generateGraph(generation, currentGeneration):
     sizes = generation[2]
     colors = []
 
-    #calculateCoordinates(generation, speeds, senses, sizes)
     generateColors(speeds,senses,sizes,colors)
 
     setAxesLabel(ax)
