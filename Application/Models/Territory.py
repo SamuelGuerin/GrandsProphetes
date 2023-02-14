@@ -21,7 +21,7 @@ STARTING_ENERGY     Valeur constante pour définir l'énergie de départ pour ch
 
 =====================       =================================================================================================================================================
 Méthode                     Action
-=====================       =================================================================================================================================================      
+=====================       =================================================================================================================================================
 :meth:`createMap`           Crée une carte (map) avec les paramètres donnés (__sizeX, sizeY, __foodCount, __lulusCount)
 :meth:`__CreateLulu`        Crée une Lulu avec les paramètres donnés (rx, ry, speed, sense, size, energyRemaining, FoodCollected, isDone)
 :meth:`__CreateFood`        Ajoute une nourriture sur la carte (map) à la position donnée en paramètres (rx, ry)
@@ -35,7 +35,7 @@ Méthode                     Action
 :meth:`printMap`            Affiche tous les items de la carte avec leur :class:`Position` dans la console (outil de débogage)
 :meth:`tryMove`             Vérifie si la Lulu peut se déplacer d'un point A à un point B en faisant toutes les validations et confirmations nécessaires, retourne un booléen
 :meth:`moveLulu`            Effectue le mouvement précédemment testé par la méthode :meth:`tryMove`
-=====================       =================================================================================================================================================    
+=====================       =================================================================================================================================================
 
 :return: N/A
 :rtype: Module
@@ -59,7 +59,7 @@ __numberOfFood = 0
 EATING_RATIO = 1.2
 
 
-def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, mutateChance):
+def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, mutateChance, speedVariation, senseVariation, sizeVariation):
     """Crée (instancie) une carte (map) avec une taille X et Y ainsi qu'un nombre donné de nourriture et de Lulus
 
     :param sizeX: Taille de la carte sur l'axe des X
@@ -86,9 +86,9 @@ def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, m
     __lulusCount = lulusCount
     __energy = energy
     __mutateChance = mutateChance
-    __speedVariation = speed
-    __senseVariation = sense
-    __sizeVariation = size
+    __speedVariation = speedVariation /100
+    __senseVariation = senseVariation /100
+    __sizeVariation = sizeVariation /100
 
     # Créer x lulus dans la map (La map va de 0 à maxX ou maxY)
     # Les mettre sur le côté
@@ -191,7 +191,7 @@ def getItem(x, y):
 def getMap():
     """Retourne la map (carte) y permettant l'accès depuis d'autres classes du projet
 
-    :return: Retourne l'objet __map 
+    :return: Retourne l'objet __map
     :rtype: dictionnary
     """
     return __map
@@ -214,6 +214,7 @@ def getSizeY():
     """
     return __sizeY
 
+
 def __addItem(position, item):
     """Ajoute un item (valeur) (:class:`Lulu` ou  nourriture (:class:`Food`)) dans le dictionnaire __map à une :class:`Position` donnée (clé)
 
@@ -225,6 +226,7 @@ def __addItem(position, item):
     __map[position] = item
     if (type(item) == Lulu):
         item.position = position
+
 
 def __deleteItem(position):
     """Retire un item (valeur) (:class:`Lulu` ou  nourriture (:class:`Food`)) dans le dictionnaire __map à une :class:`Position` donnée (clé)
@@ -286,15 +288,21 @@ def moveLulu(oldPosition, newPosition):
     __deleteItem(oldPosition)
 
 
-
 def reproduceLulu(Lulu):
     newSpeed = Lulu.speed
     newSense = Lulu.sense
     newSize = Lulu.size
-    if (random.randint(1,100) < __mutateChance):
+    if (random.randint(1, 100) < __mutateChance):
         newSpeed = round(Lulu.speed * random.uniform(1 - __speedVariation, 1 + __speedVariation))
         newSense = round(Lulu.sense * random.uniform(1 - __senseVariation, 1 + __senseVariation))
         newSize = round(Lulu.size * random.uniform(1 - __sizeVariation, 1 + __sizeVariation))
+        
+    if (newSpeed < 1):
+        newSpeed = 1
+    if (newSense < 1):
+        newSense = 1
+    if (newSize < 1):
+        newSize = 1
 
     i = 1
     rx = 0
@@ -348,10 +356,7 @@ def moveAll():
     lulusToMove = __lulus.copy()
     while (lulusToMove.__len__() > 0):
 
-        print("nombre de survivants: " +
-              str(sum(lulu.foodAmount >= 1 for lulu in getLulus())))
-        print("nombre de lulu: " + str(getLulus().__len__()))
-        print("nombre de lulu map: " + str(getLuluMap()))
+        lulusToMove = __lulus.copy()        
         # time.sleep(0.2)
         # renderAnimation()
 
@@ -364,6 +369,7 @@ def moveAll():
                 # renderAnimation()
             else:
                 lulusToMove.remove(lulu)
+        
 
 
 def dayResultLulu():
