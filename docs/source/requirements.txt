@@ -3,3 +3,4 @@ customtkinter
 matplotlib
 numpy
 sphinx
+jsonschema

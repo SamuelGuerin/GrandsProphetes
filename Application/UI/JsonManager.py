@@ -94,7 +94,6 @@ def loadData():
     except:
         data = None
         print("fichier non valide")
-    
     return data
 
 def validateData(data):
