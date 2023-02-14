@@ -6,6 +6,7 @@ from mpl_toolkits.mplot3d import axes3d
 import matplotlib.pyplot as plt
 import Graph2 as Graph
 import FormGraph as fg
+from JsonManager import saveData, loadData
 
 ct.set_appearance_mode("dark")
 ct.set_default_color_theme("blue")
@@ -276,6 +277,11 @@ class Form(ct.CTk):
                   
         btnSimulate = ct.CTkButton(master=self.frame_1, text="Lancer la simulation", command=get_allBeforeSimulation)
         btnSimulate.grid(row=9, column=0, padx=20, pady=10, sticky="we")
+
+        def importSimulation():
+            fg.generations = loadData()
+            if fg.generations is not None:
+                add_Graph()
     
         # Graph
         def add_Graph():
@@ -337,7 +343,6 @@ class Form(ct.CTk):
                 btnFirstGeneration.destroy()
                 buttonDestroyGraph.destroy()
 
-
             btnPreviousGeneration = ct.CTkButton(self, text="Génération Précédente", command=lambda:previous(canvasR))
             btnPreviousGeneration.grid(row=1, column=3, padx=5, pady=10, sticky="we")
 
@@ -353,7 +358,7 @@ class Form(ct.CTk):
             buttonDestroyGraph = ct.CTkButton(self, text="Remove Graph", command=lambda:remove_graph(canvasR))
             buttonDestroyGraph.grid(row=1, column=0, padx=10, pady=10, sticky="we")
 
-        btnGraph = ct.CTkButton(master=self.frame_1, text="Visualiser les graphiques", command=add_Graph)
+        btnGraph = ct.CTkButton(master=self.frame_1, text="Importer une simulation...", command=importSimulation)
         btnGraph.grid(row=9, column=1, padx=20, pady=10, sticky="we")
 
         lblErrorInForm = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="")

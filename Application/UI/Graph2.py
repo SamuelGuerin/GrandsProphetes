@@ -48,33 +48,33 @@ def setStats(ax, generation):
     sense = [0,0,1000000]
     size = [0,0,1000000]
 
-    for lulu in generation:
+    for ind in range(len(generation[0])):
         #Speed
-        speed[0] += lulu.Speed
-        if (lulu.Speed > speed[1]):
-            speed[1] = round(lulu.Speed)
-        if (lulu.Speed < speed[2]):
-            speed[2] = round(lulu.Speed)
+        speed[0] += generation[0][ind]
+        if (generation[0][ind] > speed[1]):
+            speed[1] = round(generation[0][ind])
+        if (generation[0][ind] < speed[2]):
+            speed[2] = round(generation[0][ind])
         #Sense
-        sense[0] += lulu.Sense
-        if (lulu.Sense > sense[1]):
-            sense[1] = round(lulu.Sense)
-        if (lulu.Sense < sense[2]):
-            sense[2] = round(lulu.Sense)
+        sense[0] += generation[1][ind]
+        if (generation[1][ind] > sense[1]):
+            sense[1] = round(generation[1][ind])
+        if (generation[1][ind] < sense[2]):
+            sense[2] = round(generation[1][ind])
         #Size
-        size[0] += lulu.Size
-        if (lulu.Size > size[1]):
-            size[1] = round(lulu.Size)
-        if (lulu.Size < size[2]):
-            size[2] = round(lulu.Size)
+        size[0] += generation[2][ind]
+        if (generation[2][ind] > size[1]):
+            size[1] = round(generation[2][ind])
+        if (generation[2][ind] < size[2]):
+            size[2] = round(generation[2][ind])
     
-    speed[0] = round(speed[0] / len(generation))
-    sense[0] = round(sense[0] / len(generation))
-    size[0] = round(size[0] / len(generation))
+    speed[0] = round(speed[0] / len(generation[0]))
+    sense[0] = round(sense[0] / len(generation[1]))
+    size[0] = round(size[0] / len(generation[2]))
 
     # Population
     ax.text(0.15, 0.95, 'Population ', fontsize=15, fontweight='bold')
-    ax.text(0.34, 0.90, str(len(generation)), fontsize=15, color='darkorange', fontweight='semibold')
+    ax.text(0.34, 0.90, str(len(generation[0])), fontsize=15, color='darkorange', fontweight='semibold')
     # Speed
     ax.text(0.03, 0.77, 'Vitesse \nMoyenne: ', fontsize=15, fontweight='bold')
     ax.text(0.7, 0.77, str(speed[0]), fontsize=15, color='blue', fontweight='semibold')
@@ -115,12 +115,12 @@ def generateGraph(generation, currentGeneration):
     setAxesSize(ax)
     fig.subplots_adjust(bottom=0.2)
 
-    speeds = []
-    senses = []
-    sizes = []
+    speeds = generation[0]
+    senses = generation[1]
+    sizes = generation[2]
     colors = []
 
-    calculateCoordinates(generation, speeds, senses, sizes)
+    #calculateCoordinates(generation, speeds, senses, sizes)
     generateColors(speeds,senses,sizes,colors)
 
     setAxesLabel(ax)

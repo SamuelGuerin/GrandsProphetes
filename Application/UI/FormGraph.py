@@ -1,8 +1,5 @@
 import numpy as np
-
 import Graph2 as Graph
-import Form
-
 
 def generateLulus():
     i = 0
@@ -17,7 +14,6 @@ def generateLulus():
             cpt += 1
         array2.append(array1.copy())
     return array2
-
 
 class Lulu:
     def __init__(self, speed, sense, size):
@@ -59,8 +55,22 @@ class graphGeneration:
             index.ind = len(generations) - 1
             return Graph.generateGraph(generations[index.ind], index.ind + 1)
 
-generations = generateLulus()
+def objectsToCoordinates(lulus):
+    gens = []
 
+    speeds = []
+    senses = []
+    sizes = []
 
+    for generation in lulus:
+        speeds.clear()
+        senses.clear()
+        sizes.clear()
+        for lulu in generation:
+            speeds.append(round(lulu.Speed, 2))
+            senses.append(round(lulu.Sense, 2))
+            sizes.append(round(lulu.Size, 2))
+        gens.append([speeds.copy(), senses.copy(), sizes.copy()])
+    return gens
 
-
+generations = []

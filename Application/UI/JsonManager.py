@@ -76,16 +76,30 @@ def loadData():
     "additionalItems": True
     }
 
-    file_path = filedialog.askopenfilename(initialdir="Save/", filetypes=[("Json File", "*.json")])
+    data = None
 
-    f = open(file_path)
-    data = json.load(f)
-    f.close()
     try:
+        file_path = filedialog.askopenfilename(initialdir="Save/", filetypes=[("Json File", "*.json")])
+
+        f = open(file_path)
+        data = json.load(f)
+        f.close()
+
         validate(instance=data, schema=schema)
+
+        if not validateData(data):
+            raise Exception()
+        
         print("fichier valide")
     except:
         data = None
         print("fichier non valide")
     
     return data
+
+def validateData(data):
+    for generation in data:
+        if not (len(generation[0]) == len(generation[1]) == len(generation[2])):
+            return False
+        
+    return True
