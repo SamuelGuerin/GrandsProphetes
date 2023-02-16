@@ -74,7 +74,8 @@ def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation,
     sims = time.time()
     Territory.createMap(sizeX, sizeY, foodCount, lulusCount,
                         speed, sense, energy * 10000, size, mutateChance, speedVariation, senseVariation, sizeVariation)
-
+    
+    global generation
     for generation in range(nbGeneration):
         st = time.time()
         print("generation " + str(generation))

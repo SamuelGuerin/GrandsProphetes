@@ -1,5 +1,6 @@
 import customtkinter as ct
 import tkinter as tk
+from tkinter import ttk
 from PIL import Image
 import os
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -11,6 +12,9 @@ workingDirectory = pathlib.Path().resolve()
 sys.path.append(str(workingDirectory) + '\Application')
 import SimulationManager as Simulation
 from JsonManager import saveData, loadData
+import threading
+import time
+
 
 ct.set_appearance_mode("dark")
 ct.set_default_color_theme("blue")
@@ -172,7 +176,6 @@ class Form(ct.CTk):
 
         width = 1920
         height = 1080
-        
 
         # Setup de base de l'interface
         self.geometry("900x800")
@@ -544,6 +547,7 @@ class Form(ct.CTk):
             except ValueError:
                 lblGenerationGood.configure(text="Ce n'est pas un nombre entier positif", text_color="red")
 
+
         # -------------------------------------------------
         def get_allBeforeSimulation():
             validMapSizeX = get_inputMapSizeX()
@@ -568,17 +572,38 @@ class Form(ct.CTk):
                and type(validMutation) is int
                and type(validGeneration) is int):
                 
-                #Simule
-                #__run__(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration)
+                btnGraph.grid_remove()
+                btnSave.grid_remove()
+                btnSimulate.configure(state="disable")
+                btnImport.configure(state="disable")
+                btnPreview.configure(state="disable")
 
-                Simulation.__run__(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration, validMutation)
+                #Simule
+                th = threading.Thread(target=Simulation.__run__, args=(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration, validMutation))
+                th.start()
+
+                def witchGeneration():
+                    progress_bar.grid(row=14, column=0, columnspan=3, padx=20, pady=10, sticky="we")
+                    progress_bar.configure(maximum=validGeneration)
+                    while(th.is_alive()):
+                        progress_var.set(Simulation.generation)
+                        progress_bar.update()
+                witchGeneration()
+                th.join()
+
                 fg.generations = fg.objectsToCoordinates(fg.generateLulus())
                 btnGraph.grid(row=11, column=0, columnspan=2, padx=20, pady=10, sticky="we")
                 btnSave.grid(row=11, column=2, padx=20, pady=10, sticky="we")
-
-                lblErrorInForm.configure(text="OK", text_color="green")
+                progress_bar.grid_remove()
+                btnSimulate.configure(state="normal")
+                btnImport.configure(state="normal")
+                btnPreview.configure(state="normal")
+                lblErrorInForm.configure(text="La simulation est terminée", text_color="green")
             else:
                 lblErrorInForm.configure(text="Erreur: Veuillez remplir convenablement le formulaire", text_color="red")
+
+        progress_var = tk.DoubleVar()
+        progress_bar = ttk.Progressbar(master=self.frame_1, variable=progress_var)
                   
         btnSimulate = ct.CTkButton(master=self.frame_1, text="Lancer la Simulation", command=get_allBeforeSimulation)
         btnSimulate.grid(row=10, column=0, columnspan=2, padx=20, pady=10, sticky="we")
