@@ -6,6 +6,7 @@ from Models.Lulu import Lulu
 from Models.Food import Food
 
 generationMoves = []
+generationLulus = []
 class VisualizeLulus(Scene):
     def construct(self):
 
@@ -80,6 +81,7 @@ def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation,
         st = time.time()
         print("generation " + str(generation))
         print("nombre de lulu: " + str(Territory.getLulus().__len__()))
+        generationLulus.append(Territory.getLulus().copy())
         Territory.moveAll()
         Territory.resetWorld()
         Territory.dayResultLulu()
@@ -98,3 +100,6 @@ def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation,
     sime = simf - sims
         
     print("temps simulation: " + str(sime))
+
+def getGenerationsLulu():
+    return generationLulus
