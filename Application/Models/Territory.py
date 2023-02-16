@@ -121,8 +121,10 @@ def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, m
 def clearMap():
     global __lulus
     global __map
+    global __numberOfFood
     __lulus = []
     __map = {}
+    __numberOfFood = 0
 
 def __CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isDone) -> bool:
     """Crée une Lulu et la place sur les bords de la carte selon une position donnée et l'instancie avec des paramètres de base
@@ -240,6 +242,7 @@ def __deleteItem(position):
     :param position: :class:`Position` à laquelle l'item (:class:`Lulu` ou  nourriture (:class:`Food`)) sera retiré de l'objet __map (carte)
     :type position: :class:`Position`
     """
+
     del __map[position]
 
 # Vérifie s'il est possible de faire le mouvement demandé
@@ -284,11 +287,16 @@ def moveLulu(oldPosition, newPosition):
     """
     # S'il y avait qqch sur la nouvelle case, l'enlever et ajouter 1 de nourriture
     currentLulu = __map[oldPosition]
-    if (getItem(newPosition.x, newPosition.y) != None):
+    test = getItem(newPosition.x, newPosition.y)
+    if (test != None):
         currentLulu.foodAmount += 1
         # ToDo : Valider que la liste lulus ne la contient plus
-        if (type(getItem(newPosition.x, newPosition.y)) == Lulu):
+        if (type(test) == Lulu):
+            if test in currentLulu.lulusInRange:
+                currentLulu.lulusInRange.remove(test)
             __lulus.remove(__map[newPosition])
+        else :
+            currentLulu.foodInRange.remove(test)
         __deleteItem(newPosition)
     __addItem(newPosition, currentLulu)
     __deleteItem(oldPosition)

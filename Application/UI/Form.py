@@ -367,7 +367,7 @@ class Form(ct.CTk):
                 mapSizeXValue = int(txtMapSizeX.get())
                 if(mapSizeXValue < 0):
                     raise ValueError
-                if(mapSizeXValue < 100 or mapSizeXValue > 1000000):
+                if(mapSizeXValue < 3 or mapSizeXValue > 1000000):
                     lblMapSizeXGood.configure(text="Cette valeur doit être entre 100 et 1 000 000", text_color="red")
                 else:
                     lblMapSizeXGood.configure(text="")
@@ -382,7 +382,7 @@ class Form(ct.CTk):
                 mapSizeYValue = int(txtMapSizeY.get())
                 if(mapSizeYValue < 0):
                     raise ValueError
-                if(mapSizeYValue < 100 or mapSizeYValue > 1000000):
+                if(mapSizeYValue < 3 or mapSizeYValue > 1000000):
                     lblMapSizeYGood.configure(text="Cette valeur doit être entre 100 et 1 000 000", text_color="red")
                 else:
                     lblMapSizeYGood.configure(text="")

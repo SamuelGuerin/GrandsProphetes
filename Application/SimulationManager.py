@@ -68,8 +68,8 @@ def newMap(sizeX, sizeY, foodCount, lulusCount):
     renderAnimation()
 
 def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation, sizeVariation, energy, nbGeneration, mutateChance):
-    speed = 25 
-    sense = 25
+    speed = 5
+    sense = 5
     size = 1000
     sims = time.time()
     Territory.createMap(sizeX, sizeY, foodCount, lulusCount,
