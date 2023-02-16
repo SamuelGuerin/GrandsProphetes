@@ -63,11 +63,46 @@ def renderAnimation():
     scene.render()
 
 def newMap(sizeX, sizeY, foodCount, lulusCount):
+    """ Appel la méthode createMap() et renderAnimation afin de d'afficher l'image à l'utilisateur
+
+	:param sizeX: Taille de la carte sur l'axe des X
+    :type sizeX: int
+    :param sizeY: Taille de la carte sur l'axe des Y
+    :type sizeY: int
+    :param foodCount: Nombre de nourriture total
+    :type foodCount: int
+    :param lulusCount: Nombre de Lulus total
+    :type lulusCount: int
+	"""
     Territory.createMap(sizeX, sizeY, foodCount, lulusCount, 0, 0, 0, 0, 0, 0, 0, 0)
 
     renderAnimation()
 
 def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation, sizeVariation, energy, nbGeneration, mutateChance):
+    """ Appel la méthode createMap() et lance la simulation en exécutant les différentes 
+
+	:param sizeX: Taille de la carte sur l'axe des X
+    :type sizeX: int
+    :param sizeY: Taille de la carte sur l'axe des Y
+    :type sizeY: int
+    :param foodCount: Nombre de nourriture total
+    :type foodCount: int
+    :param lulusCount: Nombre de Lulus total
+    :type lulusCount: int
+    :param speedVariation: Variation de la vitesse des lulus à la reproduction
+	:type speedVariation: int
+	:param senseVariation: Variation de la vision des lulus à la reproduction
+	:type senseVariation: int
+ 	:param sizeVariation: Variation de la grosseur des lulus à la reproduction
+	:type sizeVariation: int
+	:param energy: Énergie des lulus à chaque début de génération
+	:type energy: int
+	:param nbGeneration: Nombre de générations que la simulation va produire
+	:type nbGeneration: int
+	:param mutateChance: Pourcentage de chance que la lulu mute lors de sa naissance
+	:type mutateChance: int
+	""" 
+ 
     speed = 25 
     sense = 25
     size = 1000
