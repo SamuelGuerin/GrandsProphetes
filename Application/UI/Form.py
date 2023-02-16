@@ -12,6 +12,9 @@ sys.path.append(str(workingDirectory) + '\Application')
 import SimulationManager as Simulation
 from JsonManager import saveData, loadData
 
+import cProfile
+import pstats
+
 ct.set_appearance_mode("dark")
 ct.set_default_color_theme("blue")
 
@@ -571,7 +574,17 @@ class Form(ct.CTk):
                 #Simule
                 #__run__(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration)
 
+                profiler = cProfile.Profile()
+                profiler.enable()
                 Simulation.__run__(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration, validMutation)
+                profiler.disable()
+
+                file = open('./data.txt', 'w')
+                profile = pstats.Stats(profiler, stream=file)
+                profile.sort_stats('cumulative') # Sorts the result according to the supplied criteria
+                profile.print_stats(100) # Prints the first 15 lines of the sorted report
+                file.close()
+                
                 fg.generations = fg.objectsToCoordinates(fg.generateLulus())
                 btnGraph.grid(row=11, column=0, columnspan=2, padx=20, pady=10, sticky="we")
                 btnSave.grid(row=11, column=2, padx=20, pady=10, sticky="we")

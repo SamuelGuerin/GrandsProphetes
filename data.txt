@@ -1,0 +1,68 @@
+         241241016 function calls in 91.157 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001   91.157   91.157 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\SimulationManager.py:70(__run__)
+       25    0.006    0.000   91.126    3.645 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:361(moveAll)
+     3323    0.105    0.000   91.105    0.027 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Lulu.py:41(move)
+    18192   21.549    0.001   90.593    0.005 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Lulu.py:239(getItems)
+ 48080169   26.539    0.000   69.099    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:183(getItem)
+ 48080169   12.942    0.000   30.661    0.000 {method 'get' of 'dict' objects}
+ 48136805   12.228    0.000   17.700    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Position.py:13(__hash__)
+ 48105544   11.906    0.000   11.906    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Position.py:9(__init__)
+ 48136805    5.472    0.000    5.472    0.000 {built-in method builtins.hash}
+    18192    0.049    0.000    0.261    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Lulu.py:110(goToTargetPosition)
+    20270    0.037    0.000    0.194    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:249(tryMove)
+    18182    0.036    0.000    0.117    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:277(moveLulu)
+    17148    0.048    0.000    0.054    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Lulu.py:165(getClosestEnemy)
+   106434    0.042    0.000    0.042    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Position.py:16(__eq__)
+     6236    0.022    0.000    0.036    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Lulu.py:217(getClosestFood)
+    18493    0.019    0.000    0.026    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:224(__addItem)
+     5933    0.017    0.000    0.025    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Lulu.py:98(isCloseToTargetPosition)
+    18671    0.011    0.000    0.019    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:237(__deleteItem)
+   104512    0.018    0.000    0.018    0.000 {method 'append' of 'list' objects}
+       76    0.015    0.000    0.015    0.000 {built-in method builtins.print}
+    34297    0.015    0.000    0.015    0.000 {built-in method builtins.max}
+       25    0.000    0.000    0.012    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:427(resetWorld)
+    36384    0.010    0.000    0.010    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Lulu.py:151(getMoveFromDiff)
+     6154    0.009    0.000    0.009    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Lulu.py:193(getClosestPrey)
+    68594    0.009    0.000    0.009    0.000 {built-in method builtins.abs}
+     2579    0.001    0.000    0.009    0.000 C:\Users\maxim\AppData\Local\Programs\Python\Python310\lib\random.py:366(randint)
+    47946    0.008    0.000    0.008    0.000 {built-in method builtins.len}
+     2579    0.004    0.000    0.007    0.000 C:\Users\maxim\AppData\Local\Programs\Python\Python310\lib\random.py:292(randrange)
+       26    0.001    0.000    0.007    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:414(setFood)
+    36384    0.007    0.000    0.007    0.000 {method 'clear' of 'list' objects}
+      573    0.002    0.000    0.007    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Lulu.py:140(newRandomPosition)
+     5739    0.005    0.000    0.006    0.000 C:\Users\maxim\AppData\Local\Programs\Python\Python310\lib\random.py:239(_randbelow_with_getrandbits)
+    26542    0.005    0.000    0.005    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:206(getSizeX)
+      200    0.002    0.000    0.005    0.000 C:\Users\maxim\AppData\Local\Programs\Python\Python310\lib\random.py:380(shuffle)
+    25562    0.004    0.000    0.004    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:215(getSizeY)
+      311    0.001    0.000    0.004    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Lulu.py:263(resetPosition)
+    18192    0.003    0.000    0.003    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:197(getMap)
+       25    0.000    0.000    0.003    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:381(dayResultLulu)
+      651    0.001    0.000    0.003    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:161(__CreateFood)
+      106    0.000    0.000    0.003    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:297(reproduceLulu)
+     3323    0.002    0.000    0.002    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:393(addMove)
+     3323    0.002    0.000    0.002    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Move.py:2(__init__)
+      131    0.000    0.000    0.002    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:127(__CreateLulu)
+      131    0.000    0.000    0.001    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Lulu.py:25(__init__)
+     2614    0.001    0.000    0.001    0.000 {method 'remove' of 'list' objects}
+     8356    0.001    0.000    0.001    0.000 {method 'getrandbits' of '_random.Random' objects}
+     7737    0.001    0.000    0.001    0.000 {built-in method _operator.index}
+        1    0.000    0.000    0.001    0.001 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:62(createMap)
+     5739    0.001    0.000    0.001    0.000 {method 'bit_length' of 'int' objects}
+      650    0.000    0.000    0.000    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Food.py:10(__init__)
+      225    0.000    0.000    0.000    0.000 {method 'copy' of 'list' objects}
+      186    0.000    0.000    0.000    0.000 C:\Users\maxim\AppData\Local\Programs\Python\Python310\lib\random.py:546(uniform)
+       25    0.000    0.000    0.000    0.000 {method 'clear' of 'dict' objects}
+      186    0.000    0.000    0.000    0.000 {built-in method builtins.round}
+       25    0.000    0.000    0.000    0.000 C:\Users\maxim\AppData\Local\Programs\Python\Python310\lib\random.py:375(choice)
+       52    0.000    0.000    0.000    0.000 {built-in method time.time}
+       50    0.000    0.000    0.000    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:405(getLulus)
+      186    0.000    0.000    0.000    0.000 {method 'random' of '_random.Random' objects}
+       25    0.000    0.000    0.000    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:396(getMoves)
+        1    0.000    0.000    0.000    0.000 c:\Cegep\Session 6\Projet\GrandsProphetes\Application\Models\Territory.py:121(clearMap)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
