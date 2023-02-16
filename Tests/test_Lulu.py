@@ -7,15 +7,26 @@ import sys
 import pathlib
 
 workingDir = pathlib.Path().resolve()
-sys.path.insert(0, str(workingDir) + '\Application')
+sys.path.append('../Application/')
+#sys.path.insert(0, str(workingDir) + '\Application\\')
 
+# from Models.Lulu import Lulu
+# from Models.Position import Position
+# from Models.Food import Food
+# import Models.Territory as Territory
+
+from Models import Territory as Territory
 from Models.Lulu import Lulu
-from Models.Position import Position
 from Models.Food import Food
-import Models.Territory as Territory
+from Models.Position import Position
+
+# from Models import Territory
+# from Models import Lulu
+# from Models import Food
+# from Models import Position
 
 distanceCloseToTarget = 1
-Territory.createMap(100,100,0,0)
+Territory.createMap(100,100,0,0,1,1,0,100,0.3,0.3,0.3,0.3)
 
 foodInRange = []
 lulusInRange = []
@@ -25,8 +36,8 @@ class TestMove(unittest.TestCase):
         lulu1 = Lulu(Position(2,2), 1, 1, 100, 3, 0, False) # Juste à côté de lulu2 (qui est un ennemi)
         lulu2 = Lulu(Position(1,1), 1, 2, 120, 6, 0, False) # Juste à côté de lulu1 (qui est une proie)
         #food1 = Food(Position(1,2))
-        Territory.addItem(lulu1)
-        Territory.addItem(lulu2)
+        Territory.__addItem(lulu1)
+        Territory.__addItem(lulu2)
         #Territory.__map[food1.position] = food1
         Territory.__lulus.append(lulu1)
         Territory.__lulus.append(lulu2)
@@ -37,9 +48,9 @@ class TestMove(unittest.TestCase):
         lulu1 = Lulu(Position(2,6), 1, 1, 100, 3, 0, False) # Juste à côté de lulu2 (ennemi)
         lulu2 = Lulu(Position(1,5), 1, 2, 120, 6, 0, False) # Juste à côté de lulu1 (proie)
         food1 = Food(Position(1,6))
-        Territory.addItem(lulu1)
-        Territory.addItem(lulu2)
-        Territory.addItem(food1)
+        Territory.__addItem(lulu1)
+        Territory.__addItem(lulu2)
+        Territory.__addItem(food1)
         Territory.__lulus.append(lulu1)
         Territory.__lulus.append(lulu2)
 
@@ -49,8 +60,8 @@ class TestMove(unittest.TestCase):
     def test_move_priority_prey(self):
         lulu1 = Lulu(Position(2,11), 1, 1, 100, 3, 0, False) # Juste à côté de lulu2 (qui est un ennemi)
         lulu2 = Lulu(Position(1,10), 1, 2, 120, 6, 0, False) # Juste à côté de lulu1 (qui est une proie)
-        Territory.addItem(lulu1)
-        Territory.addItem(lulu2)
+        Territory.__addItem(lulu1)
+        Territory.__addItem(lulu2)
         Territory.__lulus.append(lulu1)
         Territory.__lulus.append(lulu2)
         
@@ -60,8 +71,8 @@ class TestMove(unittest.TestCase):
     def test_move_energy_cost(self):
         lulu1 = Lulu(Position(1,20), 1, 1, 100, 3, 0, False)
         food1 = Food(Position(2,20))
-        Territory.addItem(lulu1)
-        Territory.addItem(food1)
+        Territory.__addItem(lulu1)
+        Territory.__addItem(food1)
         Territory.__lulus.append(lulu1)
         energyCost = ((lulu1.size/100) ** 3) * (lulu1.speed ** 2) + lulu1.sense;
 
@@ -73,8 +84,8 @@ class TestMove(unittest.TestCase):
     # Même test que celui du energyCost sauf qu'on vérifie si la lulu.isDone = False avant de bouger et si lulu.isDone = True après avoir bougé
         lulu1 = Lulu(Position(1,30), 1, 1, 100, 3, 0, False)
         food1 = Food(Position(2,30))
-        Territory.addItem(lulu1)
-        Territory.addItem(food1)
+        Territory.__addItem(lulu1)
+        Territory.__addItem(food1)
         Territory.__lulus.append(lulu1)
         energyCost = ((lulu1.size/100) ** 3) * (lulu1.speed ** 2) + lulu1.sense;
 
@@ -86,18 +97,18 @@ class TestMove(unittest.TestCase):
 
     def test_getMovefromDiff(self):
         lulu1 = Lulu(Position(1,40), 1, 1, 100, 3, 0, False)
-        self.assertEqual(lulu1.getMoveFromDiff(5) == 1)
-        self.assertEqual(lulu1.getMoveFromDiff(-5) == -1)
-        self.assertEqual(lulu1.getMoveFromDiff(0) == 0)
+        self.assertEqual(lulu1.getMoveFromDiff(5), 1)
+        self.assertEqual(lulu1.getMoveFromDiff(-5), -1)
+        self.assertEqual(lulu1.getMoveFromDiff(0), 0)
 
 class TestPriorityMovement(unittest.TestCase):
     def test_get_closest_enemy(self):
         luluPrey1 = Lulu(Position(12,30), 1, 1, 100, 3, 0, False) # La proie
         luluEnemy1 = Lulu(Position(10,30), 1, 2, 120, 6, 0, False) # ennemi 1 (plus près)
         luluEnemy2 = Lulu(Position(18,30), 1, 2, 120, 6, 0, False) # ennemi 2 (plus loin)
-        Territory.addItem(luluPrey1)
-        Territory.addItem(luluEnemy1)
-        Territory.addItem(luluEnemy2)
+        Territory.__addItem(luluPrey1)
+        Territory.__addItem(luluEnemy1)
+        Territory.__addItem(luluEnemy2)
         Territory.__lulus.append(luluPrey1)
         Territory.__lulus.append(luluEnemy1)
         Territory.__lulus.append(luluEnemy2)
@@ -110,9 +121,9 @@ class TestPriorityMovement(unittest.TestCase):
         food1 = Food(Position(31,30))
         food2 = Food(Position(30,35))
 
-        Territory.addItem(lulu1)
-        Territory.addItem(food1)
-        Territory.addItem(food2)
+        Territory.__addItem(lulu1)
+        Territory.__addItem(food1)
+        Territory.__addItem(food2)
         Territory.__lulus.append(lulu1)
 
         lulu1.move()
@@ -123,9 +134,9 @@ class TestPriorityMovement(unittest.TestCase):
         luluEnemy1 = Lulu(Position(12,50), 1, 2, 120, 6, 0, False) # L'ennemi
         luluPrey1 = Lulu(Position(10,50), 1, 1, 100, 3, 0, False) # proie 1 (plus près)
         luluPrey2 = Lulu(Position(18,50), 1, 1, 100, 3, 0, False) # proie 2 (plus loin)
-        Territory.addItem(luluEnemy1)
-        Territory.addItem(luluPrey1)
-        Territory.addItem(luluPrey2)
+        Territory.__addItem(luluEnemy1)
+        Territory.__addItem(luluPrey1)
+        Territory.__addItem(luluPrey2)
         Territory.__lulus.append(luluEnemy1)
         Territory.__lulus.append(luluPrey1)
         Territory.__lulus.append(luluPrey2)
@@ -158,7 +169,7 @@ class TestTargetPosition(unittest.TestCase):
         self.assertLesS(currentDistance, oldDistance)
 
 class TestItems(unittest.TestCase): # Tester avec un territoire 3x3, 1 food et X lulus
-    def test_getItems(self, foodInRange, lulusInRange):
+    def test_getItems(self): # foodInRange, lulusInRange - en paramètres
         lulu1 = Lulu(Position(80,50), 1, 1, 100, 3, 0, False)
         lulu2 = Lulu(Position(79,50), 1, 1, 100, 3, 0, False)
         lulu3 = Lulu(Position(81,50), 1, 1, 100, 3, 0, False)

@@ -7,17 +7,52 @@ import sys
 import pathlib
 
 workingDir = pathlib.Path().resolve()
-sys.path.insert(0, str(workingDir) + '\Application')
+sys.path.append('../Application/')
+#sys.path.insert(0, str(workingDir) + '\Application\\')
 
-from Application.Models import Territory
-from Application.Models import Lulu
-from Application.Models import Food
-from Application.Models import Position
+# try:
+#     from Models import Lulu
+# except ImportError:
+#     import sys
+#     Models = sys.modules[__package__ + '.Models']
+
+
+# try:
+#     from Models import Food
+# except ImportError:
+#     import sys
+#     Models = sys.modules[__package__ + '.Models']
+
+
+# try:
+#     from Models import Position
+# except ImportError:
+#     import sys
+#     Models = sys.modules[__package__ + '.Models']
+
+
+# try:
+#     from Models import Territory
+# except ImportError:
+#     import sys
+#     Models = sys.modules[__package__ + '.Models']
+
+from Models.Lulu import Lulu
+from Models.Position import Position
+from Models.Food import Food
+import Models.Territory as Territory
+
+
+# import Models.Territory as Territory
+# import Models.Lulu as Lulu
+# import Models.Food as Food
+# import Models.Position as Position
 
 # from Models.Lulu import Lulu
-# from Models.Position import Position
 # from Models.Food import Food
-# import Models.Territory as Territory
+# from Models.Position import Position
+
+
 
 X = 100
 Y = 100
@@ -28,7 +63,7 @@ sense = 1
 energy = 3
 size = 100
 mutateChance = 0.3
-Territory.createMap(X,Y,numberOfFood,numberOfLulus,speed,sense,energy,size,mutateChance) # 25x25, 10 Food, 10 Lulus, etc...
+Territory.createMap(X,Y,numberOfFood,numberOfLulus,speed,sense,energy,size,mutateChance,mutateChance,mutateChance,mutateChance) # 25x25, 10 Food, 10 Lulus, etc...
 
 #Clear la map des Lulus et de Food entre chaque Test????? **************
 
@@ -294,6 +329,9 @@ class TestReproduceLulu(unittest.TestCase):
             self.assertGreater(newLuluCount, oldLuluCount)
         else:
             self.assertEqual(oldLuluCount, newLuluCount)
+
+if __name__ == '__main__':
+    unittest.main()
             
 
 

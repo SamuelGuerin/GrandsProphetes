@@ -46,7 +46,7 @@ from Models.Position import Position
 from Models.Lulu import Lulu
 from Models.Food import Food
 import time
-from manim import *
+#from manim import *
 
 __sizeX = None
 __sizeY = None
@@ -424,68 +424,68 @@ def resetWorld():
         lulu.resetPosition()
 
 
-class VisualizeLulus(Scene):
-    def construct(self):
+# class VisualizeLulus(Scene):
+#     def construct(self):
 
-        items = getMap()
-        # SIZE = 1/5 du plus petit x ou y?
-        SIZE = getSizeX()/5 if getSizeX() < getSizeY() else getSizeY()/5
-        # CENTERX = /2
-        CENTERX = getSizeX()/2
-        # CENTERY = /2
-        CENTERY = getSizeY()/2
+#         items = getMap()
+#         # SIZE = 1/5 du plus petit x ou y?
+#         SIZE = getSizeX()/5 if getSizeX() < getSizeY() else getSizeY()/5
+#         # CENTERX = /2
+#         CENTERX = getSizeX()/2
+#         # CENTERY = /2
+#         CENTERY = getSizeY()/2
 
-        groupdots = VGroup()
+#         groupdots = VGroup()
 
-        maxSize = max(lulu.size for lulu in getLulus())
-        minSize = min(lulu.size for lulu in getLulus())
-        rangeOfSizes = maxSize - minSize
+#         maxSize = max(lulu.size for lulu in getLulus())
+#         minSize = min(lulu.size for lulu in getLulus())
+#         rangeOfSizes = maxSize - minSize
 
-        for position in items:
-            item = items.get(position)
-            if (type(item) == Lulu):
-                if (item.isDone):
-                    rangeOfColors = rangeOfSizes/6
-                    if item.size <= minSize + (rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=RED_A)
-                    elif item.size <= minSize + 2*(rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=RED_B)
-                    elif item.size <= minSize + 3*(rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=RED_C)
-                    elif item.size <= minSize + 4*(rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=RED_D)
-                    else:
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=RED_E)
-                else:
-                    rangeOfColors = rangeOfSizes/6
-                    if item.size <= minSize + (rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=BLUE_A)
-                    elif item.size <= minSize + 2*(rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=BLUE_B)
-                    elif item.size <= minSize + 3*(rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=BLUE_C)
-                    elif item.size <= minSize + 4*(rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=BLUE_D)
-                    else:
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=BLUE_E)
-            elif (type(item) == Food):
-                dot = Dot([(position.x - CENTERX)/SIZE,
-                          (position.y - CENTERY)/SIZE, 0], color=GREEN)
-            groupdots.add(dot)
+#         for position in items:
+#             item = items.get(position)
+#             if (type(item) == Lulu):
+#                 if (item.isDone):
+#                     rangeOfColors = rangeOfSizes/6
+#                     if item.size <= minSize + (rangeOfColors):
+#                         dot = Dot([(position.x - CENTERX)/SIZE,
+#                                   (position.y - CENTERY)/SIZE, 0], color=RED_A)
+#                     elif item.size <= minSize + 2*(rangeOfColors):
+#                         dot = Dot([(position.x - CENTERX)/SIZE,
+#                                   (position.y - CENTERY)/SIZE, 0], color=RED_B)
+#                     elif item.size <= minSize + 3*(rangeOfColors):
+#                         dot = Dot([(position.x - CENTERX)/SIZE,
+#                                   (position.y - CENTERY)/SIZE, 0], color=RED_C)
+#                     elif item.size <= minSize + 4*(rangeOfColors):
+#                         dot = Dot([(position.x - CENTERX)/SIZE,
+#                                   (position.y - CENTERY)/SIZE, 0], color=RED_D)
+#                     else:
+#                         dot = Dot([(position.x - CENTERX)/SIZE,
+#                                   (position.y - CENTERY)/SIZE, 0], color=RED_E)
+#                 else:
+#                     rangeOfColors = rangeOfSizes/6
+#                     if item.size <= minSize + (rangeOfColors):
+#                         dot = Dot([(position.x - CENTERX)/SIZE,
+#                                   (position.y - CENTERY)/SIZE, 0], color=BLUE_A)
+#                     elif item.size <= minSize + 2*(rangeOfColors):
+#                         dot = Dot([(position.x - CENTERX)/SIZE,
+#                                   (position.y - CENTERY)/SIZE, 0], color=BLUE_B)
+#                     elif item.size <= minSize + 3*(rangeOfColors):
+#                         dot = Dot([(position.x - CENTERX)/SIZE,
+#                                   (position.y - CENTERY)/SIZE, 0], color=BLUE_C)
+#                     elif item.size <= minSize + 4*(rangeOfColors):
+#                         dot = Dot([(position.x - CENTERX)/SIZE,
+#                                   (position.y - CENTERY)/SIZE, 0], color=BLUE_D)
+#                     else:
+#                         dot = Dot([(position.x - CENTERX)/SIZE,
+#                                   (position.y - CENTERY)/SIZE, 0], color=BLUE_E)
+#             elif (type(item) == Food):
+#                 dot = Dot([(position.x - CENTERX)/SIZE,
+#                           (position.y - CENTERY)/SIZE, 0], color=GREEN)
+#             groupdots.add(dot)
 
-        self.add(groupdots)
+#         self.add(groupdots)
 
 
-def renderAnimation():
-    scene = VisualizeLulus()
-    scene.render()
+# def renderAnimation():
+#     scene = VisualizeLulus()
+#     scene.render()
