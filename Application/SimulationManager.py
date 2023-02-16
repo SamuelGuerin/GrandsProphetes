@@ -99,3 +99,6 @@ def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation,
     sime = simf - sims
         
     print("temps simulation: " + str(sime))
+
+def getGenerationsLulu():
+    return generationLulus
