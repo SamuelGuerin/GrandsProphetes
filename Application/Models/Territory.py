@@ -59,7 +59,6 @@ __moves = []
 __numberOfFood = 0
 EATING_RATIO = 1.2
 
-
 def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, mutateChance, speedVariation, senseVariation, sizeVariation):
     """Crée (instancie) une carte (map) avec une taille X et Y ainsi qu'un nombre donné de nourriture et de Lulus
 
@@ -91,6 +90,7 @@ def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, m
     __senseVariation = senseVariation /100
     __sizeVariation = sizeVariation /100
 
+    clearMap()
     # Créer x lulus dans la map (La map va de 0 à maxX ou maxY)
     # Les mettre sur le côté
     for _ in range(__lulusCount):
@@ -118,6 +118,11 @@ def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, m
 
 # private
 
+def clearMap():
+    global __lulus
+    global __map
+    __lulus = []
+    __map = {}
 
 def __CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isDone) -> bool:
     """Crée une Lulu et la place sur les bords de la carte selon une position donnée et l'instancie avec des paramètres de base
