@@ -55,6 +55,7 @@ __foodCount = None
 __lulus = []
 __map = {}
 __energy = None
+__moves = []
 __numberOfFood = 0
 EATING_RATIO = 1.2
 
@@ -383,6 +384,12 @@ def dayResultLulu():
         lulu.foodAmount = 0
         lulu.isNewBorn = False
 
+
+def addMove(move):
+    __moves.append(move)
+
+def getMoves():
+    return __moves
 
 def printMap():
     """Affiche tous les items de la carte avec leur :class:`Position` dans la console (outil de débogage) 

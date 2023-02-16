@@ -4,6 +4,7 @@ import time
 # À enlever -> pour test
 import random
 
+generationMoves = []
 
 def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation, sizeVariation, energy, nbGeneration, mutateChance):
     speed = 25 
@@ -20,6 +21,7 @@ def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation,
         Territory.moveAll()
         Territory.resetWorld()
         Territory.dayResultLulu()
+        generationMoves.append(Territory.getMoves())
         
         if (Territory.getLulus().__len__() == 0):
             break

@@ -2,6 +2,7 @@ import Models.Territory as Territory
 import random
 from Models.Position import Position
 from Models.Food import Food
+from Models.Move import Move
 
 class Lulu:
     """Classe contenant toutes les informations propre à une :class:`Lulu`
@@ -47,7 +48,8 @@ class Lulu:
         lulusInRange = []
         energyCost = ((self.size/100) ** 3) * (self.speed ** 2) + self.sense
         speedLeft = self.speed
-
+        startPt = self.position
+        
         while(speedLeft > 0 and self.energy >= energyCost):
             foodInRange.clear()
             lulusInRange.clear()
@@ -76,6 +78,10 @@ class Lulu:
                 self.goToTargetPosition(targetPosition)
             self.energy -= energyCost
             speedLeft -= 1
+        
+        endPt = self.position
+        Territory.addMove(Move(self.speed, self.sense, self.size, startPt, endPt))
+
         self.started = True
         if(self.energy < energyCost):
             self.isDone = True
