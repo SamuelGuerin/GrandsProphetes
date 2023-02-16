@@ -572,7 +572,7 @@ class Form(ct.CTk):
                 #__run__(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration)
 
                 Simulation.__run__(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration, validMutation)
-                fg.generations = fg.objectsToCoordinates(fg.generateLulus())
+                fg.generations = fg.objectsToCoordinates(Simulation.getGenerationsLulu())
                 btnGraph.grid(row=11, column=0, columnspan=2, padx=20, pady=10, sticky="we")
                 btnSave.grid(row=11, column=2, padx=20, pady=10, sticky="we")
 
