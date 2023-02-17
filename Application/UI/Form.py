@@ -1,16 +1,20 @@
 import customtkinter as ct
 import tkinter as tk
+from tkinter import ttk
 from PIL import Image
 import os
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import FormGraph as fg
-import sys
 import pathlib
+import sys
+import FormGraph as fg
 import math
 workingDirectory = pathlib.Path().resolve()
 sys.path.append(str(workingDirectory) + '\Application')
 import SimulationManager as Simulation
 from JsonManager import saveData, loadData
+import threading
+import time
+
 
 ct.set_appearance_mode("dark")
 ct.set_default_color_theme("blue")
@@ -172,7 +176,6 @@ class Form(ct.CTk):
 
         width = 1920
         height = 1080
-        
 
         # Setup de base de l'interface
         self.geometry("900x800")
@@ -544,6 +547,7 @@ class Form(ct.CTk):
             except ValueError:
                 lblGenerationGood.configure(text="Ce n'est pas un nombre entier positif", text_color="red")
 
+
         # -------------------------------------------------
         def get_allBeforeSimulation():
             validMapSizeX = get_inputMapSizeX()
@@ -568,20 +572,38 @@ class Form(ct.CTk):
                and type(validMutation) is int
                and type(validGeneration) is int):
                 
+                btnGraph.grid_remove()
+                btnSave.grid_remove()
+                btnSimulate.configure(state="disable")
+                btnImport.configure(state="disable")
+                btnPreview.configure(state="disable")
+
                 #Simule
-                #__run__(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration)
+                th = threading.Thread(target=Simulation.__run__, args=(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration, validMutation))
+                th.start()
 
-                Simulation.__run__(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration, validMutation)
-                fg.generations = fg.objectsToCoordinates(fg.generateLulus())
+                def witchGeneration():
+                    progress_bar.grid(row=14, column=0, columnspan=3, padx=20, pady=10, sticky="we")
+                    progress_bar.configure(maximum=validGeneration)
+                    while(th.is_alive()):
+                        progress_var.set(Simulation.generation)
+                        progress_bar.update()
+                witchGeneration()
+                th.join()
+
+                fg.generations = fg.objectsToCoordinates(Simulation.getGenerationsLulu())
                 btnGraph.grid(row=11, column=0, columnspan=2, padx=20, pady=10, sticky="we")
                 btnSave.grid(row=11, column=2, padx=20, pady=10, sticky="we")
-
-                lblErrorInForm.configure(text="OK", text_color="green")
+                progress_bar.grid_remove()
+                btnSimulate.configure(state="normal")
+                btnImport.configure(state="normal")
+                btnPreview.configure(state="normal")
+                lblErrorInForm.configure(text="La simulation est terminée", text_color="green")
             else:
-                fg.generations = fg.objectsToCoordinates(fg.generateLulus())
-                btnGraph.grid(row=11, column=0, columnspan=2, padx=20, pady=10, sticky="we")
-                btnSave.grid(row=11, column=2, padx=20, pady=10, sticky="we")
                 lblErrorInForm.configure(text="Erreur: Veuillez remplir convenablement le formulaire", text_color="red")
+
+        progress_var = tk.DoubleVar()
+        progress_bar = ttk.Progressbar(master=self.frame_1, variable=progress_var)
                   
         btnSimulate = ct.CTkButton(master=self.frame_1, text="Lancer la Simulation", command=get_allBeforeSimulation)
         btnSimulate.grid(row=10, column=0, columnspan=2, padx=20, pady=10, sticky="we")
@@ -749,12 +771,38 @@ class Form(ct.CTk):
             refreshButtons()            
 
         def preview():
-            current_path = os.path.dirname(os.path.realpath(__file__))
-            preview = ct.CTkImage(Image.open(current_path + "/preview.png"), size=(700, 350))
-            previewImage = ct.CTkLabel(master=self, text="", image=preview)
-            previewImage.grid(row=0, column=0, sticky="snwe")
-            btnClose = ct.CTkButton(master=self, text="Fermer la prévisualisation", command=lambda:closePreview(previewImage, btnClose))
-            btnClose.grid(row=1, column=0, padx=20, pady=10, sticky="we")
+            validMapSizeX = get_inputMapSizeX()
+            validMapSizeY = get_inputMapSizeY()
+            validStartFood = get_inputStartFood()
+            validStartLulu = get_inputStartLulu()
+            validEnergy = get_inputEnergy()
+            validSpeed = get_inputSpeed()
+            validSense = get_inputSense()
+            validSize = get_inputSize()
+            validMutation = get_inputMutation()
+            validGeneration = get_inputGeneration()
+            print(validMapSizeX)
+            if(type(validMapSizeX) is int
+               and type(validMapSizeY) is int
+               and type(validStartFood) is int
+               and type(validStartLulu) is int
+               and type(validEnergy) is int
+               and type(validSpeed) is int
+               and type(validSense) is int
+               and type(validSize) is int
+               and type(validMutation) is int
+               and type(validGeneration) is int):
+                
+                Simulation.newMap(validMapSizeX, validMapSizeY, validStartFood, validStartLulu)
+                # current_path = os.path.dirname(os.path.realpath(__file__))
+                current_path = os.getcwd()
+                preview = ct.CTkImage(Image.open(str(current_path) + "\media\images\VisualizeLulus_ManimCE_v0.17.2.png"), size=(700, 350))
+                previewImage = ct.CTkLabel(master=self, text="", image=preview)
+                previewImage.grid(row=0, column=0, sticky="snwe")
+                btnClose = ct.CTkButton(master=self, text="Fermer la prévisualisation", command=lambda:closePreview(previewImage, btnClose))
+                btnClose.grid(row=1, column=0, padx=20, pady=10, sticky="we")
+            else:
+                lblErrorInForm.configure(text="Erreur: Veuillez remplir convenablement le formulaire", text_color="red")
 
         def closePreview(previewImage, btnClose):
             previewImage.destroy()
@@ -773,6 +821,6 @@ class Form(ct.CTk):
         lblErrorInForm = ct.CTkLabel(master=self.frame_1, height=100, justify=ct.CENTER, text="")
         lblErrorInForm.grid(row=13, column=0, columnspan=3, padx=20, pady=10)
 
-if __name__ == "__main__":
-    app = Form()
-    app.mainloop()
+# if __name__ == "__main__":
+#     app = Form()
+#     app.mainloop()
