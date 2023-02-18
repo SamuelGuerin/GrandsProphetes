@@ -582,13 +582,12 @@ class Form(ct.CTk):
                 th = threading.Thread(target=Simulation.__run__, args=(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration, validMutation))
                 th.start()
 
-                def witchGeneration():
-                    progress_bar.grid(row=14, column=0, columnspan=3, padx=20, pady=10, sticky="we")
-                    progress_bar.configure(maximum=validGeneration)
-                    while(th.is_alive()):
-                        progress_var.set(Simulation.generation)
-                        progress_bar.update()
-                witchGeneration()
+                progress_bar.grid(row=14, column=0, columnspan=3, padx=20, pady=10, sticky="we")
+                progress_bar.configure(maximum=validGeneration)
+                while(th.is_alive()):
+                    time.sleep(3)
+                    progress_var.set(float(Simulation.generation))
+                    progress_bar.update()
                 th.join()
 
                 fg.generations = fg.objectsToCoordinates(Simulation.getGenerationsLulu())
