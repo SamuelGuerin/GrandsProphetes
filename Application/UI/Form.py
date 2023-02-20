@@ -608,11 +608,11 @@ class Form(ct.CTk):
         btnSimulate.grid(row=10, column=0, columnspan=2, padx=20, pady=10, sticky="we")
 
         def importSimulation():
-            btnGraph.grid_remove()
-            btnSave.grid_remove()
-
-            fg.generations = loadData()
-            if fg.generations is not None:
+            importData = loadData()
+            if importData is not None:
+                btnGraph.grid_remove()
+                btnSave.grid_remove()
+                fg.generations = importData
                 add_Graph()
             else:
                 lblErrorInForm.configure(text="Erreur: Fichier non valide", text_color="red")
