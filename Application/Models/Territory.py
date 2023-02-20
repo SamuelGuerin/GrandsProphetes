@@ -434,6 +434,8 @@ def setFood():
 
 def resetWorld():
     __map.clear()
+    global __numberOfFood
+    __numberOfFood = 0
     setFood()
     for lulu in __lulus[:]:
         lulu.isDone = False
