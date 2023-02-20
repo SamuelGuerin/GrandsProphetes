@@ -337,7 +337,7 @@ class Form(ct.CTk):
 
         infoMutation = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoMutation.grid(row=8, column=1, pady=10, padx=10)
-        infoMutation.bind("<Enter>", lambda event: show_info(event, "Ce champs représente le % de chance qu'une mutation\r soit effectuée lors de la reproduction.\r (Cette valeur doit être entre 1 et 100)"))
+        infoMutation.bind("<Enter>", lambda event: show_info(event, "Ce champs représente le % de chance qu'une mutation\r soit effectuée lors de la reproduction.\r (Cette valeur doit être entre 0 et 100)"))
         infoMutation.bind("<Leave>", hide_info)
 
         txtMutation = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="50"))
@@ -433,7 +433,7 @@ class Form(ct.CTk):
                 try:
                     mapSizeXValue = get_inputMapSizeX()
                     mapSizeYValue = get_inputMapSizeY()
-                    maxLulu = mapSizeXValue * mapSizeYValue * 0.75
+                    maxLulu = (mapSizeXValue * 2 + mapSizeYValue * 2) - 4
                     if(startLuluValue > maxLulu):
                         lblStartLuluGood.configure(text="Cette valeur doit être inférieur ou égal à " 
                                                 + str(int(maxLulu)) + "\r(Cette valeur dépend de la taille du territoire)", text_color="red")
@@ -453,10 +453,10 @@ class Form(ct.CTk):
                 mapSizeYValue = int(txtMapSizeY.get()) 
                 if(mapSizeXValue < 0 or mapSizeYValue < 0):
                     raise ValueError
-                maxLulu = mapSizeXValue * mapSizeYValue * 0.75
-                return "Ce champs représente le nombre\r de Lulus présent sur le territoire au début.\r (Le nombre de Lulus doit être inférieur ou égal\r à 75% du territoire soit " + str(math.floor(maxLulu)) + ")"
+                maxLulu = (mapSizeXValue * 2 + mapSizeYValue * 2) - 4
+                return "Ce champs représente le nombre\r de Lulus présent sur le territoire au début.\r (Le nombre de Lulus doit être inférieur ou égal\r au périmètre du territoire - 4 soit " + str(math.floor(maxLulu)) + ")"
             except ValueError:
-                return "Ce champs représente le nombre\r de Lulus présent sur le territoire au début.\r (Le nombre de Lulus doit être inférieur ou égal\r à 75% du territoire\r(Les valeur en X et Y doivent être mise\r pour pouvoir savoir la valeur maximal))"
+                return "Ce champs représente le nombre\r de Lulus présent sur le territoire au début.\r (Le nombre de Lulus doit être inférieur ou égal\r au périmètre du territoire - 4\r (Les valeur en X et Y doivent être mise\r pour pouvoir savoir la valeur maximal))"
 
         # Enter 5 -- Validation
         def get_inputEnergy():
@@ -582,13 +582,12 @@ class Form(ct.CTk):
                 th = threading.Thread(target=Simulation.__run__, args=(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration, validMutation))
                 th.start()
 
-                def witchGeneration():
-                    progress_bar.grid(row=14, column=0, columnspan=3, padx=20, pady=10, sticky="we")
-                    progress_bar.configure(maximum=validGeneration)
-                    while(th.is_alive()):
-                        progress_var.set(Simulation.generation)
-                        progress_bar.update()
-                witchGeneration()
+                progress_bar.grid(row=14, column=0, columnspan=3, padx=20, pady=10, sticky="we")
+                progress_bar.configure(maximum=validGeneration)
+                while(th.is_alive()):
+                    time.sleep(3)
+                    progress_var.set(float(Simulation.generation))
+                    progress_bar.update()
                 th.join()
 
                 fg.generations = fg.objectsToCoordinates(Simulation.getGenerationsLulu())

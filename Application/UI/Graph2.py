@@ -22,6 +22,7 @@ def generateColors(speeds, senses, sizes, colors):
         colors.append([speeds[i]/(max(speeds) * 1.3), senses[i]/(max(senses) * 1.3), sizes[i]/(max(sizes) * 1.5)])
 
 def calculateCoordinates(generation, speeds, senses, sizes):
+
     speeds.clear()
     senses.clear()
     sizes.clear()
@@ -70,6 +71,8 @@ def setStats(ax, generation):
     :param generation: Liste des coordonnées de la génération actuelle.
     :type generation: [[[float],[float],[float]]]
     """
+    plt.close('all')
+
     ax.clear()
     speed = [0,0,1000000]
     sense = [0,0,1000000]
@@ -125,7 +128,7 @@ def setStats(ax, generation):
     ax.text(0.7, 0.03, str(size[2]), fontsize=15, color='red', fontweight='semibold')
     #Draw
     Button(ax, '')
-    plt.draw()
+    #plt.draw()
 
 class Lulu:
     def __init__(self, speed, sense, size):
@@ -151,6 +154,7 @@ def generateGraph(generation, currentGeneration, elev, azim):
     :return: Retourne une `Figure` et un `Axes` pour dessiner le graphique et ses statistiques.
     :rtype: `[Figure, Axes]`
     """
+    plt.close('all')
 
     fig, ax = plt.subplots(figsize=(16, 9))
     plt.axis('off')
