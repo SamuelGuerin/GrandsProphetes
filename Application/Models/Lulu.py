@@ -32,8 +32,12 @@ class Lulu:
         self.foodAmount = foodAmount
         self.isDone = isDone
         self.started = False
+        self.newTurn = True
         self.isNewBorn = True
         self.randomTargetPosition = self.newRandomPosition()
+        self.foodInRange = []
+        self.lulusInRange = []
+        self.lastPosition = position
 
     def __repr__(self) -> str:
         return ("Lulu")
@@ -41,40 +45,39 @@ class Lulu:
     def move(self) -> bool:
         """Algorithme qui détermine comment la :class:`Lulu` se déplacera dépendemment de ce qui est présent dans sa vision
 
-        :return: Retourne un booléen déterminant s'il reste assez d'énergie à la :class:`Lulu` pour effectuer un mouvement 
+        :return: Retourne un booléen déterminant s'il reste assez d'énergie à la :class:`Lulu` pour effectuer un mouvement
         :rtype: bool
         """
-        foodInRange = []
-        lulusInRange = []
         energyCost = ((self.size/100) ** 3) * (self.speed ** 2) + self.sense
         speedLeft = self.speed
         startPt = self.position
-        
+        self.newTurn = True
+
         while(speedLeft > 0 and self.energy >= energyCost):
-            foodInRange.clear()
-            lulusInRange.clear()
-            self.getItems(foodInRange, lulusInRange)
+            self.getItems()
             targetPosition = None
             targetFound = False
 
-            if(len(lulusInRange) > 0):
-                targetPosition, targetFound = self.getClosestEnemy(lulusInRange)
-            if (not targetFound and len(foodInRange) > 0):
-                if(len(foodInRange) == 1):
-                    targetPosition = foodInRange[0].position
+            if(len(self.lulusInRange) > 0):
+                targetPosition, targetFound = self.getClosestEnemy(self.lulusInRange)
+            if (not targetFound and len(self.foodInRange) > 0):
+                if(len(self.foodInRange) == 1):
+                    targetPosition = self.foodInRange[0].position
                     targetFound = True
                 else:
-                    targetPosition, targetFound = self.getClosestFood(foodInRange)
-            if(not targetFound and len(lulusInRange) > 0):
-                targetPosition, targetFound = self.getClosestPrey(lulusInRange)
+                    targetPosition, targetFound = self.getClosestFood(self.foodInRange)
+            if(not targetFound and len(self.lulusInRange) > 0):
+                targetPosition, targetFound = self.getClosestPrey(self.lulusInRange)
             if(not targetFound):
                 if(self.isCloseToTargetPosition()):
                     targetPosition = self.newRandomPosition()
                     self.randomTargetPosition = targetPosition
                 else:
                     targetPosition = self.randomTargetPosition
+                self.lastPosition = self.position
                 self.goToTargetPosition(targetPosition)
             else:
+                self.lastPosition = self.position
                 self.goToTargetPosition(targetPosition)
             self.energy -= energyCost
             speedLeft -= 1
@@ -236,7 +239,7 @@ class Lulu:
                 closestDistance = currentDistance
         return position, foodFound
                 
-    def getItems(self, foodInRange, lulusInRange):
+    def getItems(self):
         """Recherche les :class:`Food` et les :class:`Lulu` qui sont dans sa vision (sense)
 
         :param foodInRange: contient toutes les nourritures dans la vision (sense) de la :class:`Lulu`
@@ -244,20 +247,127 @@ class Lulu:
         :param lulusInRange: contient toutes les nourritures dans la vision (sense) de la :class:`Lulu`
         :type lulusInRange: list
         """
+
         map = Territory.getMap()
-        minX = self.position.x - self.sense
-        maxX = self.position.x + self.sense
-        minY = self.position.y - self.sense
-        maxY = self.position.y + self.sense
-        
-        for x in range(minX, maxX + 1):
-            for y in range(minY, maxY + 1):
-                if not (self.position.x == x and self.position.y == y):
-                    item = Territory.getItem(x,y)
+        # 1 - Supprimer les anciennes cases
+        #   1 - trouver les anciennes cases (lastPos et sense)
+        #   2 - Itération dans les listes inRange -> si Pos == anciennes cases -> del
+        #   3 - Supprimer les items ou of range
+        # 2- Ajouter les nouvelles
+        #   1 - trouver les nouvelles cases (lastPos et sense)
+        #   2 - Itération dans les listes inRange -> si Pos == nouvelles cases -> del
+        #   3 - Ajouter les items out of range
+
+        if not self.newTurn: 
+            oldVisionX = self.sense
+            oldVisionY = self.sense
+
+            # diagonnale
+            if (self.lastPosition.x != self.position.x and self.lastPosition.y != self.position.y):
+                if (self.position.x > self.lastPosition.x):
+                    oldVisionX *= -1
+
+                if (self.position.y > self.lastPosition.y):
+                    oldVisionY *= -1
+
+                # check pour delete
+                xToDelete = self.lastPosition.x + oldVisionX
+                yToDelete = self.lastPosition.y + oldVisionY
+                foodToDelete = [food for food in self.foodInRange if food.position.x == xToDelete or food.position.y == yToDelete]
+                lulusToDelete = [lulu for lulu in self.lulusInRange if lulu.position.x == xToDelete or lulu.position.y == yToDelete]
+                # foodToDelete = filter(lambda f: f.position.x == xToDelete or f.position.y == yToDelete, self.foodInRange)
+                for food in foodToDelete[:]:
+                    self.foodInRange.remove(food)
+
+                for lulu in lulusToDelete[:]:
+                    self.lulusInRange.remove(lulu)
+
+                # check pour add
+                xToAdd = self.position.x - oldVisionX
+                yToAdd = self.position.y - oldVisionY
+
+                for x in range(self.position.x - self.sense, self.position.x + self.sense + 1):
+                    item = Territory.getItem(x,yToAdd)
                     if(type(item) == Food):
-                        foodInRange.append(item)
+                        self.foodInRange.append(item)
                     elif(type(item) == Lulu):
-                        lulusInRange.append(item)
+                        self.lulusInRange.append(item)
+
+                for y in range(self.position.y - self.sense, self.position.y + self.sense + 1):
+                    item = Territory.getItem(xToAdd,y)
+                    if(type(item) == Food):
+                        self.foodInRange.append(item)
+                    elif(type(item) == Lulu):
+                        self.lulusInRange.append(item)
+
+            # linéaire
+            else:
+                if (self.lastPosition.y != self.position.y):
+                    if (self.position.y > self.lastPosition.y):
+                        oldVisionY *= -1
+
+                    # check
+                    yToDelete = self.lastPosition.y + oldVisionY
+                    foodToDelete = [food for food in self.foodInRange if food.position.y == yToDelete]
+                    lulusToDelete = [lulu for lulu in self.lulusInRange if lulu.position.y == yToDelete]
+                    for food in foodToDelete[:]:
+                        self.foodInRange.remove(food)
+
+                    for lulu in lulusToDelete[:]:
+                        self.lulusInRange.remove(lulu)
+                
+                    # check pour add
+                    yToAdd = self.position.y - oldVisionY
+
+                    for x in range(self.position.x - self.sense, self.position.x + self.sense + 1):
+                        item = Territory.getItem(x,yToAdd)
+                        if(type(item) == Food):
+                            self.foodInRange.append(item)
+                        elif(type(item) == Lulu):
+                            self.lulusInRange.append(item)
+
+                elif (self.lastPosition.x != self.position.x):
+                    if (self.position.x > self.lastPosition.x):
+                        oldVisionX *= -1
+                    #check
+                    xToDelete = self.lastPosition.x + oldVisionX
+                    foodToDelete = [food for food in self.foodInRange if food.position.x == xToDelete]
+                    lulusToDelete = [lulu for lulu in self.lulusInRange if lulu.position.x == xToDelete]
+                    for food in foodToDelete[:]:
+                        self.foodInRange.remove(food)
+
+                    for lulu in lulusToDelete[:]:
+                        self.lulusInRange.remove(lulu)
+
+                    # check pour add
+                    xToAdd = self.position.x - oldVisionX
+
+                    for y in range(self.position.y - self.sense, self.position.y + self.sense + 1):
+                        item = Territory.getItem(xToAdd,y)
+                        if(type(item) == Food):
+                            self.foodInRange.append(item)
+                        elif(type(item) == Lulu):
+                            self.lulusInRange.append(item)
+
+        # Remplir la liste 1 x au complet si nouveau tour
+        else:
+            self.newTurn = False
+            self.foodInRange = []
+            self.lulusInRange = []
+            map = Territory.getMap()
+            minX = self.position.x - self.sense
+            maxX = self.position.x + self.sense
+            minY = self.position.y - self.sense
+            maxY = self.position.y + self.sense
+            
+            for x in range(minX, maxX + 1):
+                for y in range(minY, maxY + 1):
+                    if not (self.position.x == x and self.position.y == y):
+                        item = Territory.getItem(x,y)
+                        if(type(item) == Food):
+                            self.foodInRange.append(item)
+                        elif(type(item) == Lulu):
+                            self.lulusInRange.append(item)
     
     # Téléporte la lulu sur le côté au début d'une round
     def resetPosition(self):
