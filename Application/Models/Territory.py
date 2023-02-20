@@ -300,7 +300,9 @@ def reproduceLulu(Lulu):
     newSize = Lulu.size
     if (random.randint(1, 100) < __mutateChance):
         newSpeed = round(Lulu.speed * random.uniform(1 - __speedVariation, 1 + __speedVariation))
+    if (random.randint(1, 100) < __mutateChance):
         newSense = round(Lulu.sense * random.uniform(1 - __senseVariation, 1 + __senseVariation))
+    if (random.randint(1, 100) < __mutateChance):
         newSize = round(Lulu.size * random.uniform(1 - __sizeVariation, 1 + __sizeVariation))
         
     if (newSpeed < 1):
