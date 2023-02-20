@@ -116,15 +116,17 @@ def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, m
     for lulu in __lulus:
         lulu.isNewBorn = False
 
-# private
 
 def clearMap():
+    """Supprime les données des listes de Lulus et map
+	"""
     global __lulus
     global __map
     global __numberOfFood
     __lulus = []
     __map = {}
     __numberOfFood = 0
+
 
 def __CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isDone) -> bool:
     """Crée une Lulu et la place sur les bords de la carte selon une position donnée et l'instancie avec des paramètres de base
@@ -159,7 +161,6 @@ def __CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isD
     return False
 
 
-# private
 def __CreateFood(rx, ry) -> bool:
     """Ajoute une nourriture sur la carte (map) à la position donnée en paramètres (rx, ry)
 
@@ -178,8 +179,6 @@ def __CreateFood(rx, ry) -> bool:
         __numberOfFood += 1
         return True
     return False
-
-# public
 
 
 def getItem(x, y):
@@ -245,9 +244,6 @@ def __deleteItem(position):
 
     del __map[position]
 
-# Vérifie s'il est possible de faire le mouvement demandé
-# return true si le move est fait, sinon false
-
 
 def tryMove(oldPosition, newPosition) -> bool:
     """Vérifie si la :class:`Lulu` peut se déplacer d'une :class:`Position` A à une :class:`Position` B en faisant toutes les validations et confirmations nécessaires
@@ -273,8 +269,6 @@ def tryMove(oldPosition, newPosition) -> bool:
             moveLulu(oldPosition, newPosition)
             return True
     return False
-
-# Todo : Gérer l'énergie avec la formule
 
 
 def moveLulu(oldPosition, newPosition):
@@ -303,12 +297,21 @@ def moveLulu(oldPosition, newPosition):
 
 
 def reproduceLulu(Lulu):
+    """Algorithme permettant à la lulu passée en paramètre de se reproduire.
+    Fait muté la nouvelle lulu selon un pourcentage de chance et selon les
+    variations passer dans le formulaire.
+
+	:param Lulu: Lulu a reproduire
+	:type Lulu: Lulu
+	"""
     newSpeed = Lulu.speed
     newSense = Lulu.sense
     newSize = Lulu.size
     if (random.randint(1, 100) < __mutateChance):
         newSpeed = round(Lulu.speed * random.uniform(1 - __speedVariation, 1 + __speedVariation))
+    if (random.randint(1, 100) < __mutateChance):
         newSense = round(Lulu.sense * random.uniform(1 - __senseVariation, 1 + __senseVariation))
+    if (random.randint(1, 100) < __mutateChance):
         newSize = round(Lulu.size * random.uniform(1 - __sizeVariation, 1 + __sizeVariation))
         
     if (newSpeed < 1):
@@ -358,6 +361,11 @@ def reproduceLulu(Lulu):
 
 
 def getLuluMap():
+    """Calcul le nombre de lulus présents dans la map
+
+	:return: Quantité de lulus
+	:rtype: int
+	"""
     count = 0
     for item in __map.values():
         if (type(item) == Lulu):
@@ -367,6 +375,8 @@ def getLuluMap():
 
 
 def moveAll():
+    """Algorithme qui permet à chaque lulu d'effectuer un mouvement à tour de rôle
+	"""
     lulusToMove = __lulus.copy()
     while (lulusToMove.__len__() > 0):
 
@@ -385,8 +395,9 @@ def moveAll():
                 lulusToMove.remove(lulu)
         
 
-
 def dayResultLulu():
+    """Vérifie la quantité de nourriture que possède chaque lulu et décide si elle se reproduit, survit, ou meurt
+	"""
     for lulu in __lulus[:]:
         if (lulu.foodAmount == 0 and not lulu.isNewBorn):
             __deleteItem(lulu.position)
@@ -399,10 +410,22 @@ def dayResultLulu():
 
 
 def addMove(move):
+    """Ajoute le mouvement effectué à la liste des mouvements
+
+	:param move: Objet contenant le déplacement effectué
+	:type move: Move
+	"""
     __moves.append(move)
 
+
 def getMoves():
+    """Retourne la liste des mouvements effectués
+
+	:return: Retourne la liste des mouvements effectués
+	:rtype: list
+	"""
     return __moves
+
 
 def printMap():
     """Affiche tous les items de la carte avec leur :class:`Position` dans la console (outil de débogage) 
@@ -420,6 +443,8 @@ def getLulus():
 
 
 def setFood():
+    """Permet de mettre la nourriture de façon aléatoire dans la map
+	"""
     maxX = __sizeX
     maxY = __sizeY
 
@@ -433,6 +458,10 @@ def setFood():
 
 
 def resetWorld():
+    """Réinitialise la nourriture restante dans le monde.
+    Réinitialise l'énergie et la nourriture des lulus.
+    Réinitialise la position des lulus sur les côtés.
+	"""
     __map.clear()
     global __numberOfFood
     __numberOfFood = 0
@@ -444,70 +473,3 @@ def resetWorld():
         
     for lulu in __lulus[:]:
         lulu.resetPosition()
-
-
-class VisualizeLulus(Scene):
-    def construct(self):
-
-        items = getMap()
-        # SIZE = 1/5 du plus petit x ou y?
-        SIZE = getSizeX()/5 if getSizeX() < getSizeY() else getSizeY()/5
-        # CENTERX = /2
-        CENTERX = getSizeX()/2
-        # CENTERY = /2
-        CENTERY = getSizeY()/2
-
-        groupdots = VGroup()
-
-        maxSize = max(lulu.size for lulu in getLulus())
-        minSize = min(lulu.size for lulu in getLulus())
-        rangeOfSizes = maxSize - minSize
-
-        for position in items:
-            item = items.get(position)
-            if (type(item) == Lulu):
-                if (item.isDone):
-                    rangeOfColors = rangeOfSizes/6
-                    if item.size <= minSize + (rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=RED_A)
-                    elif item.size <= minSize + 2*(rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=RED_B)
-                    elif item.size <= minSize + 3*(rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=RED_C)
-                    elif item.size <= minSize + 4*(rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=RED_D)
-                    else:
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=RED_E)
-                else:
-                    rangeOfColors = rangeOfSizes/6
-                    if item.size <= minSize + (rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=BLUE_A)
-                    elif item.size <= minSize + 2*(rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=BLUE_B)
-                    elif item.size <= minSize + 3*(rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=BLUE_C)
-                    elif item.size <= minSize + 4*(rangeOfColors):
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=BLUE_D)
-                    else:
-                        dot = Dot([(position.x - CENTERX)/SIZE,
-                                  (position.y - CENTERY)/SIZE, 0], color=BLUE_E)
-            elif (type(item) == Food):
-                dot = Dot([(position.x - CENTERX)/SIZE,
-                          (position.y - CENTERY)/SIZE, 0], color=GREEN)
-            groupdots.add(dot)
-
-        self.add(groupdots)
-
-
-def renderAnimation():
-    scene = VisualizeLulus()
-    scene.render()

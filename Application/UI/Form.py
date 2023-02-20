@@ -1,5 +1,6 @@
 import customtkinter as ct
 import tkinter as tk
+from tkinter import ttk
 from PIL import Image
 import os
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -11,6 +12,9 @@ workingDirectory = pathlib.Path().resolve()
 sys.path.append(str(workingDirectory) + '\Application')
 import SimulationManager as Simulation
 from JsonManager import saveData, loadData
+import threading
+import time
+
 
 ct.set_appearance_mode("dark")
 ct.set_default_color_theme("blue")
@@ -172,7 +176,6 @@ class Form(ct.CTk):
 
         width = 1920
         height = 1080
-        
 
         # Setup de base de l'interface
         self.geometry("900x800")
@@ -334,7 +337,7 @@ class Form(ct.CTk):
 
         infoMutation = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoMutation.grid(row=8, column=1, pady=10, padx=10)
-        infoMutation.bind("<Enter>", lambda event: show_info(event, "Ce champs représente le % de chance qu'une mutation\r soit effectuée lors de la reproduction.\r (Cette valeur doit être entre 1 et 100)"))
+        infoMutation.bind("<Enter>", lambda event: show_info(event, "Ce champs représente le % de chance qu'une mutation\r soit effectuée lors de la reproduction.\r (Cette valeur doit être entre 0 et 100)"))
         infoMutation.bind("<Leave>", hide_info)
 
         txtMutation = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="50"))
@@ -430,7 +433,7 @@ class Form(ct.CTk):
                 try:
                     mapSizeXValue = get_inputMapSizeX()
                     mapSizeYValue = get_inputMapSizeY()
-                    maxLulu = mapSizeXValue * mapSizeYValue * 0.75
+                    maxLulu = (mapSizeXValue * 2 + mapSizeYValue * 2) - 4
                     if(startLuluValue > maxLulu):
                         lblStartLuluGood.configure(text="Cette valeur doit être inférieur ou égal à " 
                                                 + str(int(maxLulu)) + "\r(Cette valeur dépend de la taille du territoire)", text_color="red")
@@ -450,10 +453,10 @@ class Form(ct.CTk):
                 mapSizeYValue = int(txtMapSizeY.get()) 
                 if(mapSizeXValue < 0 or mapSizeYValue < 0):
                     raise ValueError
-                maxLulu = mapSizeXValue * mapSizeYValue * 0.75
-                return "Ce champs représente le nombre\r de Lulus présent sur le territoire au début.\r (Le nombre de Lulus doit être inférieur ou égal\r à 75% du territoire soit " + str(math.floor(maxLulu)) + ")"
+                maxLulu = (mapSizeXValue * 2 + mapSizeYValue * 2) - 4
+                return "Ce champs représente le nombre\r de Lulus présent sur le territoire au début.\r (Le nombre de Lulus doit être inférieur ou égal\r au périmètre du territoire - 4 soit " + str(math.floor(maxLulu)) + ")"
             except ValueError:
-                return "Ce champs représente le nombre\r de Lulus présent sur le territoire au début.\r (Le nombre de Lulus doit être inférieur ou égal\r à 75% du territoire\r(Les valeur en X et Y doivent être mise\r pour pouvoir savoir la valeur maximal))"
+                return "Ce champs représente le nombre\r de Lulus présent sur le territoire au début.\r (Le nombre de Lulus doit être inférieur ou égal\r au périmètre du territoire - 4\r (Les valeur en X et Y doivent être mise\r pour pouvoir savoir la valeur maximal))"
 
         # Enter 5 -- Validation
         def get_inputEnergy():
@@ -544,6 +547,7 @@ class Form(ct.CTk):
             except ValueError:
                 lblGenerationGood.configure(text="Ce n'est pas un nombre entier positif", text_color="red")
 
+
         # -------------------------------------------------
         def get_allBeforeSimulation():
             validMapSizeX = get_inputMapSizeX()
@@ -568,18 +572,37 @@ class Form(ct.CTk):
                and type(validMutation) is int
                and type(validGeneration) is int):
                 
-                #Simule
-                #__run__(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration)
+                btnGraph.grid_remove()
+                btnSave.grid_remove()
+                btnSimulate.configure(state="disable")
+                btnImport.configure(state="disable")
+                btnPreview.configure(state="disable")
 
-                Simulation.__run__(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration, validMutation)
-                
-                fg.generations = fg.objectsToCoordinates(fg.generateLulus())
+                #Simule
+                th = threading.Thread(target=Simulation.__run__, args=(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration, validMutation))
+                th.start()
+
+                progress_bar.grid(row=14, column=0, columnspan=3, padx=20, pady=10, sticky="we")
+                progress_bar.configure(maximum=validGeneration)
+                while(th.is_alive()):
+                    time.sleep(3)
+                    progress_var.set(float(Simulation.generation))
+                    progress_bar.update()
+                th.join()
+
+                fg.generations = fg.objectsToCoordinates(Simulation.getGenerationsLulu())
                 btnGraph.grid(row=11, column=0, columnspan=2, padx=20, pady=10, sticky="we")
                 btnSave.grid(row=11, column=2, padx=20, pady=10, sticky="we")
-
-                lblErrorInForm.configure(text="OK", text_color="green")
+                progress_bar.grid_remove()
+                btnSimulate.configure(state="normal")
+                btnImport.configure(state="normal")
+                btnPreview.configure(state="normal")
+                lblErrorInForm.configure(text="La simulation est terminée", text_color="green")
             else:
                 lblErrorInForm.configure(text="Erreur: Veuillez remplir convenablement le formulaire", text_color="red")
+
+        progress_var = tk.DoubleVar()
+        progress_bar = ttk.Progressbar(master=self.frame_1, variable=progress_var)
                   
         btnSimulate = ct.CTkButton(master=self.frame_1, text="Lancer la Simulation", command=get_allBeforeSimulation)
         btnSimulate.grid(row=10, column=0, columnspan=2, padx=20, pady=10, sticky="we")
