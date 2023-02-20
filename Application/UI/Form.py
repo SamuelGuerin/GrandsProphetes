@@ -201,7 +201,7 @@ class Form(ct.CTk):
 
         #Méthode afficher l'information que l'utilisateur doit entrer
         def show_info(event, txt):
-            lblErrorInForm.configure(text=txt, corner_radius=90, text_color="green", fg_color="#343638")
+            lblErrorInForm.configure(text=txt, corner_radius=90, text_color="white", fg_color="#343638")
 
         def hide_info(event):
             lblErrorInForm.configure(text="", fg_color="#2b2b2b")
