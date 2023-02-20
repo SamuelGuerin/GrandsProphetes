@@ -1,6 +1,5 @@
 # Cas d'utilisations
 
-
 ```plantuml
 left to right direction
 actor Utilisateur as user
