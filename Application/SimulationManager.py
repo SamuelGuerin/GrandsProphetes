@@ -112,6 +112,8 @@ def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation,
                         speed, sense, energy * 10000, size, mutateChance, speedVariation, senseVariation, sizeVariation)
     
     global generation
+    global generationLulus
+    generationLulus = []
     for generation in range(nbGeneration):
         st = time.time()
         print("generation " + str(generation))
