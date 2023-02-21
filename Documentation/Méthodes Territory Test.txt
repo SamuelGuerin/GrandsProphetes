@@ -5,7 +5,6 @@ Fichier Territory
 	Tester si la map est créée avec le bon nombre de nourriture ✔️
 	Tester si la map est créée avec le bon nombre de Lulus ✔️
 	Tester si les Lulus sont bien initialisées avec les paramètres de speed, sense, size et energy ✔️
-	Tester si les mutations arrivent autant que le paramètre de mutateChance [X]
 --------------------------------------------------------------------------------------
 - méthode __CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isDone) -> bool:
 	Tester si la Lulu a bien été créée dans une case vide --> retourne True ✔️
@@ -50,8 +49,10 @@ Fichier Territory
 	Tester si on retire la Lulu mangée de la liste de Lulus ✔️
 ------------------------------------------------------------------------------------
 - méthode reproduceLulu(Lulu):
-	Tester si la nouvelle Lulu est placée à côté de la Lulu parent
-	Tester la mutation
+	Tester si la nouvelle Lulu est placée à côté de la Lulu parent ✔️
+	Tester si la liste s'incérmente (nouveau lulu) ✔️
+	Tester si la nouvelle Lulu remplace le parent si la ligne est pleine ✔️
+	Tester si la nouvelle Lulu se rajoute sur la meme ligne que le parent si la ligne est pas pleine ✔️
 ---------------------------------------------------------------------------------
 - méthode getLuluMap(): 
 	Tester si la méthode retourne bien le nombre de Lulu contenu dans la map ✔️
@@ -77,11 +78,8 @@ Fichier Territory
 	Tester si la map a bien été clear [X]
 	Tester si on regénère bien de la Food aléatoirement partout sur la map [X]
 	Tester si on réinitialise .isDone des Lulus à False et qu'on réinitialise leur énergie à la valeur par défaut ✔️
-	Tester si on réinitialise leurs position (resetPosition)
 -----------------------------------------------------------------------------
 
-- si la liste s'incérmente (nouveau lulu) ✔️
-- remplace le parent si la ligne est pleine ✔️
-- se rajoute sur la meme ligne que le parent si la ligne est pas pleine ✔️
+
 
 

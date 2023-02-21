@@ -7,7 +7,6 @@ Classe Lulu
 	Tester si la priorité ennemi, nourriture, proie est respectée ✔️
 	Tester si le coût d'énergie est bien respecté/utilisé ✔️
 	Tester si isDone est changé au bon moment ✔️
-	Tester si vitesse/nombre de cases à parcourir concorde bien au résultat attendu [?]
 -------------------------------------------------------------------------------
 - méthode isCloseToTargetPosition(self) -> bool:✔️
 	Tester si on est près de la targetPosition, tester voir si on retourne le bon résultat
