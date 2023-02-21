@@ -68,9 +68,9 @@ def setAxesSize(ax, sx, sy, sz):
     :type sz: float
     """
 
-    ax.set_xlim([0,sx])
-    ax.set_ylim([0,sy])
-    ax.set_zlim([0,sz])
+    ax.set_xlim(sx)
+    ax.set_ylim(sy)
+    ax.set_zlim(sz)
 
 def setStats(ax, generation):
     """Génère les statistiques de la génération actuelle.
@@ -138,7 +138,6 @@ def setStats(ax, generation):
     ax.text(0.7, 0.03, str(size[2]), fontsize=15, color='red', fontweight='semibold')
     #Draw
     Button(ax, '')
-    #plt.draw()
 
 class Lulu:
     def __init__(self, speed, sense, size):
@@ -146,7 +145,7 @@ class Lulu:
         self.Sense = sense
         self.Size = size
 
-def generateGraph(generation, currentGeneration, elev, azim):
+def generateGraph(generation, currentGeneration, position):
     """Génère le graphique 3d et ses statistiques.
 
     :param generation: Liste des coordonnées de la génération actuelle.
@@ -186,8 +185,8 @@ def generateGraph(generation, currentGeneration, elev, azim):
     ax = plt.axes(projection="3d")
     plt.subplots_adjust(left=0.25)
     ax.set_title('Génération ' + str(currentGeneration))
-    ax.elev = elev
-    ax.azim = azim
+    ax.elev = position[0]
+    ax.azim = position[1]
     fig.subplots_adjust(bottom=0.2)
 
     speeds = generation[0]
@@ -197,7 +196,7 @@ def generateGraph(generation, currentGeneration, elev, azim):
 
     generateColors(speeds,senses,sizes,colors)
 
-    setAxesSize(ax, max(speeds) * 1.5, max(senses) * 1.5, max(sizes) * 1.5)
+    setAxesSize(ax, position[2], position[3], position[4])
     setAxesLabel(ax)
 
     ax.scatter(speeds, senses, sizes, c=colors)
@@ -206,8 +205,4 @@ def generateGraph(generation, currentGeneration, elev, azim):
     ax_stats = plt.axes([0.005, 0.05, 0.23, 0.9])
     setStats(ax_stats, generation)
 
-    #plt.show()
     return [fig, ax]
-
-#test = generateLulus()
-#generateGraph(test[0], 1)
