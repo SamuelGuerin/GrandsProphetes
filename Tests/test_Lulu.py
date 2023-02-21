@@ -6,8 +6,8 @@ import random
 import sys
 import pathlib
 
-workingDir = pathlib.Path().resolve()
-sys.path.append('../Application/')
+#workingDir = pathlib.Path().resolve()
+#sys.path.append('../Application/')
 #sys.path.insert(0, str(workingDir) + '\Application\\')
 
 # from Models.Lulu import Lulu

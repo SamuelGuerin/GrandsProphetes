@@ -25,7 +25,7 @@ Méthode                     Action
 :meth:`createMap`           Crée une carte (map) avec les paramètres donnés (__sizeX, sizeY, __foodCount, __lulusCount)
 :meth:`__CreateLulu`        Crée une Lulu avec les paramètres donnés (rx, ry, speed, sense, size, energyRemaining, FoodCollected, isDone)
 :meth:`__CreateFood`        Ajoute une nourriture sur la carte (map) à la position donnée en paramètres (rx, ry)
-:meth:`__addItem`           Ajoute un item (Lulu ou nourriture) sur la carte à la :class:`Position` donnée en paramètres (item, :class:`Position`)
+:meth:`addItem`           Ajoute un item (Lulu ou nourriture) sur la carte à la :class:`Position` donnée en paramètres (item, :class:`Position`)
 :meth:`__deleteItem`        Retire un item (Lulu ou nourriture) sur la carte à la :class:`Position` donnée en paramètres (item, :class:`Position`)
 :meth:`getItem`             Obtient un item (Lulu ou nourriture) sur la carte à la :class:`Position` donnée en paramètres (item, :class:`Position`)
 :meth:`getMap`              Retourne la carte (map)
@@ -42,9 +42,9 @@ Méthode                     Action
 """
 
 import random
-from Models.Position import Position
-from Models.Lulu import Lulu
-from Models.Food import Food
+# from Models.Position import Position
+# from Models.Lulu import Lulu
+# from Models.Food import Food
 import time
 #from manim import *
 
@@ -140,6 +140,10 @@ def __CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isD
     :return: Retourne un booléen confirmant si la :class:`Lulu` a bien été ajoutée ou non
     :rtype: bool
     """
+
+    from Models.Position import Position
+    from Models.Lulu import Lulu
+    
     # Créer une lulu si la case est vide
     if (getItem(rx, ry) == None):
         rPos = Position(rx, ry)
@@ -162,6 +166,10 @@ def __CreateFood(rx, ry) -> bool:
     :return: Retourne un booléen confirmant si la nourriture (:class:`Food`) a bien été ajoutée ou non
     :rtype: bool
     """
+
+    from Models.Position import Position
+    from Models.Food import Food
+
     # Créer une food si la case est vide
     global __numberOfFood
     if (getItem(rx, ry) == None):
@@ -184,6 +192,9 @@ def getItem(x, y):
     :return: Retourne un item (:class:`Lulu` ou  nourriture (:class:`Food`))
     :rtype: :class:`Position`
     """
+
+    from Models.Position import Position
+
     item = __map.get(Position(x, y))
     return item
 
@@ -215,7 +226,7 @@ def getSizeY():
     return __sizeY
 
 
-def __addItem(position, item):
+def addItem(position, item):
     """Ajoute un item (valeur) (:class:`Lulu` ou  nourriture (:class:`Food`)) dans le dictionnaire __map à une :class:`Position` donnée (clé)
 
     :param position: :class:`Position` à laquelle l'item (:class:`Lulu` ou  nourriture (:class:`Food`)) sera placé dans l'objet __map (carte)
@@ -223,6 +234,9 @@ def __addItem(position, item):
     :param item: L'item (:class:`Lulu` ou  nourriture (:class:`Food`)) qui sera placé dans le dictionnaire __map
     :type item: (:class:`Lulu` ou  nourriture (:class:`Food`))
     """
+
+    from Models.Lulu import Lulu
+
     __map[position] = item
     if (type(item) == Lulu):
         item.position = position
@@ -250,6 +264,9 @@ def tryMove(oldPosition, newPosition) -> bool:
     :return: Retourne un booléen confirmant si la Lulu peut être déplacée ou non
     :rtype: bool
     """
+
+    from Models.Food import Food
+
     # Vérifier si le mouvement est dans la map
     if ((newPosition.x >= 1 and newPosition.x <= getSizeX()) and (newPosition.y >= 1 and newPosition.y <= getSizeY())):
         # Vérifier s'il n'y a pas une lulu plus grosse ou égale
@@ -276,6 +293,9 @@ def moveLulu(oldPosition, newPosition):
     :param newPosition: La nouvelle :class:`Position` de la :class:`Lulu`
     :type newPosition: :class:`Position`
     """
+
+    from Models.Lulu import Lulu
+
     # S'il y avait qqch sur la nouvelle case, l'enlever et ajouter 1 de nourriture
     currentLulu = __map[oldPosition]
     if (getItem(newPosition.x, newPosition.y) != None):
@@ -284,11 +304,14 @@ def moveLulu(oldPosition, newPosition):
         if (type(getItem(newPosition.x, newPosition.y)) == Lulu):
             __lulus.remove(__map[newPosition])
         __deleteItem(newPosition)
-    __addItem(newPosition, currentLulu)
+    addItem(newPosition, currentLulu)
     __deleteItem(oldPosition)
 
 
 def reproduceLulu(Lulu):
+
+    from Models.Lulu import Lulu
+
     newSpeed = Lulu.speed
     newSense = Lulu.sense
     newSize = Lulu.size
@@ -344,6 +367,9 @@ def reproduceLulu(Lulu):
 
 
 def getLuluMap():
+
+    from Models.Lulu import Lulu
+
     count = 0
     for item in __map.values():
         if (type(item) == Lulu):
@@ -353,6 +379,9 @@ def getLuluMap():
 
 
 def moveAll():
+
+    from Models.Lulu import Lulu
+
     lulusToMove = __lulus.copy()
     while (lulusToMove.__len__() > 0):
 
@@ -418,7 +447,7 @@ def resetWorld():
     for lulu in __lulus[:]:
         lulu.isDone = False
         lulu.energy = __energy
-        __addItem(lulu.position, lulu)
+        addItem(lulu.position, lulu)
         
     for lulu in __lulus[:]:
         lulu.resetPosition()

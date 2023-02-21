@@ -7,40 +7,23 @@ import sys
 import pathlib
 
 workingDir = pathlib.Path().resolve()
-sys.path.append('../Application/')
-#sys.path.insert(0, str(workingDir) + '\Application\\')
-
-# try:
-#     from Models import Lulu
-# except ImportError:
-#     import sys
-#     Models = sys.modules[__package__ + '.Models']
+sys.path.append(str(workingDir) + '\Application')
+#sys.path.append('../Application/')
+#sys.path.append('Application/')
 
 
-# try:
-#     from Models import Food
-# except ImportError:
-#     import sys
-#     Models = sys.modules[__package__ + '.Models']
-
-
-# try:
-#     from Models import Position
-# except ImportError:
-#     import sys
-#     Models = sys.modules[__package__ + '.Models']
-
-
-# try:
-#     from Models import Territory
-# except ImportError:
-#     import sys
-#     Models = sys.modules[__package__ + '.Models']
-
-from Models.Lulu import Lulu
-from Models.Position import Position
-from Models.Food import Food
+import Models.Position as Position
+import Models.Food as Food
+import Models.Lulu as Lulu
 import Models.Territory as Territory
+
+# from Models.Position import Position # Fonctionne, circular imports
+# from Models.Food import Food
+# from Models.Lulu import Lulu
+# from Models import Territory
+#import Models.Territory as Territory
+
+
 
 
 # import Models.Territory as Territory
@@ -52,6 +35,13 @@ import Models.Territory as Territory
 # from Models.Food import Food
 # from Models.Position import Position
 
+# while True:
+#     try:
+#         execfile("test_Territory.py")
+#     except SystemExit:
+#         print("ignoring SystemExit")
+#     finally:
+#         time.sleep(2)
 
 
 X = 100
@@ -70,17 +60,21 @@ Territory.createMap(X,Y,numberOfFood,numberOfLulus,speed,sense,energy,size,mutat
 class TestCreateMap(unittest.TestCase):
     def test_max_X_Y(self):
         # Teste si les limites de la map ont bien été générées en X et en Y
-        testX = Territory.__sizeX
-        testY = Territory.__sizeY
-        self.assertTrue(X == testX and Y == testY)
+        testX = Territory.pSizeX
+        testY = Territory.pSizeY
+        assert X == testX, "X and testX should have the same values"
+        assert Y == testY, "Y and testY should have the same values"
+        #self.assertTrue(X == testX and Y == testY)
 
     def test_number_of_food(self):
-        testFood = Territory.__foodCount
-        self.assertEqual(numberOfFood, testFood)
+        testFood = Territory.pFoodCount
+        assert numberOfFood == testFood, "numberOfFood and testFood should have the same values"
+        #self.assertEqual(numberOfFood, testFood)
 
     def test_number_of_lulu(self):
-        testLulu = Territory.__lulusCount
-        self.assertEqual(numberOfLulus, testLulu)
+        testLulu = Territory.pLulusCount
+        assert numberOfLulus == testLulu, "numberOfLulus and testLulu should have the same values"
+        #self.assertEqual(numberOfLulus, testLulu)
 
     def test_lulu_attributes(self):
         lulusTest = Territory.getLulus()
@@ -88,63 +82,75 @@ class TestCreateMap(unittest.TestCase):
         for l in lulusTest:
             if(l.speed == speed and l.sense == sense and l.energy == energy and l.size == size and l.mutateChance == mutateChance):
                 counter += 1
-        self.assertEqual(counter, numberOfLulus)
+        assert counter == numberOfLulus, "counter and numberOfLulus should have the same values"
+        #self.assertEqual(counter, numberOfLulus)
 
 class TestCreateLulu(unittest.TestCase):
     def test_lulu_created_empty(self):
-        created = Territory.__CreateLulu(5,5,speed, sense, size, energy, 0, False)
-        self.assertTrue(created)
+        created = Territory.CreateLulu(5,5,speed, sense, size, energy, 0, False)
+        assert created == True, "created should == True"
+        #self.assertTrue(created)
 
     def test_lulu_not_created(self): 
         # Est-ce que les tests sont enchaînés un à la suite de l'autre ou est-ce que les tests doivent être indépendants des autres? -> va changer la manière d'approcher le test
-        created = Territory.__CreateLulu(5,5,speed, sense, size, energy, 0, False)
-        self.assertFalse(created)
+        created = Territory.CreateLulu(5,5,speed, sense, size, energy, 0, False)
+        assert created == False, "created should == False"
+        #self.assertFalse(created)
 
     def test_lulu_added_to_list(self):
         len1 = len(Territory.getLulus())
-        created = Territory.__CreateLulu(6,5,speed, sense, size, energy, 0, False)
+        created = Territory.CreateLulu(6,5,speed, sense, size, energy, 0, False)
         len2 = len(Territory.getLulus())
-        self.assertGreater(len2, len1)
+        assert len2 > len1, "len2 should be greater than len1"
+        #self.assertGreater(len2, len1)
         #self.assertEqual(lulu, Territory.getLulus()[len2 - 1])
 
 class TestCreateFood(unittest.TestCase):
     def test_food_created_empty(self):
-        oldCounter = Territory.__foodCount
+        oldCounter = Territory.pFoodCount
         created = Territory.CreateFood(10,10)
-        self.assertTrue(created)
-        newCounter = Territory.__foodCount
-        self.assertGreater(newCounter, oldCounter)
+        assert created == True, "created should == True"
+        #self.assertTrue(created)
+        newCounter = Territory.pFoodCount
+        assert newCounter > oldCounter, "newCounter should be greater than oldCounter"
+        #self.assertGreater(newCounter, oldCounter)
 
     def test_food_not_created(self):
         # Est-ce qu'on a le droit d'utiliser d'autres méthodes? exemple: getItem?????? ça serait très utile
         # Est-ce que les tests sont enchaînés un à la suite de l'autre ou est-ce que les tests doivent être indépendants des autres? -> va changer la manière d'approcher le test
         created = Territory.CreateFood(10,10)
-        self.assertFalse(created)
+        assert created == False, "created should == False"
+        #self.assertFalse(created)
 
 class TestGet(unittest.TestCase):
     def test_get_map1(self):
         map = Territory.getMap()
-        self.assertNotEqual(map, None)
+        assert map != None, "map shouldn't be equal to None"
+        #self.assertNotEqual(map, None)
     # Version #2 du test
     def test_get_map2(self):
         lulu1 = Lulu(Position(80,40), 3, 3, 145, 5, 0, False)
-        Territory.__addItem(lulu1.position, lulu1)
-        Territory.__lulus.append(lulu1)
+        Territory.addItem(lulu1.position, lulu1)
+        Territory.pLulus.append(lulu1)
         map = Territory.getMap()
-        self.assertEqual(map[lulu1.position], lulu1)
+        assert map[lulu1.position] == lulu1, "The lulu in the map at the position of lulu1.position should be equal to lulu1"
+        #self.assertEqual(map[lulu1.position], lulu1)
     # Version #3 du test
     def test_get_map3(self):
         map = Territory.getMap()
-        self.assertEqual(map, Territory.__map)
+        assert map == Territory.pMap, "map should be equal/the same as Territory.pMap"
+        #self.assertEqual(map, Territory.pMap)
 
     def test_get_sizeX_and_sizeY(self):
         testX = Territory.getSizeX()
         testY = Territory.getSizeY()
-        self.assertTrue(X == testX and Y == testY)
+        assert X == testX and Y == testY, "X should be equal to testX AND Y should be equal to testY"
+        #self.assertTrue(X == testX and Y == testY)
 
     def test_get_lulus(self):
         lulusList = Territory.getLulus()
-        self.assertEqual(lulusList, Territory.__lulus)
+        assert lulusList == Territory.pLulus
+        #self.assertEqual(lulusList, Territory.pLulus)
     
     def test_get_lulu_map(self):
         luluCount = Territory.getLuluMap()
@@ -169,49 +175,49 @@ class TestItem(unittest.TestCase):
 
     def test_add_item(self):
         lulu = Lulu(20,20,speed,sense,size,energy,0,False)
-        Territory.__addItem(lulu.position, lulu)
+        Territory.addItem(lulu.position, lulu)
         map = Territory.getMap()
         self.assertEqual(lulu, map[lulu.position])
 
     def test_delete_item(self):
         lulu = Lulu(20,20,speed,sense,size,energy,0,False)
-        Territory.__addItem(lulu.position, lulu)
+        Territory.addItem(lulu.position, lulu)
         luluDictionnary = Territory.getItem(lulu.position)
-        Territory.__deleteItem(luluDictionnary.position)
+        Territory.deleteItem(luluDictionnary.position)
         self.assertEqual(luluDictionnary, Territory.getMap()[luluDictionnary.position]) # Va peut-être crash
 
 class TestTryMove(unittest.TestCase):
     def test_outside_of_map(self):
         lulu1 = Lulu(Position(100,100), 1, 1, 100, 3, 0, False)
         lulu1.randomTargetPosition = Position(101,101)
-        Territory.___addItem(lulu1)
-        Territory.__lulus.append(lulu1)
+        Territory.addItem(lulu1.position, lulu1)
+        Territory.pLulus.append(lulu1)
         self.assertFalse(Territory.tryMove(lulu1.position, lulu1.randomTargetPosition))
 
     def test_not_eatable_lulu(self):
         lulu1 = Lulu(Position(60,60), 1, 1, 100, 3, 0, False)
         lulu2 = Lulu(Position(61,60), 1, 1, 100, 3, 0, False) 
-        Territory.__addItem(lulu1)
-        Territory.__addItem(lulu2)
-        Territory.__lulus.append(lulu1)
-        Territory.__lulus.append(lulu2)
+        Territory.addItem(lulu1.position, lulu1)
+        Territory.addItem(lulu2.position, lulu2)
+        Territory.pLulus.append(lulu1)
+        Territory.pLulus.append(lulu2)
         self.assertFalse(Territory.tryMove(lulu1.position, lulu2.position))
 
     def test_eat_food(self):
         lulu1 = Lulu(Position(40,40), 1, 1, 100, 3, 0, False)
         food1 = Food(Position(40,41))
-        Territory.__addItem(lulu1)
-        Territory.__addItem(food1)
-        Territory.__lulus.append(lulu1)
+        Territory.addItem(lulu1.position, lulu1)
+        Territory.addItem(food1.position, food1)
+        Territory.pLulus.append(lulu1)
         self.assertTrue(Territory.tryMove(lulu1.position, food1.position))
 
     def test_eat_lulu_prey(self):
         lulu1 = Lulu(Position(50,70), 1, 1, 100, 3, 0, False) # proie
         lulu2 = Lulu(Position(50,71), 1, 2, 120, 6, 0, False) # ennemi
-        Territory.__addItem(lulu1)
-        Territory.__addItem(lulu2)
-        Territory.__lulus.append(lulu1)
-        Territory.__lulus.append(lulu2)
+        Territory.addItem(lulu1.position, lulu1)
+        Territory.addItem(lulu2.position, lulu2)
+        Territory.pLulus.append(lulu1)
+        Territory.pLulus.append(lulu2)
         self.assertTrue(Territory.tryMove(lulu2.position, lulu1.position))
 
 class TestMoveLulu(unittest.TestCase):
@@ -220,10 +226,10 @@ class TestMoveLulu(unittest.TestCase):
         lulu2 = Lulu(Position(50,81), 1, 1, 100, 3, 0, False) 
         oldFoodAmount = lulu1.foodAmount
 
-        Territory.__addItem(lulu1)
-        Territory.__addItem(lulu2)
-        Territory.__lulus.append(lulu1)
-        Territory.__lulus.append(lulu2)
+        Territory.addItem(lulu1.position, lulu1)
+        Territory.addItem(lulu2.position, lulu2)
+        Territory.pLulus.append(lulu1)
+        Territory.pLulus.append(lulu2)
         Territory.moveLulu(lulu1.position, lulu2.position)
 
         lulusList = Territory.getLulus()
@@ -281,7 +287,7 @@ class TestDayResultLulu(unittest.TestCase):
 class TestResetWorld(unittest.TestCase):
     def test_reset_food(self):
         Territory.resetWorld()
-        self.assertEqual(Territory.__numberOfFood, numberOfFood)
+        self.assertEqual(Territory.pNumberOfFood, numberOfFood)
 
     def test_reset_params_default(self):
         Territory.resetWorld()
@@ -294,7 +300,7 @@ class TestResetWorld(unittest.TestCase):
 class TestReproduceLulu(unittest.TestCase): 
     def test_list_lulu_incremented(self):
         oldLulusList = Territory.getLulus()
-        for l in Territory.__lulus:
+        for l in Territory.pLulus:
             if(l.foodAmount > 1):
                 Territory.reproduceLulu(l)
         newLulusList = Territory.getLulus()
@@ -302,8 +308,8 @@ class TestReproduceLulu(unittest.TestCase):
 
     # def test_parent_replaced_by_newborn(self):
     #     lulu1 = Lulu(Position(80,Y), 10, 5, 150, 6, 0, False)
-    #     Territory.__addItem(lulu1)
-    #     Territory.__lulus.append(lulu1)
+    #     Territory.addItem(lulu1.position, lulu1)
+    #     Territory.pLulus.append(lulu1)
     #     for x in range(1, X + 1):
     #         if(type(Territory.getItem(x,Y)) == Lulu):
     #             if(x == X): # Si la ligne est pleine, la reproduction devrait causer un remplacement du parent par le nouveau-né
@@ -314,8 +320,8 @@ class TestReproduceLulu(unittest.TestCase):
         # Teste le nombre de Lulu par axe, confirme si la Lulu nouvea-né a été ajoutée ou si un parent
         # a été remplacé dépendemment du compteur
         lulu1 = Lulu(Position(X,80), 1, 1, 100, 3, 0, False)
-        Territory.__addItem(lulu1)
-        Territory.__lulus.append(lulu1)
+        Territory.addItem(lulu1.position, lulu1)
+        Territory.pLulus.append(lulu1)
         oldLuluCount = 0
         newLuluCount = 0
         for y in range(1, Y + 1):
@@ -332,25 +338,4 @@ class TestReproduceLulu(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-            
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-
-    
-
-
-
-
 
