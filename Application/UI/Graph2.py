@@ -1,5 +1,15 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
+import gc
+import matplotlib
+matplotlib.use('agg')
+
+global ax
+global fig
+global ax_stats
+ax = None
+fig = None
+ax_stats = None
 
 def generateColors(speeds, senses, sizes, colors):
     """Cette fonction assigne une valeur RGB pour chaque points
@@ -152,6 +162,21 @@ def generateGraph(generation, currentGeneration, elev, azim):
     :rtype: `[Figure, Axes]`
     """
 
+    global fig
+    global ax
+    global ax_stats
+
+    plt.clf()
+    plt.close("all")
+    
+    gc.collect()
+    
+    fig = None
+    if ax != None:
+        ax.clear()
+    ax = None
+    ax_stats = None
+
     fig, ax = plt.subplots(figsize=(16, 9))
     plt.axis('off')
     ax = plt.axes(projection="3d")
@@ -182,5 +207,3 @@ def generateGraph(generation, currentGeneration, elev, azim):
 
 #test = generateLulus()
 #generateGraph(test[0], 1)
-    
-    
