@@ -590,7 +590,7 @@ class Form(ct.CTk):
                     progress_bar.update()
                 th.join()
 
-                fg.generations = fg.objectsToCoordinates(Simulation.getGenerationsLulu())
+                fg.generations = fg.objectsToCoordinates(Simulation.getGenerationsSave().generations)
                 btnGraph.grid(row=11, column=0, columnspan=2, padx=20, pady=10, sticky="we")
                 btnSave.grid(row=11, column=2, padx=20, pady=10, sticky="we")
                 progress_bar.grid_remove()
@@ -610,19 +610,31 @@ class Form(ct.CTk):
         def importSimulation():
             importData = loadData()
             if importData is not None:
-                btnGraph.grid_remove()
-                btnSave.grid_remove()
-                fg.generations = importData
-                add_Graph()
+                fg.generations = fg.objectsToCoordinates(importData.generations)
+                changeInputs(importData)
             else:
                 lblErrorInForm.configure(text="Erreur: Fichier non valide", text_color="red")
 
         def save():
-            saveData(fg.generations)
+            saveData(Simulation.getGenerationsSave())
             lblErrorInForm.configure(text="Le fichier a été sauvegardé.", text_color="green")
 
-                
-    
+        def changeInputs(data):
+            changeInputText(txtMapSizeX,str(data.sizeX))
+            changeInputText(txtMapSizeY,str(data.sizeY))
+            changeInputText(txtStartFood,str(data.nbFood))
+            changeInputText(txtStartLulu,str(data.nbLulu))
+            changeInputText(txtEnergy,str(data.energy))
+            changeInputText(txtSpeed,str(data.varSpeed))
+            changeInputText(txtSense,str(data.varSense))
+            changeInputText(txtSize,str(data.varSize))
+            changeInputText(txtMutation,str(data.mutationChance))
+            changeInputText(txtGeneration,str(data.nbGen))
+        
+        def changeInputText(input,text):
+            input.delete(0,'end')
+            input.insert(0,text)
+            
         # Graph
         def add_Graph():
             global canvasR
@@ -820,6 +832,7 @@ class Form(ct.CTk):
         lblErrorInForm = ct.CTkLabel(master=self.frame_1, height=100, justify=ct.CENTER, text="")
         lblErrorInForm.grid(row=13, column=0, columnspan=3, padx=20, pady=10)
 
+        
 # if __name__ == "__main__":
 #     app = Form()
 #     app.mainloop()

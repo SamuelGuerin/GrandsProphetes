@@ -7,7 +7,7 @@ from Models.Food import Food
 from Models.Saves import Save
 
 generationMoves = []
-generationLulus = Save()
+generationsSave = Save()
 class VisualizeLulus(Scene):
     def construct(self):
 
@@ -112,14 +112,14 @@ def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation,
                         speed, sense, energy * 10000, size, mutateChance, speedVariation, senseVariation, sizeVariation)
     
     global generation
-    global generationLulus
-    generationLulus = []
+    global generationsSave
+    generationsSave = Save(sizeX,sizeY,foodCount, lulusCount,energy,speedVariation,senseVariation,sizeVariation,mutateChance,nbGeneration, generations=[])
 
     for generation in range(nbGeneration):
         st = time.time()
         print("generation " + str(generation))
         print("nombre de lulu: " + str(Territory.getLulus().__len__()))
-        generationLulus.append(Territory.getLulus().copy())
+        generationsSave.generations.append(Territory.getLulus().copy())
         Territory.moveAll()
         Territory.resetWorld()
         Territory.dayResultLulu()
@@ -138,5 +138,9 @@ def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation,
         
     print("temps simulation: " + str(sime))
 
-def getGenerationsLulu():
-    return generationLulus
+def getGenerationsSave():
+    return generationsSave
+
+def setGenerationSave(data):
+    global generationsSave
+    generationsSave = data
