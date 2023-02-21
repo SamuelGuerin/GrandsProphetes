@@ -52,9 +52,9 @@ __sizeX = None
 __sizeY = None
 __lulusCount = None
 __foodCount = None
+__energy = None
 __lulus = []
 __map = {}
-__energy = None
 __moves = []
 __numberOfFood = 0
 EATING_RATIO = 1.2
@@ -80,25 +80,27 @@ def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, m
     global __speedVariation
     global __senseVariation
     global __sizeVariation
+
     __sizeX = sizeX
     __sizeY = sizeY
     __foodCount = foodCount
     __lulusCount = lulusCount
     __energy = energy
     __mutateChance = mutateChance
-    __speedVariation = speedVariation /100
-    __senseVariation = senseVariation /100
-    __sizeVariation = sizeVariation /100
+    __speedVariation = speedVariation / 100
+    __senseVariation = senseVariation / 100
+    __sizeVariation = sizeVariation / 100
 
     clearMap()
-    # Créer x lulus dans la map (La map va de 0 à maxX ou maxY)
+    
+    # Créer X nombre de Lulus dans la map (La map va de 0 à maxX ou maxY)
     # Les mettre sur le côté
     for _ in range(__lulusCount):
         maxX = __sizeX
         maxY = __sizeY
         luluCreated = False
 
-        # Choisir un side à 0 ou maxSide, puis un random de l'autre coordonnée (x ou y)
+        # Choisir des coordonnées aléatoire pour faire apparaître les Lulus tout le tour du périmètre
         while (not luluCreated and len(__lulus) < (2 * maxX + 2 * maxY) - 4):
             if (bool(random.getrandbits(1))):
                 rx = random.choice([1, maxX])
@@ -255,9 +257,9 @@ def tryMove(oldPosition, newPosition) -> bool:
     :return: Retourne un booléen confirmant si la Lulu peut être déplacée ou non
     :rtype: bool
     """
-    # Vérifier si le mouvement est dans la map
+    # Vérifier si la nouvelle position est dans la map
     if ((newPosition.x >= 1 and newPosition.x <= getSizeX()) and (newPosition.y >= 1 and newPosition.y <= getSizeY())):
-        # Vérifier s'il n'y a pas une lulu plus grosse ou égale
+        # Vérifier le contenu de la case à la nouvelle position
         itemInNewPosition = getItem(newPosition.x, newPosition.y)
         if (itemInNewPosition == None):
             moveLulu(oldPosition, newPosition)
@@ -279,7 +281,7 @@ def moveLulu(oldPosition, newPosition):
     :param newPosition: La nouvelle :class:`Position` de la :class:`Lulu`
     :type newPosition: :class:`Position`
     """
-    # S'il y avait qqch sur la nouvelle case, l'enlever et ajouter 1 de nourriture
+    # S'il y avait quelque chose sur la nouvelle case, l'enlever et ajouter 1 de nourriture (foodAmount)
     currentLulu = __map[oldPosition]
     test = getItem(newPosition.x, newPosition.y)
     if (test != None):
@@ -307,6 +309,7 @@ def reproduceLulu(Lulu):
     newSpeed = Lulu.speed
     newSense = Lulu.sense
     newSize = Lulu.size
+
     if (random.randint(1, 100) < __mutateChance):
         newSpeed = round(Lulu.speed * random.uniform(1 - __speedVariation, 1 + __speedVariation))
     if (random.randint(1, 100) < __mutateChance):
@@ -325,7 +328,8 @@ def reproduceLulu(Lulu):
     rx = 0
     ry = 0
     searchingPos = True
-    # Faire spawn le nouveau Lulu à côté de l'ancien
+
+    # Faire apparaître la nouvelle Lulu à côté de son parent
     if (Lulu.position.x == 0 or Lulu.position.x == __sizeX):
         rx = Lulu.position.x
         while (searchingPos):
@@ -378,19 +382,15 @@ def moveAll():
     """Algorithme qui permet à chaque lulu d'effectuer un mouvement à tour de rôle
 	"""
     lulusToMove = __lulus.copy()
-    while (lulusToMove.__len__() > 0):
 
+    while (lulusToMove.__len__() > 0):
         lulusToMove = __lulus.copy()        
-        # time.sleep(0.2)
-        # renderAnimation()
 
         random.shuffle(lulusToMove)
         for lulu in lulusToMove[:]:
             if (getItem(lulu.position.x, lulu.position.y) == lulu):
                 if not (lulu.move()):
                     lulusToMove.remove(lulu)
-                # time.sleep(0.2)
-                # renderAnimation()
             else:
                 lulusToMove.remove(lulu)
         
@@ -448,7 +448,7 @@ def setFood():
     maxX = __sizeX
     maxY = __sizeY
 
-    # Ajouter de la nourriture partout sauf sur le côté
+    # Ajouter de la nourriture partout sauf sur le périmètre de la map
     for _ in range(__foodCount):
         foodCreated = False
         while (not foodCreated and __numberOfFood < ((__sizeX - 2) * (__sizeY - 2))):
@@ -463,9 +463,11 @@ def resetWorld():
     Réinitialise la position des lulus sur les côtés.
 	"""
     __map.clear()
+
     global __numberOfFood
     __numberOfFood = 0
     setFood()
+    
     for lulu in __lulus[:]:
         lulu.isDone = False
         lulu.energy = __energy
