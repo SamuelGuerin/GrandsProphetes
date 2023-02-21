@@ -190,12 +190,12 @@ class Form(ct.CTk):
 
         # Ajout du background
         current_path = os.path.dirname(os.path.realpath(__file__))
-        # self.bg_image = ct.CTkImage(Image.open(current_path + "/evo.jpeg"),
-        #                                        size=(width, height))
-        # self.bg_image = ct.CTkLabel(self, image=self.bg_image, text="")
-        # self.bg_image.grid(row=0, column=0, columnspan=5)
-        # self.bg_image.rowconfigure(0, weight=1)
-        # self.bg_image.columnconfigure(0, weight=1)
+        self.bg_image = ct.CTkImage(Image.open(current_path + "/evo.jpeg"),
+                                               size=(width, height))
+        self.bg_image = ct.CTkLabel(self, image=self.bg_image, text="")
+        self.bg_image.grid(row=0, column=0, columnspan=5)
+        self.bg_image.rowconfigure(0, weight=1)
+        self.bg_image.columnconfigure(0, weight=1)
 
         # Ajout du frame
         self.frame_1 = ct.CTkFrame(master=self)
