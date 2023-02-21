@@ -15,6 +15,8 @@ from JsonManager import saveData, loadData
 import threading
 import time
 
+global canvasR
+canvasR = None
 
 ct.set_appearance_mode("dark")
 ct.set_default_color_theme("blue")
@@ -201,7 +203,7 @@ class Form(ct.CTk):
 
         #Méthode afficher l'information que l'utilisateur doit entrer
         def show_info(event, txt):
-            lblErrorInForm.configure(text=txt, corner_radius=90, text_color="green", fg_color="#343638")
+            lblErrorInForm.configure(text=txt, corner_radius=90, text_color="white", fg_color="#343638")
 
         def hide_info(event):
             lblErrorInForm.configure(text="", fg_color="#2b2b2b")
@@ -608,11 +610,11 @@ class Form(ct.CTk):
         btnSimulate.grid(row=10, column=0, columnspan=2, padx=20, pady=10, sticky="we")
 
         def importSimulation():
-            btnGraph.grid_remove()
-            btnSave.grid_remove()
-
-            fg.generations = loadData()
-            if fg.generations is not None:
+            importData = loadData()
+            if importData is not None:
+                btnGraph.grid_remove()
+                btnSave.grid_remove()
+                fg.generations = importData
                 add_Graph()
             else:
                 lblErrorInForm.configure(text="Erreur: Fichier non valide", text_color="red")
@@ -726,10 +728,15 @@ class Form(ct.CTk):
                 index.azim = ax.azim
                 fig = graphData[0]
                 ax = graphData[1]
-                canvasN = FigureCanvasTkAgg(fig, self)
-                canvasN.get_tk_widget().grid(row=0, column=0, columnspan=5, sticky="wesn")
                 global canvasR
-                canvasR = canvasN
+
+                if canvasR != None:
+                    canvasR.get_tk_widget().destroy()
+                canvasR = None
+
+                canvasR = FigureCanvasTkAgg(fig, self)
+                canvasR.get_tk_widget().grid(row=0, column=0, columnspan=5, sticky="wesn")
+                # canvasR = canvasN
             
             def refreshButtons():
                 global buttonSpeedSize
