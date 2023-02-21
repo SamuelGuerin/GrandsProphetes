@@ -4,9 +4,10 @@ from manim import *
 from manim.utils.file_ops import open_file as open_media_file
 from Models.Lulu import Lulu
 from Models.Food import Food
+from Models.Saves import Save
 
 generationMoves = []
-generationLulus = []
+generationLulus = Save()
 class VisualizeLulus(Scene):
     def construct(self):
 
