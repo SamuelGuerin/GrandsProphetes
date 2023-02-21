@@ -77,7 +77,6 @@ def newMap(sizeX, sizeY, foodCount, lulusCount):
     :type lulusCount: int
 	"""
     Territory.createMap(sizeX, sizeY, foodCount, lulusCount, 0, 0, 0, 0, 0, 0, 0, 0)
-
     renderAnimation()
 
 def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation, sizeVariation, energy, nbGeneration, mutateChance):
@@ -115,6 +114,7 @@ def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation,
     global generation
     global generationLulus
     generationLulus = []
+
     for generation in range(nbGeneration):
         st = time.time()
         print("generation " + str(generation))
@@ -128,7 +128,6 @@ def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation,
         if (Territory.getLulus().__len__() == 0):
             break
 
-        
         et = time.time()
         elapsed = et - st
         
