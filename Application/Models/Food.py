@@ -1,4 +1,4 @@
-from Models.Position import Position
+from Position import Position
 #Classe Food
 
 class Food():

@@ -26,7 +26,7 @@ from Models.Position import Position
 # from Models import Position
 
 distanceCloseToTarget = 1
-Territory.createMap(100,100,0,0,1,1,0,100,0.3,0.3,0.3,0.3)
+#Territory.createMap(100,100,0,0,1,1,0,100,0.3,0.3,0.3,0.3)
 
 foodInRange = []
 lulusInRange = []

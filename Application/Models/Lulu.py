@@ -1,7 +1,7 @@
-import Models.Territory as Territory
+import Territory as Territory
+from Position import Position
+from Food import Food
 import random
-from Models.Position import Position
-from Models.Food import Food
 
 class Lulu:
     """Classe contenant toutes les informations propre à une :class:`Lulu`

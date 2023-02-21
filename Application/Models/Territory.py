@@ -6,13 +6,13 @@ où les Lulus et la nourriture seront placés aléatoirement
 ================    ================================================================================================================
 Nom du paramètre    Définition
 ================    ================================================================================================================
-__sizeX             Taille de la carte sur l'axe des X
-__sizeY             Taille de la carte sur l'axe des Y
-__lulusCount        Le nombre de Lulus total
-__foodCount         Le nombre de nourriture total
-__lulus             Liste contenant toutes les Lulus
-__map               Dictionnaire contenant les Lulus et la nourriture à chaque position de la carte
-__numberOfFood      Nombre de nourriture qui ont été créée jusqu'à présent
+psizeX             Taille de la carte sur l'axe des X
+psizeY             Taille de la carte sur l'axe des Y
+plulusCount        Le nombre de Lulus total
+pfoodCount         Le nombre de nourriture total
+plulus             Liste contenant toutes les Lulus
+pmap               Dictionnaire contenant les Lulus et la nourriture à chaque position de la carte
+pnumberOfFood      Nombre de nourriture qui ont été créée jusqu'à présent
 EATING_RATIO        Valeur constante pour définir le ratio de grandeur a avoir pour manger une Lulu ou être mangé par une autre Lulu
 STARTING_ENERGY     Valeur constante pour définir l'énergie de départ pour chaque Lulu
 ================    ================================================================================================================
@@ -22,15 +22,15 @@ STARTING_ENERGY     Valeur constante pour définir l'énergie de départ pour ch
 =====================       =================================================================================================================================================
 Méthode                     Action
 =====================       =================================================================================================================================================
-:meth:`createMap`           Crée une carte (map) avec les paramètres donnés (__sizeX, sizeY, __foodCount, __lulusCount)
-:meth:`__CreateLulu`        Crée une Lulu avec les paramètres donnés (rx, ry, speed, sense, size, energyRemaining, FoodCollected, isDone)
-:meth:`__CreateFood`        Ajoute une nourriture sur la carte (map) à la position donnée en paramètres (rx, ry)
+:meth:`createMap`           Crée une carte (map) avec les paramètres donnés (sizeX, sizeY, foodCount, lulusCount)
+:meth:`CreateLulu`        Crée une Lulu avec les paramètres donnés (rx, ry, speed, sense, size, energyRemaining, FoodCollected, isDone)
+:meth:`CreateFood`        Ajoute une nourriture sur la carte (map) à la position donnée en paramètres (rx, ry)
 :meth:`addItem`           Ajoute un item (Lulu ou nourriture) sur la carte à la :class:`Position` donnée en paramètres (item, :class:`Position`)
-:meth:`__deleteItem`        Retire un item (Lulu ou nourriture) sur la carte à la :class:`Position` donnée en paramètres (item, :class:`Position`)
+:meth:`deleteItem`        Retire un item (Lulu ou nourriture) sur la carte à la :class:`Position` donnée en paramètres (item, :class:`Position`)
 :meth:`getItem`             Obtient un item (Lulu ou nourriture) sur la carte à la :class:`Position` donnée en paramètres (item, :class:`Position`)
 :meth:`getMap`              Retourne la carte (map)
-:meth:`getSizeX`            Retourne la taille de l'axe des X de la carte (__sizeX)
-:meth:`getSizeY`            Retourne la taille de l'axe des Y de la carte (__sizeY)
+:meth:`getSizeX`            Retourne la taille de l'axe des X de la carte (sizeX)
+:meth:`getSizeY`            Retourne la taille de l'axe des Y de la carte (sizeY)
 :meth:`getLulus`            Retourne la liste contenant toutes les Lulus
 :meth:`printMap`            Affiche tous les items de la carte avec leur :class:`Position` dans la console (outil de débogage)
 :meth:`tryMove`             Vérifie si la Lulu peut se déplacer d'un point A à un point B en faisant toutes les validations et confirmations nécessaires, retourne un booléen
@@ -42,20 +42,20 @@ Méthode                     Action
 """
 
 import random
-# from Models.Position import Position
-# from Models.Lulu import Lulu
-# from Models.Food import Food
+from Position import Position
+from Lulu import Lulu
+from Food import Food
 import time
 #from manim import *
 
-__sizeX = None
-__sizeY = None
-__lulusCount = None
-__foodCount = None
-__lulus = []
-__map = {}
-__energy = None
-__numberOfFood = 0
+psizeX = None
+psizeY = None
+plulusCount = None
+pfoodCount = None
+plulus = []
+pmap = {}
+penergy = None
+pnumberOfFood = 0
 EATING_RATIO = 1.2
 
 
@@ -71,54 +71,63 @@ def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, m
     :param lulusCount: Nombre de Lulus total
     :type lulusCount: int
     """
-    global __sizeX
-    global __sizeY
-    global __foodCount
-    global __lulusCount
-    global __energy
-    global __mutateChance
-    global __speedVariation
-    global __senseVariation
-    global __sizeVariation
-    __sizeX = sizeX
-    __sizeY = sizeY
-    __foodCount = foodCount
-    __lulusCount = lulusCount
-    __energy = energy
-    __mutateChance = mutateChance
-    __speedVariation = speedVariation /100
-    __senseVariation = senseVariation /100
-    __sizeVariation = sizeVariation /100
+    global psizeX
+    global psizeY
+    global pfoodCount
+    global plulusCount
+    global penergy
+    global pmutateChance
+    global pspeedVariation
+    global psenseVariation
+    global psizeVariation
+    psizeX = sizeX
+    psizeY = sizeY
+    pfoodCount = foodCount
+    plulusCount = lulusCount
+    penergy = energy
+    pmutateChance = mutateChance
+    pspeedVariation = speedVariation /100
+    psenseVariation = senseVariation /100
+    psizeVariation = sizeVariation /100
+
+    clearMap()
 
     # Créer x lulus dans la map (La map va de 0 à maxX ou maxY)
     # Les mettre sur le côté
-    for _ in range(__lulusCount):
-        maxX = __sizeX
-        maxY = __sizeY
+    for _ in range(lulusCount):
+        maxX = sizeX
+        maxY = sizeY
         luluCreated = False
 
         # Choisir un side à 0 ou maxSide, puis un random de l'autre coordonnée (x ou y)
-        while (not luluCreated and len(__lulus) < (2 * maxX + 2 * maxY) - 4):
+        while (not luluCreated and len(plulus) < (2 * maxX + 2 * maxY) - 4):
             if (bool(random.getrandbits(1))):
                 rx = random.choice([1, maxX])
                 ry = random.randint(1, maxY)
-                luluCreated = __CreateLulu(
+                luluCreated = CreateLulu(
                     rx, ry, speed, sense, size, energy, 0, False)
             else:
                 ry = random.choice([1, maxY])
                 rx = random.randint(1, maxX)
-                luluCreated = __CreateLulu(
+                luluCreated = CreateLulu(
                     rx, ry, speed, sense, size, energy, 0, False)
 
     setFood()
 
-    for lulu in __lulus:
+    for lulu in plulus:
         lulu.isNewBorn = False
 
-# private
+def clearMap():
+    """Supprime les données des listes de Lulus et map
+	"""
+    global plulus
+    global pmap
+    global pnumberOfFood
+    plulus = []
+    pmap = {}
+    pnumberOfFood = 0
 
-
-def __CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isDone) -> bool:
+def CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isDone) -> bool:
     """Crée une Lulu et la place sur les bords de la carte selon une position donnée et l'instancie avec des paramètres de base
 
     :param rx: Emplacement sur l'axe des X
@@ -141,22 +150,22 @@ def __CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isD
     :rtype: bool
     """
 
-    from Models.Position import Position
-    from Models.Lulu import Lulu
+    # from Models.Position import Position
+    # from Models.Lulu import Lulu
     
     # Créer une lulu si la case est vide
     if (getItem(rx, ry) == None):
         rPos = Position(rx, ry)
-        __map[rPos] = Lulu(rPos, speed, sense, size,
+        pmap[rPos] = Lulu(rPos, speed, sense, size,
                            energyRemaining, FoodCollected, isDone)
         # Ajouter la lulu dans la liste de lulus
-        __lulus.append(__map[rPos])
+        plulus.append(pmap[rPos])
         return True
     return False
 
 
 # private
-def __CreateFood(rx, ry) -> bool:
+def CreateFood(rx, ry) -> bool:
     """Ajoute une nourriture sur la carte (map) à la position donnée en paramètres (rx, ry)
 
     :param rx: Emplacement sur l'axe des X où la nourriture (:class:`Food`) sera ajoutée
@@ -167,15 +176,15 @@ def __CreateFood(rx, ry) -> bool:
     :rtype: bool
     """
 
-    from Models.Position import Position
-    from Models.Food import Food
+    # from Models.Position import Position
+    # from Models.Food import Food
 
     # Créer une food si la case est vide
-    global __numberOfFood
+    global pnumberOfFood
     if (getItem(rx, ry) == None):
         rPos = Position(rx, ry)
-        __map[rPos] = Food(rPos)
-        __numberOfFood += 1
+        pmap[rPos] = Food(rPos)
+        pnumberOfFood += 1
         return True
     return False
 
@@ -183,7 +192,7 @@ def __CreateFood(rx, ry) -> bool:
 
 
 def getItem(x, y):
-    """Obtiens un item (:class:`Lulu` ou  nourriture (:class:`Food`)) dans le dictionnaire __map (carte) selon sa :class:`Position` et retourne l'item trouvé
+    """Obtiens un item (:class:`Lulu` ou  nourriture (:class:`Food`)) dans le dictionnaire map (carte) selon sa :class:`Position` et retourne l'item trouvé
 
     :param x: Emplacement sur l'axe des X
     :type x: int
@@ -193,62 +202,62 @@ def getItem(x, y):
     :rtype: :class:`Position`
     """
 
-    from Models.Position import Position
+    # from Models.Position import Position
 
-    item = __map.get(Position(x, y))
+    item = pmap.get(Position(x, y))
     return item
 
 
 def getMap():
     """Retourne la map (carte) y permettant l'accès depuis d'autres classes du projet
 
-    :return: Retourne l'objet __map
+    :return: Retourne l'objet map
     :rtype: dictionnary
     """
-    return __map
+    return pmap
 
 
 def getSizeX():
     """Retourne la taille de l'axe des X de la carte (map)
 
-    :return: Retourne __sizeX
+    :return: Retourne sizeX
     :rtype: int
     """
-    return __sizeX
+    return psizeX
 
 
 def getSizeY():
     """Retourne la taille de l'axe des Y de la carte (map)
 
-    :return: Retourne __sizeY
+    :return: Retourne sizeY
     :rtype: int
     """
-    return __sizeY
+    return psizeY
 
 
 def addItem(position, item):
-    """Ajoute un item (valeur) (:class:`Lulu` ou  nourriture (:class:`Food`)) dans le dictionnaire __map à une :class:`Position` donnée (clé)
+    """Ajoute un item (valeur) (:class:`Lulu` ou  nourriture (:class:`Food`)) dans le dictionnaire map à une :class:`Position` donnée (clé)
 
-    :param position: :class:`Position` à laquelle l'item (:class:`Lulu` ou  nourriture (:class:`Food`)) sera placé dans l'objet __map (carte)
+    :param position: :class:`Position` à laquelle l'item (:class:`Lulu` ou  nourriture (:class:`Food`)) sera placé dans l'objet map (carte)
     :type position: :class:`Position`
-    :param item: L'item (:class:`Lulu` ou  nourriture (:class:`Food`)) qui sera placé dans le dictionnaire __map
+    :param item: L'item (:class:`Lulu` ou  nourriture (:class:`Food`)) qui sera placé dans le dictionnaire map
     :type item: (:class:`Lulu` ou  nourriture (:class:`Food`))
     """
 
-    from Models.Lulu import Lulu
+    # from Models.Lulu import Lulu
 
-    __map[position] = item
+    pmap[position] = item
     if (type(item) == Lulu):
         item.position = position
 
 
-def __deleteItem(position):
-    """Retire un item (valeur) (:class:`Lulu` ou  nourriture (:class:`Food`)) dans le dictionnaire __map à une :class:`Position` donnée (clé)
+def deleteItem(position):
+    """Retire un item (valeur) (:class:`Lulu` ou  nourriture (:class:`Food`)) dans le dictionnaire map à une :class:`Position` donnée (clé)
 
-    :param position: :class:`Position` à laquelle l'item (:class:`Lulu` ou  nourriture (:class:`Food`)) sera retiré de l'objet __map (carte)
+    :param position: :class:`Position` à laquelle l'item (:class:`Lulu` ou  nourriture (:class:`Food`)) sera retiré de l'objet map (carte)
     :type position: :class:`Position`
     """
-    del __map[position]
+    del pmap[position]
 
 # Vérifie s'il est possible de faire le mouvement demandé
 # return true si le move est fait, sinon false
@@ -265,7 +274,7 @@ def tryMove(oldPosition, newPosition) -> bool:
     :rtype: bool
     """
 
-    from Models.Food import Food
+    # from Models.Food import Food
 
     # Vérifier si le mouvement est dans la map
     if ((newPosition.x >= 1 and newPosition.x <= getSizeX()) and (newPosition.y >= 1 and newPosition.y <= getSizeY())):
@@ -277,7 +286,7 @@ def tryMove(oldPosition, newPosition) -> bool:
         elif (type(itemInNewPosition) == Food):
             moveLulu(oldPosition, newPosition)
             return True
-        elif (itemInNewPosition.size < __map[oldPosition].size / EATING_RATIO):
+        elif (itemInNewPosition.size < pmap[oldPosition].size / EATING_RATIO):
             moveLulu(oldPosition, newPosition)
             return True
     return False
@@ -294,31 +303,31 @@ def moveLulu(oldPosition, newPosition):
     :type newPosition: :class:`Position`
     """
 
-    from Models.Lulu import Lulu
+    # from Models.Lulu import Lulu
 
     # S'il y avait qqch sur la nouvelle case, l'enlever et ajouter 1 de nourriture
-    currentLulu = __map[oldPosition]
+    currentLulu = pmap[oldPosition]
     if (getItem(newPosition.x, newPosition.y) != None):
         currentLulu.foodAmount += 1
         # ToDo : Valider que la liste lulus ne la contient plus
         if (type(getItem(newPosition.x, newPosition.y)) == Lulu):
-            __lulus.remove(__map[newPosition])
-        __deleteItem(newPosition)
+            plulus.remove(pmap[newPosition])
+        deleteItem(newPosition)
     addItem(newPosition, currentLulu)
-    __deleteItem(oldPosition)
+    deleteItem(oldPosition)
 
 
 def reproduceLulu(Lulu):
 
-    from Models.Lulu import Lulu
+    # from Models.Lulu import Lulu
 
     newSpeed = Lulu.speed
     newSense = Lulu.sense
     newSize = Lulu.size
-    if (random.randint(1, 100) < __mutateChance):
-        newSpeed = round(Lulu.speed * random.uniform(1 - __speedVariation, 1 + __speedVariation))
-        newSense = round(Lulu.sense * random.uniform(1 - __senseVariation, 1 + __senseVariation))
-        newSize = round(Lulu.size * random.uniform(1 - __sizeVariation, 1 + __sizeVariation))
+    if (random.randint(1, 100) < pmutateChance):
+        newSpeed = round(Lulu.speed * random.uniform(1 - pspeedVariation, 1 + pspeedVariation))
+        newSense = round(Lulu.sense * random.uniform(1 - psenseVariation, 1 + psenseVariation))
+        newSize = round(Lulu.size * random.uniform(1 - psizeVariation, 1 + psizeVariation))
         
     if (newSpeed < 1):
         newSpeed = 1
@@ -332,16 +341,16 @@ def reproduceLulu(Lulu):
     ry = 0
     searchingPos = True
     # Faire spawn le nouveau Lulu à côté de l'ancien
-    if (Lulu.position.x == 0 or Lulu.position.x == __sizeX):
+    if (Lulu.position.x == 0 or Lulu.position.x == psizeX):
         rx = Lulu.position.x
         while (searchingPos):
-            if (Lulu.position.y + i < __sizeY and getItem(Lulu.position.x, Lulu.position.y + i) == None):
+            if (Lulu.position.y + i < psizeY and getItem(Lulu.position.x, Lulu.position.y + i) == None):
                 ry = Lulu.position.y + i
                 searchingPos = False
             elif (Lulu.position.y - i > 0 and getItem(Lulu.position.x, Lulu.position.y - i) == None):
                 ry = Lulu.position.y - i
                 searchingPos = False
-            elif (Lulu.position.y + i > __sizeY or Lulu.position.y - i < 0):
+            elif (Lulu.position.y + i > psizeY or Lulu.position.y - i < 0):
                 ry = Lulu.position.y
                 searchingPos = False
             else:
@@ -350,28 +359,28 @@ def reproduceLulu(Lulu):
     else:
         ry = Lulu.position.y
         while (searchingPos):
-            if (Lulu.position.x + i < __sizeX and getItem(Lulu.position.x + i, Lulu.position.y) == None):
+            if (Lulu.position.x + i < psizeX and getItem(Lulu.position.x + i, Lulu.position.y) == None):
                 rx = Lulu.position.x + i
                 searchingPos = False
             elif (Lulu.position.x - i > 0 and getItem(Lulu.position.x - i, Lulu.position.y) == None):
                 rx = Lulu.position.x - i
                 searchingPos = False
-            elif (Lulu.position.x + i > __sizeX or Lulu.position.x - i < 0):
+            elif (Lulu.position.x + i > psizeX or Lulu.position.x - i < 0):
                 rx = Lulu.position.x
                 searchingPos = False
             else:
                 i += 1
 
-    __CreateLulu(rx, ry, newSpeed, newSense, newSize, __energy,
+    CreateLulu(rx, ry, newSpeed, newSense, newSize, penergy,
                  0, False)
 
 
 def getLuluMap():
 
-    from Models.Lulu import Lulu
+    # from Models.Lulu import Lulu
 
     count = 0
-    for item in __map.values():
+    for item in pmap.values():
         if (type(item) == Lulu):
             count += 1
 
@@ -380,12 +389,12 @@ def getLuluMap():
 
 def moveAll():
 
-    from Models.Lulu import Lulu
+    # from Models.Lulu import Lulu
 
-    lulusToMove = __lulus.copy()
+    lulusToMove = plulus.copy()
     while (lulusToMove.__len__() > 0):
 
-        lulusToMove = __lulus.copy()        
+        lulusToMove = plulus.copy()        
         # time.sleep(0.2)
         # renderAnimation()
 
@@ -402,10 +411,10 @@ def moveAll():
 
 
 def dayResultLulu():
-    for lulu in __lulus[:]:
+    for lulu in plulus[:]:
         if (lulu.foodAmount == 0 and not lulu.isNewBorn):
-            __deleteItem(lulu.position)
-            __lulus.remove(lulu)
+            deleteItem(lulu.position)
+            plulus.remove(lulu)
         elif (lulu.foodAmount > 1):
             reproduceLulu(lulu)
 
@@ -416,7 +425,7 @@ def dayResultLulu():
 def printMap():
     """Affiche tous les items de la carte avec leur :class:`Position` dans la console (outil de débogage) 
     """
-    print(__map)
+    print(pmap)
 
 
 def getLulus():
@@ -425,31 +434,32 @@ def getLulus():
     :return: Liste de toutes les Lulus
     :rtype: Liste
     """
-    return __lulus
+    return plulus
 
 
 def setFood():
-    maxX = __sizeX
-    maxY = __sizeY
+    maxX = psizeX
+    maxY = psizeY
+    pnumberOfFood = 0 # ?
 
     # Ajouter de la nourriture partout sauf sur le côté
-    for _ in range(__foodCount):
+    for _ in range(pfoodCount):
         foodCreated = False
-        while (not foodCreated and __numberOfFood < ((__sizeX - 2) * (__sizeY - 2))):
+        while (not foodCreated and pnumberOfFood < ((psizeX - 2) * (psizeY - 2))):
             rx = random.randint(2, maxX - 1)
             ry = random.randint(2, maxY - 1)
-            foodCreated = __CreateFood(rx, ry)
+            foodCreated = CreateFood(rx, ry)
 
 
 def resetWorld():
-    __map.clear()
+    pmap.clear()
     setFood()
-    for lulu in __lulus[:]:
+    for lulu in plulus[:]:
         lulu.isDone = False
-        lulu.energy = __energy
+        lulu.energy = penergy
         addItem(lulu.position, lulu)
         
-    for lulu in __lulus[:]:
+    for lulu in plulus[:]:
         lulu.resetPosition()
 
 
