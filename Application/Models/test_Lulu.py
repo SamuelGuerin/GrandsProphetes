@@ -10,22 +10,24 @@ import pathlib
 #sys.path.append('../Application/')
 #sys.path.insert(0, str(workingDir) + '\Application\\')
 
-# from Models.Lulu import Lulu
-# from Models.Position import Position
-# from Models.Food import Food
-# import Models.Territory as Territory
-
-from Models import Territory as Territory
-from Models.Lulu import Lulu
-from Models.Food import Food
-from Models.Position import Position
-
-# from Models import Territory
-# from Models import Lulu
-# from Models import Food
-# from Models import Position
+import Territory
+from Lulu import Lulu 
+from Position import Position
+from Food import Food
 
 distanceCloseToTarget = 1
+
+X = 100
+Y = 100
+numberOfFood = 0
+numberOfLulus = 0
+speed = 1
+sense = 1
+energy = 0
+size = 100
+mutateChance = 0.3
+
+Territory.createMap(X,Y,numberOfFood,numberOfLulus,speed,sense,energy,size,mutateChance,mutateChance,mutateChance,mutateChance) # 25x25, 10 Food, 10 Lulus, etc...
 #Territory.createMap(100,100,0,0,1,1,0,100,0.3,0.3,0.3,0.3)
 
 foodInRange = []
@@ -34,47 +36,47 @@ lulusInRange = []
 class TestMove(unittest.TestCase):
     def test_move_priority_enemy(self):
         lulu1 = Lulu(Position(2,2), 1, 1, 100, 3, 0, False) # Juste à côté de lulu2 (qui est un ennemi)
-        lulu2 = Lulu(Position(1,1), 1, 2, 120, 6, 0, False) # Juste à côté de lulu1 (qui est une proie)
+        lulu2 = Lulu(Position(1,1), 1, 2, 120, 4, 0, False) # Juste à côté de lulu1 (qui est une proie)
         #food1 = Food(Position(1,2))
-        Territory.__addItem(lulu1)
-        Territory.__addItem(lulu2)
+        Territory.addItem(lulu1.position, lulu1)
+        Territory.addItem(lulu2.position, lulu2)
         #Territory.__map[food1.position] = food1
-        Territory.__lulus.append(lulu1)
-        Territory.__lulus.append(lulu2)
+        Territory.plulus.append(lulu1)
+        Territory.plulus.append(lulu2)
         lulu1.move()
         self.assertEqual(lulu1.position, Position(3,3))
 
     def test_move_priority_food(self):
         lulu1 = Lulu(Position(2,6), 1, 1, 100, 3, 0, False) # Juste à côté de lulu2 (ennemi)
-        lulu2 = Lulu(Position(1,5), 1, 2, 120, 6, 0, False) # Juste à côté de lulu1 (proie)
+        lulu2 = Lulu(Position(1,5), 1, 2, 120, 4, 0, False) # Juste à côté de lulu1 (proie)
         food1 = Food(Position(1,6))
-        Territory.__addItem(lulu1)
-        Territory.__addItem(lulu2)
-        Territory.__addItem(food1)
-        Territory.__lulus.append(lulu1)
-        Territory.__lulus.append(lulu2)
+        Territory.addItem(lulu1.position, lulu1)
+        Territory.addItem(lulu2.position, lulu2)
+        Territory.addItem(food1.position, food1)
+        Territory.plulus.append(lulu1)
+        Territory.plulus.append(lulu2)
 
         lulu2.move()
         self.assertEqual(lulu1.position, Position(1,2))
 
     def test_move_priority_prey(self):
-        lulu1 = Lulu(Position(2,11), 1, 1, 100, 3, 0, False) # Juste à côté de lulu2 (qui est un ennemi)
-        lulu2 = Lulu(Position(1,10), 1, 2, 120, 6, 0, False) # Juste à côté de lulu1 (qui est une proie)
-        Territory.__addItem(lulu1)
-        Territory.__addItem(lulu2)
-        Territory.__lulus.append(lulu1)
-        Territory.__lulus.append(lulu2)
+        lulu1 = Lulu(Position(1,11), 1, 1, 100, 3, 0, False) # Juste à côté de lulu2 (qui est un ennemi)
+        lulu2 = Lulu(Position(1,10), 1, 2, 120, 4, 0, False) # Juste à côté de lulu1 (qui est une proie)
+        Territory.addItem(lulu1.position, lulu1)
+        Territory.addItem(lulu2.position, lulu2)
+        Territory.plulus.append(lulu1)
+        Territory.plulus.append(lulu2)
         
         lulu2.move()
-        self.assertEqual(lulu2.position, Position(2,2))
+        self.assertEqual(lulu2.position, Position(1,11))
 
     def test_move_energy_cost(self):
         lulu1 = Lulu(Position(1,20), 1, 1, 100, 3, 0, False)
         food1 = Food(Position(2,20))
-        Territory.__addItem(lulu1)
-        Territory.__addItem(food1)
-        Territory.__lulus.append(lulu1)
-        energyCost = ((lulu1.size/100) ** 3) * (lulu1.speed ** 2) + lulu1.sense;
+        Territory.addItem(lulu1.position, lulu1)
+        Territory.addItem(food1.position, food1)
+        Territory.plulus.append(lulu1)
+        energyCost = ((lulu1.size/100) ** 3) * (lulu1.speed ** 2) + lulu1.sense
 
         self.assertTrue(lulu1.move()) # À vérifier le comportement de move, s'il faut seulement faire un assertFalse
         self.assertLess(lulu1.energy, energyCost)
@@ -84,9 +86,9 @@ class TestMove(unittest.TestCase):
     # Même test que celui du energyCost sauf qu'on vérifie si la lulu.isDone = False avant de bouger et si lulu.isDone = True après avoir bougé
         lulu1 = Lulu(Position(1,30), 1, 1, 100, 3, 0, False)
         food1 = Food(Position(2,30))
-        Territory.__addItem(lulu1)
-        Territory.__addItem(food1)
-        Territory.__lulus.append(lulu1)
+        Territory.addItem(lulu1.position, lulu1)
+        Territory.addItem(food1.position, food1)
+        Territory.plulus.append(lulu1)
         energyCost = ((lulu1.size/100) ** 3) * (lulu1.speed ** 2) + lulu1.sense;
 
         self.assertFalse(lulu1.isDone)
@@ -104,14 +106,14 @@ class TestMove(unittest.TestCase):
 class TestPriorityMovement(unittest.TestCase):
     def test_get_closest_enemy(self):
         luluPrey1 = Lulu(Position(12,30), 1, 1, 100, 3, 0, False) # La proie
-        luluEnemy1 = Lulu(Position(10,30), 1, 2, 120, 6, 0, False) # ennemi 1 (plus près)
-        luluEnemy2 = Lulu(Position(18,30), 1, 2, 120, 6, 0, False) # ennemi 2 (plus loin)
-        Territory.__addItem(luluPrey1)
-        Territory.__addItem(luluEnemy1)
-        Territory.__addItem(luluEnemy2)
-        Territory.__lulus.append(luluPrey1)
-        Territory.__lulus.append(luluEnemy1)
-        Territory.__lulus.append(luluEnemy2)
+        luluEnemy1 = Lulu(Position(10,30), 1, 2, 120, 4, 0, False) # ennemi 1 (plus près)
+        luluEnemy2 = Lulu(Position(18,30), 1, 2, 120, 4, 0, False) # ennemi 2 (plus loin)
+        Territory.addItem(luluPrey1.position, luluPrey1)
+        Territory.addItem(luluEnemy1.position, luluEnemy1)
+        Territory.addItem(luluEnemy2.position, luluEnemy2)
+        Territory.plulus.append(luluPrey1)
+        Territory.plulus.append(luluEnemy1)
+        Territory.plulus.append(luluEnemy2)
 
         luluPrey1.move()
         self.assertEqual(luluPrey1.position, Position(13,30)) # 1 case plus loin sur l'axe des X pour s'enfuir de l'ennemi 1
@@ -121,25 +123,25 @@ class TestPriorityMovement(unittest.TestCase):
         food1 = Food(Position(31,30))
         food2 = Food(Position(30,35))
 
-        Territory.__addItem(lulu1)
-        Territory.__addItem(food1)
-        Territory.__addItem(food2)
-        Territory.__lulus.append(lulu1)
+        Territory.addItem(lulu1.position, lulu1)
+        Territory.addItem(food1.position, food1)
+        Territory.addItem(food2.position, food2)
+        Territory.plulus.append(lulu1)
 
         lulu1.move()
         self.assertEqual(lulu1.position, Position(31,30))
         self.assertEqual(lulu1.foodAmount == 1)
 
     def test_get_closest_prey(self):
-        luluEnemy1 = Lulu(Position(12,50), 1, 2, 120, 6, 0, False) # L'ennemi
+        luluEnemy1 = Lulu(Position(12,50), 1, 2, 120, 4, 0, False) # L'ennemi
         luluPrey1 = Lulu(Position(10,50), 1, 1, 100, 3, 0, False) # proie 1 (plus près)
         luluPrey2 = Lulu(Position(18,50), 1, 1, 100, 3, 0, False) # proie 2 (plus loin)
-        Territory.__addItem(luluEnemy1)
-        Territory.__addItem(luluPrey1)
-        Territory.__addItem(luluPrey2)
-        Territory.__lulus.append(luluEnemy1)
-        Territory.__lulus.append(luluPrey1)
-        Territory.__lulus.append(luluPrey2)
+        Territory.addItem(luluEnemy1.position, luluEnemy1)
+        Territory.addItem(luluPrey1.position, luluPrey1)
+        Territory.addItem(luluPrey2.position, luluPrey2)
+        Territory.plulus.append(luluEnemy1)
+        Territory.plulus.append(luluPrey1)
+        Territory.plulus.append(luluPrey2)
 
         luluEnemy1.move()
         self.assertEqual(luluEnemy1.position, Position(11,50)) # 1 case plus loin sur l'axe des X pour s'approcher de la proie 1
@@ -170,7 +172,7 @@ class TestTargetPosition(unittest.TestCase):
 
 class TestItems(unittest.TestCase): # Tester avec un territoire 3x3, 1 food et X lulus
     def test_getItems(self): # foodInRange, lulusInRange - en paramètres
-        lulu1 = Lulu(Position(80,50), 1, 1, 100, 3, 0, False)
+        lulu1 = Lulu(Position(80,50), 1, 3, 100, 3, 0, False)
         lulu2 = Lulu(Position(79,50), 1, 1, 100, 3, 0, False)
         lulu3 = Lulu(Position(81,50), 1, 1, 100, 3, 0, False)
         food1 = Food(Position(80,51))
