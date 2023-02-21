@@ -16,7 +16,7 @@ package Entité {
         + int VarSense
         + int MutationChance
         + int NbGens
-        List<generationsLulus> generations
+        + List<generationsLulus> generations
     }
 
     class "generationLulus" as genlulu {
