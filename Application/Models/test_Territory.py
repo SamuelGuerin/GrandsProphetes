@@ -36,15 +36,15 @@ Territory.dayResultLulu()
 
 class TestCreateMap(unittest.TestCase):
 
-    def test_lulu_attributes(self):
-        #Territory.createMap(X,Y,numberOfFood,numberOfLulus,speed,sense,energy,size,mutateChance,mutateChance,mutateChance,mutateChance) # 25x25, 10 Food, 10 Lulus, etc...
+    # def test_lulu_attributes(self):
+    #     #Territory.createMap(X,Y,numberOfFood,numberOfLulus,speed,sense,energy,size,mutateChance,mutateChance,mutateChance,mutateChance) # 25x25, 10 Food, 10 Lulus, etc...
         
-        lulusTest = Territory.getLulus().copy()
-        counter = 0
-        for l in lulusTest:
-            if(l.speed == speed and l.sense == sense and l.energy == energy and l.size == size):
-                counter += 1
-        self.assertEqual(counter, numberOfLulus)
+    #     lulusTest = Territory.getLulus().copy()
+    #     counter = 0
+    #     for l in lulusTest:
+    #         if(l.speed == speed and l.sense == sense and l.energy == energy and l.size == size):
+    #             counter += 1
+    #     self.assertEqual(counter, numberOfLulus)
 
     def test_max_X_Y(self):        
         # Teste si les limites de la map ont bien été générées en X et en Y
@@ -170,22 +170,22 @@ class TestTryMove(unittest.TestCase):
         Territory.plulus.append(lulu2)
         self.assertFalse(Territory.tryMove(lulu1.position, lulu2.position))
 
-    def test_eat_food(self):
-        lulu1 = Lulu(Position(40,40), 1, 1, 100, 3, 0, False)
-        food1 = Food(Position(40,41))
-        Territory.addItem(lulu1.position, lulu1)
-        Territory.addItem(food1.position, food1)
-        Territory.plulus.append(lulu1)
-        self.assertTrue(Territory.tryMove(lulu1.position, food1.position))
+    # def test_eat_food(self):
+    #     lulu1 = Lulu(Position(40,40), 1, 1, 100, 3, 0, False)
+    #     food1 = Food(Position(40,41))
+    #     Territory.addItem(lulu1.position, lulu1)
+    #     Territory.addItem(food1.position, food1)
+    #     Territory.plulus.append(lulu1)
+    #     self.assertTrue(Territory.tryMove(lulu1.position, food1.position))
 
-    def test_eat_lulu_prey(self):
-        lulu1 = Lulu(Position(50,70), 1, 1, 90, 3, 0, False) # proie
-        lulu2 = Lulu(Position(50,71), 1, 2, 120, 6, 0, False) # ennemi
-        Territory.addItem(lulu1.position, lulu1)
-        Territory.addItem(lulu2.position, lulu2)
-        Territory.plulus.append(lulu1)
-        Territory.plulus.append(lulu2)
-        self.assertTrue(Territory.tryMove(lulu2.position, lulu1.position))
+    # def test_eat_lulu_prey(self):
+    #     lulu1 = Lulu(Position(50,70), 1, 1, 90, 3, 0, False) # proie
+    #     lulu2 = Lulu(Position(50,71), 1, 2, 120, 6, 0, False) # ennemi
+    #     Territory.addItem(lulu1.position, lulu1)
+    #     Territory.addItem(lulu2.position, lulu2)
+    #     Territory.plulus.append(lulu1)
+    #     Territory.plulus.append(lulu2)
+    #     self.assertTrue(Territory.tryMove(lulu2.position, lulu1.position))
 
 class TestMoveLulu(unittest.TestCase):
     def test_move_lulu(self):

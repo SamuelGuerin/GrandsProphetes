@@ -1,6 +1,7 @@
 import Territory as Territory
 from Position import Position
 from Food import Food
+from Move import Move
 import random
 
 class Lulu:

@@ -48,21 +48,21 @@ from Food import Food
 import time
 #from manim import *
 
-import pathlib
-import sys
-workingDirectory = pathlib.Path().resolve()
-sys.path.append(str(workingDirectory) + '\Application')
-import SimulationManager as Simulation
+# import pathlib
+# import sys
+# workingDirectory = pathlib.Path().resolve()
+# sys.path.append(str(workingDirectory) + '\Application')
+# import SimulationManager as Simulation
 
-__sizeX = None
-__sizeY = None
-__lulusCount = None
-__foodCount = None
-__energy = None
-__lulus = []
-__map = {}
+psizeX = None
+psizeY = None
+plulusCount = None
+pfoodCount = None
+penergy = None
+plulus = []
+pmap = {}
 __moves = []
-__numberOfFood = 0
+pnumberOfFood = 0
 EATING_RATIO = 1.5
 
 def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, mutateChance, speedVariation, senseVariation, sizeVariation):
@@ -77,22 +77,22 @@ def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, m
     :param lulusCount: Nombre de Lulus total
     :type lulusCount: int
     """
-    global __sizeX
-    global __sizeY
-    global __foodCount
-    global __lulusCount
-    global __energy
-    global __mutateChance
+    global psizeX
+    global psizeY
+    global pfoodCount
+    global plulusCount
+    global penergy
+    global pmutateChance
     global __speedVariation
     global __senseVariation
     global __sizeVariation
 
-    __sizeX = sizeX
-    __sizeY = sizeY
-    __foodCount = foodCount
-    __lulusCount = lulusCount
-    __energy = energy
-    __mutateChance = mutateChance
+    psizeX = sizeX
+    psizeY = sizeY
+    pfoodCount = foodCount
+    plulusCount = lulusCount
+    penergy = energy
+    pmutateChance = mutateChance
     __speedVariation = speedVariation / 100
     __senseVariation = senseVariation / 100
     __sizeVariation = sizeVariation / 100
@@ -107,7 +107,7 @@ def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, m
         luluCreated = False
 
         # Choisir des coordonnées aléatoire pour faire apparaître les Lulus tout le tour du périmètre
-        while (not luluCreated and len(__lulus) < (2 * maxX + 2 * maxY) - 4):
+        while (not luluCreated and len(plulus) < (2 * maxX + 2 * maxY) - 4):
             if (bool(random.getrandbits(1))):
                 rx = random.choice([1, maxX])
                 ry = random.randint(1, maxY)
@@ -128,12 +128,12 @@ def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, m
 def clearMap():
     """Supprime les données des listes de Lulus et map
 	"""
-    global __lulus
-    global __map
-    global __numberOfFood
-    __lulus = []
-    __map = {}
-    __numberOfFood = 0
+    global plulus
+    global pmap
+    global pnumberOfFood
+    plulus = []
+    pmap = {}
+    pnumberOfFood = 0
 
 def CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isDone) -> bool:
     """Crée une Lulu et la place sur les bords de la carte selon une position donnée et l'instancie avec des paramètres de base
@@ -264,7 +264,7 @@ def deleteItem(position):
     :type position: :class:`Position`
     """
 
-    del __map[position]
+    del pmap[position]
 
 
 def tryMove(oldPosition, newPosition) -> bool:
@@ -302,7 +302,7 @@ def moveLulu(oldPosition, newPosition):
     :type newPosition: :class:`Position`
     """
     # S'il y avait quelque chose sur la nouvelle case, l'enlever et ajouter 1 de nourriture (foodAmount)
-    currentLulu = __map[oldPosition]
+    currentLulu = pmap[oldPosition]
     test = getItem(newPosition.x, newPosition.y)
     if (test != None):
         currentLulu.foodAmount += 1
@@ -310,12 +310,12 @@ def moveLulu(oldPosition, newPosition):
         if (type(test) == Lulu):
             if test in currentLulu.lulusInRange:
                 currentLulu.lulusInRange.remove(test)
-            __lulus.remove(__map[newPosition])
+            plulus.remove(pmap[newPosition])
         else :
             currentLulu.foodInRange.remove(test)
-        __deleteItem(newPosition)
-    __addItem(newPosition, currentLulu)
-    __deleteItem(oldPosition)
+        deleteItem(newPosition)
+    addItem(newPosition, currentLulu)
+    deleteItem(oldPosition)
 
 
 def reproduceLulu(Lulu):
@@ -330,11 +330,11 @@ def reproduceLulu(Lulu):
     newSense = Lulu.sense
     newSize = Lulu.size
 
-    if (random.randint(1, 100) < __mutateChance):
+    if (random.randint(1, 100) < pmutateChance):
         newSpeed = round(Lulu.speed * random.uniform(1 - __speedVariation, 1 + __speedVariation))
-    if (random.randint(1, 100) < __mutateChance):
+    if (random.randint(1, 100) < pmutateChance):
         newSense = round(Lulu.sense * random.uniform(1 - __senseVariation, 1 + __senseVariation))
-    if (random.randint(1, 100) < __mutateChance):
+    if (random.randint(1, 100) < pmutateChance):
         newSize = round(Lulu.size * random.uniform(1 - __sizeVariation, 1 + __sizeVariation))
         
     if (newSpeed < 1):
@@ -350,7 +350,7 @@ def reproduceLulu(Lulu):
     searchingPos = True
 
     # Faire apparaître la nouvelle Lulu à côté de son parent
-    if (Lulu.position.x == 0 or Lulu.position.x == __sizeX):
+    if (Lulu.position.x == 0 or Lulu.position.x == psizeX):
         rx = Lulu.position.x
         while (searchingPos):
             if (Lulu.position.y + i < psizeY and getItem(Lulu.position.x, Lulu.position.y + i) == None):
@@ -401,18 +401,18 @@ def getLuluMap():
 def moveAll():
     """Algorithme qui permet à chaque lulu d'effectuer un mouvement à tour de rôle
 	"""
-    lulusToMove = __lulus.copy()
+    lulusToMove = plulus.copy()
 
     while (lulusToMove.__len__() > 0):
-        lulusToMove = __lulus.copy()   
+        lulusToMove = plulus.copy()   
 
-        if(Simulation.check):
-            break     
+        # if(Simulation.check):
+        #     break     
 
         random.shuffle(lulusToMove)
         for lulu in lulusToMove[:]:
-            if(Simulation.check):
-                break
+            # if(Simulation.check):
+            #     break
             if (getItem(lulu.position.x, lulu.position.y) == lulu):
                 if not (lulu.move()):
                     lulusToMove.remove(lulu)
@@ -423,7 +423,7 @@ def moveAll():
 def dayResultLulu():
     """Vérifie la quantité de nourriture que possède chaque lulu et décide si elle se reproduit, survit, ou meurt
 	"""
-    for lulu in __lulus[:]:
+    for lulu in plulus[:]:
         if (lulu.foodAmount == 0 and not lulu.isNewBorn):
             deleteItem(lulu.position)
             plulus.remove(lulu)
@@ -470,11 +470,11 @@ def getLulus():
 def setFood():
     """Permet de mettre la nourriture de façon aléatoire dans la map
 	"""
-    maxX = __sizeX
-    maxY = __sizeY
+    maxX = psizeX
+    maxY = psizeY
 
     # Ajouter de la nourriture partout sauf sur le périmètre de la map
-    for _ in range(__foodCount):
+    for _ in range(pfoodCount):
         foodCreated = False
         while (not foodCreated and pnumberOfFood < ((psizeX - 2) * (psizeY - 2))):
             rx = random.randint(2, maxX - 1)
@@ -487,16 +487,16 @@ def resetWorld():
     Réinitialise l'énergie et la nourriture des lulus.
     Réinitialise la position des lulus sur les côtés.
 	"""
-    __map.clear()
+    pmap.clear()
 
-    global __numberOfFood
-    __numberOfFood = 0
+    global pnumberOfFood
+    pnumberOfFood = 0
     setFood()
     
-    for lulu in __lulus[:]:
+    for lulu in plulus[:]:
         lulu.isDone = False
-        lulu.energy = __energy
+        lulu.energy = penergy
         addItem(lulu.position, lulu)
         
-    for lulu in __lulus[:]:
+    for lulu in plulus[:]:
         lulu.resetPosition()
