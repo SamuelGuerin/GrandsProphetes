@@ -640,9 +640,10 @@ class Form(ct.CTk):
         # Graph
         def add_Graph():
             global canvasR
-            graphData = fg.graphGeneration.first(index)
-            index.elev = 30
             index.azim = 130
+            index.elev = 30
+            index.setAxis()
+            graphData = fg.graphGeneration.first(index)
             global ax
             ax = graphData[1]
             fig = graphData[0]
@@ -658,6 +659,9 @@ class Form(ct.CTk):
                 canvas.get_tk_widget().destroy()
                 index.elev = ax.elev
                 index.azim = ax.azim
+                index.xaxis = ax.get_xlim()
+                index.yaxis = ax.get_ylim()
+                index.zaxis = ax.get_zlim()
                 graphData = fg.graphGeneration.previous(index)
                 updateGraph(canvas, graphData)
                 refreshButtons() 
@@ -669,6 +673,9 @@ class Form(ct.CTk):
                 canvas.get_tk_widget().destroy()
                 index.elev = ax.elev
                 index.azim = ax.azim
+                index.xaxis = ax.get_xlim()
+                index.yaxis = ax.get_ylim()
+                index.zaxis = ax.get_zlim()
                 graphData = fg.graphGeneration.next(index)
                 updateGraph(canvas, graphData)
                 refreshButtons() 
@@ -680,6 +687,9 @@ class Form(ct.CTk):
                 canvas.get_tk_widget().destroy()
                 index.elev = ax.elev
                 index.azim = ax.azim
+                index.xaxis = ax.get_xlim()
+                index.yaxis = ax.get_ylim()
+                index.zaxis = ax.get_zlim()
                 graphData = fg.graphGeneration.last(index)
                 updateGraph(canvas, graphData)
                 refreshButtons() 
@@ -691,6 +701,9 @@ class Form(ct.CTk):
                 canvas.get_tk_widget().destroy()
                 index.elev = ax.elev
                 index.azim = ax.azim
+                index.xaxis = ax.get_xlim()
+                index.yaxis = ax.get_ylim()
+                index.zaxis = ax.get_zlim()
                 graphData = fg.graphGeneration.first(index)
                 updateGraph(canvas, graphData)
                 refreshButtons() 
@@ -700,6 +713,9 @@ class Form(ct.CTk):
                 canvas.get_tk_widget().destroy()
                 index.elev = ax.elev
                 index.azim = ax.azim
+                index.xaxis = ax.get_xlim()
+                index.yaxis = ax.get_ylim()
+                index.zaxis = ax.get_zlim()
                 graphData = fg.graphGeneration.speedSize(index)
                 updateGraph(canvas, graphData)
                 refreshButtons()
@@ -709,6 +725,9 @@ class Form(ct.CTk):
                 canvas.get_tk_widget().destroy()
                 index.elev = ax.elev
                 index.azim = ax.azim
+                index.xaxis = ax.get_xlim()
+                index.yaxis = ax.get_ylim()
+                index.zaxis = ax.get_zlim()
                 graphData = fg.graphGeneration.sizeSense(index)
                 updateGraph(canvas, graphData)
                 refreshButtons() 
@@ -718,6 +737,9 @@ class Form(ct.CTk):
                 canvas.get_tk_widget().destroy()
                 index.elev = ax.elev
                 index.azim = ax.azim
+                index.xaxis = ax.get_xlim()
+                index.yaxis = ax.get_ylim()
+                index.zaxis = ax.get_zlim()
                 graphData = fg.graphGeneration.senseSpeed(index)
                 updateGraph(canvas, graphData)
                 refreshButtons() 
@@ -748,7 +770,6 @@ class Form(ct.CTk):
 
                 canvasR = FigureCanvasTkAgg(fig, self)
                 canvasR.get_tk_widget().grid(row=0, column=0, columnspan=5, sticky="wesn")
-                # canvasR = canvasN
             
             def refreshButtons():
                 global buttonSpeedSize
