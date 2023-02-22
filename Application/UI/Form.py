@@ -13,7 +13,7 @@ sys.path.append(str(workingDirectory) + '\Application')
 import SimulationManager as Simulation
 from JsonManager import saveData, loadData
 import threading
-import time
+import Form as f
 
 
 ct.set_appearance_mode("dark")
@@ -169,6 +169,8 @@ class Form(ct.CTk):
 
     """
 
+    def cancelSimulation():
+        Simulation.check = True
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -177,9 +179,13 @@ class Form(ct.CTk):
         width = 1920
         height = 1080
 
+        current_path = os.path.dirname(os.path.realpath(__file__))
+        path = current_path + "/logo.ico"
+        self.wm_iconbitmap(path)
+
         # Setup de base de l'interface
         self.geometry("900x800")
-        self.title("Sélection naturel Form.py")
+        self.title("Lulus World")
         self.resizable(True, True)
         self.maxsize(width, height)
         self.minsize(830, 700)
@@ -201,13 +207,12 @@ class Form(ct.CTk):
 
         #Méthode afficher l'information que l'utilisateur doit entrer
         def show_info(event, txt):
-            lblErrorInForm.configure(text=txt, corner_radius=90, text_color="white", fg_color="#343638")
+            lblErrorInForm.configure(text=txt, corner_radius=90, text_color="#dce4ee", fg_color="#343638")
 
         def hide_info(event):
             lblErrorInForm.configure(text="", fg_color="#2b2b2b")
 
         # Créer une image pour le bouton
-        current_path = os.path.dirname(os.path.realpath(__file__))
         circle_image = ct.CTkImage(Image.open(current_path + "/circle.png"))
 
         # Enter 1 -- MapSizeX
@@ -216,7 +221,7 @@ class Form(ct.CTk):
 
         infoMapSizeX = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoMapSizeX.grid(row=0, column=1, pady=10, padx=10)
-        infoMapSizeX.bind("<Enter>", lambda event: show_info(event, "Ce champs va déterminer la grandeur du territoire en X.\r (Cette valeur doit être entre 100 et 1 000 000)"))
+        infoMapSizeX.bind("<Enter>", lambda event: show_info(event, "Déterminer la grandeur du territoire en X.\r (Cette valeur doit être entre 100 et 1 000 000)"))
         infoMapSizeX.bind("<Leave>", hide_info)
 
         txtMapSizeX = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="100"))
@@ -232,7 +237,7 @@ class Form(ct.CTk):
 
         infoMapSizeY = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoMapSizeY.grid(row=1, column=1, pady=10, padx=10)
-        infoMapSizeY.bind("<Enter>", lambda event: show_info(event, "Ce champs va déterminer la grandeur du territoire en Y.\r (Cette valeur doit être entre 100 et 1 000 000)"))
+        infoMapSizeY.bind("<Enter>", lambda event: show_info(event, "Déterminer la grandeur du territoire en Y.\r (Cette valeur doit être entre 100 et 1 000 000)"))
         infoMapSizeY.bind("<Leave>", hide_info)
 
         txtMapSizeY = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="100"))
@@ -277,7 +282,7 @@ class Form(ct.CTk):
 
         infoEnergy = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoEnergy.grid(row=4, column=1, pady=10, padx=10)
-        infoEnergy.bind("<Enter>", lambda event: show_info(event, "Ce champs représente le nombre mouvement\r que les Lulus pourront faire lors d'une génération.\r (Cette valeur doit être entre 100 et 1 000 000)"))
+        infoEnergy.bind("<Enter>", lambda event: show_info(event, "Énergie que les Lulus auront pour\r ce déplacer lors d'une génération.\r (Cette valeur doit être entre 100 et 1 000 000)"))
         infoEnergy.bind("<Leave>", hide_info)
 
         txtEnergy = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="1000"))
@@ -287,12 +292,12 @@ class Form(ct.CTk):
         lblEnergyGood.grid(row=4, column=3, pady=10, padx=10)
 
         # Enter 6 -- Speed
-        lblSpeed = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Variation de la vitesse lors \rde la mutation (en %)")
+        lblSpeed = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Variation de la vitesse (en %)")
         lblSpeed.grid(row=5, column=0, pady=10, padx=10)
 
         infoSpeed = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoSpeed.grid(row=5, column=1, pady=10, padx=10)
-        infoSpeed.bind("<Enter>", lambda event: show_info(event, "Ce champs représente la variation\r de leur vitesse en % si une mutation est effectuée.\r (Cette valeur doit être inférieur ou égal à 33)"))
+        infoSpeed.bind("<Enter>", lambda event: show_info(event, "Variation de leur vitesse en % si une mutation est effectuée.\r (Cette valeur doit être inférieur ou égal à 33)"))
         infoSpeed.bind("<Leave>", hide_info)
 
         txtSpeed = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
@@ -302,12 +307,12 @@ class Form(ct.CTk):
         lblSpeedGood.grid(row=5, column=3, pady=10, padx=10)
 
         # Enter 7 -- Sense
-        lblSense = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Variation de la vision lors \rde la mutation (en %)")
+        lblSense = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Variation de la vision (en %)")
         lblSense.grid(row=6, column=0, pady=10, padx=10)
 
         infoSense = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoSense.grid(row=6, column=1, pady=10, padx=10)
-        infoSense.bind("<Enter>", lambda event: show_info(event, "Ce champs représente la variation\r de leur vision en % si une mutation est effectuée.\r (Cette valeur doit être inférieur ou égal à 33)"))
+        infoSense.bind("<Enter>", lambda event: show_info(event, "Variation de leur vision en % si une mutation est effectuée.\r (Cette valeur doit être inférieur ou égal à 33)"))
         infoSense.bind("<Leave>", hide_info)
 
         txtSense = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
@@ -317,12 +322,12 @@ class Form(ct.CTk):
         lblSenseGood.grid(row=6, column=3, pady=10, padx=10)
 
         # Enter 8 -- Size
-        lblSize = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Variation de la taille lors \rde la mutation (en %)")
+        lblSize = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="Variation de la taille (en %)")
         lblSize.grid(row=7, column=0, pady=10, padx=10)
 
         infoSize = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoSize.grid(row=7, column=1, pady=10, padx=10)
-        infoSize.bind("<Enter>", lambda event: show_info(event, "Ce champs représente la variation\r de leur taille en % si une mutation est effectuée.\r (Cette valeur doit être inférieur ou égal à 33)"))
+        infoSize.bind("<Enter>", lambda event: show_info(event, "Variation de leur taille en % si une mutation est effectuée.\r (Cette valeur doit être inférieur ou égal à 33)"))
         infoSize.bind("<Leave>", hide_info)
 
         txtSize = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
@@ -332,12 +337,12 @@ class Form(ct.CTk):
         lblSizeGood.grid(row=7, column=3, pady=10, padx=10)
 
         # Entrer 9 -- Mutation
-        lblMutation = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="% de chance de mutation\r lors de la reproduction")
+        lblMutation = ct.CTkLabel(master=self.frame_1, justify=ct.CENTER, text="% de chance de mutation")
         lblMutation.grid(row=8, column=0, pady=10, padx=10)
 
         infoMutation = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoMutation.grid(row=8, column=1, pady=10, padx=10)
-        infoMutation.bind("<Enter>", lambda event: show_info(event, "Ce champs représente le % de chance qu'une mutation\r soit effectuée lors de la reproduction.\r (Cette valeur doit être entre 0 et 100)"))
+        infoMutation.bind("<Enter>", lambda event: show_info(event, "Représente le % de chance qu'une mutation\r soit effectuée lors de la reproduction.\r (Cette valeur doit être entre 0 et 100)"))
         infoMutation.bind("<Leave>", hide_info)
 
         txtMutation = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="50"))
@@ -352,7 +357,7 @@ class Form(ct.CTk):
 
         infoGeneration = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoGeneration.grid(row=9, column=1, pady=10, padx=10)
-        infoGeneration.bind("<Enter>", lambda event: show_info(event, "Ce champs représente le nombre de générations\r qui sera effectuées lors de la simulation.\r (Cette valeur doit être entre 1 et 1 000 000)"))
+        infoGeneration.bind("<Enter>", lambda event: show_info(event, "Nombre de générations\r qui sera effectuées lors de la simulation.\r (Cette valeur doit être entre 1 et 1 000 000)"))
         infoGeneration.bind("<Leave>", hide_info)
 
         txtGeneration = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
@@ -420,9 +425,9 @@ class Form(ct.CTk):
                 if(mapSizeXValue < 0 or mapSizeYValue < 0):
                     raise ValueError
                 maxFood = mapSizeXValue * mapSizeYValue * 0.50
-                return "Ce champs représente le nombre\r de nourriture présent sur le territoire.\r (Le nombre de nourriture doit être inférieur ou égal\r à 50% du territoire soit " + str(math.floor(maxFood)) + ")"
+                return "Nombre de nourriture présent sur le territoire.\r (Le nombre de nourriture doit être inférieur ou égal\r à 50% du territoire soit " + str(math.floor(maxFood)) + ")"
             except ValueError:
-                return "Ce champs représente le nombre\r de nourriture présent sur le territoire.\r (Le nombre de nourriture doit être inférieur ou égal\r à 50% du territoire\r(Les valeur en X et Y doivent être mise\r pour pouvoir savoir la valeur maximal))"
+                return "Nombre de nourriture présent sur le territoire.\r (Le nombre de nourriture doit être inférieur ou égal\r à 50% du territoire\r(Les valeur en X et Y doivent être mise\r pour pouvoir savoir la valeur maximal))"
 
         # Enter 4 -- Validation
         def get_inputStartLulu():
@@ -454,9 +459,9 @@ class Form(ct.CTk):
                 if(mapSizeXValue < 0 or mapSizeYValue < 0):
                     raise ValueError
                 maxLulu = (mapSizeXValue * 2 + mapSizeYValue * 2) - 4
-                return "Ce champs représente le nombre\r de Lulus présent sur le territoire au début.\r (Le nombre de Lulus doit être inférieur ou égal\r au périmètre du territoire - 4 soit " + str(math.floor(maxLulu)) + ")"
+                return "Nombre de Lulus présent sur le territoire au début.\r (Le nombre de Lulus doit être inférieur ou égal\r au périmètre du territoire - 4 soit " + str(math.floor(maxLulu)) + ")"
             except ValueError:
-                return "Ce champs représente le nombre\r de Lulus présent sur le territoire au début.\r (Le nombre de Lulus doit être inférieur ou égal\r au périmètre du territoire - 4\r (Les valeur en X et Y doivent être mise\r pour pouvoir savoir la valeur maximal))"
+                return "Nombre de Lulus présent sur le territoire au début.\r (Le nombre de Lulus doit être inférieur ou égal\r au périmètre du territoire - 4\r (Les valeur en X et Y doivent être mise\r pour pouvoir savoir la valeur maximal))"
 
         # Enter 5 -- Validation
         def get_inputEnergy():
@@ -576,7 +581,6 @@ class Form(ct.CTk):
                 btnSave.grid_remove()
                 btnSimulate.configure(state="disable")
                 btnImport.configure(state="disable")
-                btnPreview.configure(state="disable")
 
                 #Simule
                 th = threading.Thread(target=Simulation.__run__, args=(validMapSizeX, validMapSizeY, validStartFood, validStartLulu, validSpeed, validSense, validSize, validEnergy, validGeneration, validMutation))
@@ -585,7 +589,6 @@ class Form(ct.CTk):
                 progress_bar.grid(row=14, column=0, columnspan=3, padx=20, pady=10, sticky="we")
                 progress_bar.configure(maximum=validGeneration)
                 while(th.is_alive()):
-                    time.sleep(3)
                     progress_var.set(float(Simulation.generation))
                     progress_bar.update()
                 th.join()
@@ -596,7 +599,6 @@ class Form(ct.CTk):
                 progress_bar.grid_remove()
                 btnSimulate.configure(state="normal")
                 btnImport.configure(state="normal")
-                btnPreview.configure(state="normal")
                 lblErrorInForm.configure(text="La simulation est terminée", text_color="green")
             else:
                 lblErrorInForm.configure(text="Erreur: Veuillez remplir convenablement le formulaire", text_color="red")
@@ -620,8 +622,6 @@ class Form(ct.CTk):
         def save():
             saveData(fg.generations)
             lblErrorInForm.configure(text="Le fichier a été sauvegardé.", text_color="green")
-
-                
     
         # Graph
         def add_Graph():
@@ -769,57 +769,15 @@ class Form(ct.CTk):
             createButtons()
             refreshButtons()            
 
-        def preview():
-            validMapSizeX = get_inputMapSizeX()
-            validMapSizeY = get_inputMapSizeY()
-            validStartFood = get_inputStartFood()
-            validStartLulu = get_inputStartLulu()
-            validEnergy = get_inputEnergy()
-            validSpeed = get_inputSpeed()
-            validSense = get_inputSense()
-            validSize = get_inputSize()
-            validMutation = get_inputMutation()
-            validGeneration = get_inputGeneration()
-            print(validMapSizeX)
-            if(type(validMapSizeX) is int
-               and type(validMapSizeY) is int
-               and type(validStartFood) is int
-               and type(validStartLulu) is int
-               and type(validEnergy) is int
-               and type(validSpeed) is int
-               and type(validSense) is int
-               and type(validSize) is int
-               and type(validMutation) is int
-               and type(validGeneration) is int):
-                
-                Simulation.newMap(validMapSizeX, validMapSizeY, validStartFood, validStartLulu)
-                # current_path = os.path.dirname(os.path.realpath(__file__))
-                current_path = os.getcwd()
-                preview = ct.CTkImage(Image.open(str(current_path) + "\media\images\VisualizeLulus_ManimCE_v0.17.2.png"), size=(700, 350))
-                previewImage = ct.CTkLabel(master=self, text="", image=preview)
-                previewImage.grid(row=0, column=0, sticky="snwe")
-                btnClose = ct.CTkButton(master=self, text="Fermer la prévisualisation", command=lambda:closePreview(previewImage, btnClose))
-                btnClose.grid(row=1, column=0, padx=20, pady=10, sticky="we")
-            else:
-                lblErrorInForm.configure(text="Erreur: Veuillez remplir convenablement le formulaire", text_color="red")
-
-        def closePreview(previewImage, btnClose):
-            previewImage.destroy()
-            btnClose.destroy()
-
         btnImport = ct.CTkButton(master=self.frame_1, text="Importer une Simulation...", command=importSimulation)
         btnImport.grid(row=10, column=2, padx=20, pady=10, sticky="we")
 
         btnGraph = ct.CTkButton(master=self.frame_1, text="Visualiser les Graphiques", command=add_Graph)
         btnSave = ct.CTkButton(master=self.frame_1, text="Sauvegarder la simulation", command=save)
 
-        btnPreview = ct.CTkButton(master=self.frame_1, text="Prévisualiser le Territoire", command=preview)
-        btnPreview.grid(row=12, column=0, columnspan=3, padx=20, pady=10, sticky="we")
+        btnCancel = ct.CTkButton(master=self.frame_1, text="Cancel", command=f.Form.cancelSimulation)
+        btnCancel.grid(row=12, column=0, columnspan=3, padx=20, pady=10, sticky="we")
 
         global lblErrorInForm
         lblErrorInForm = ct.CTkLabel(master=self.frame_1, height=100, justify=ct.CENTER, text="")
         lblErrorInForm.grid(row=13, column=0, columnspan=3, padx=20, pady=10)
-
-# if __name__ == "__main__":
-#     app = Form()
-#     app.mainloop()

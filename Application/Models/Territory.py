@@ -48,6 +48,12 @@ from Models.Food import Food
 import time
 from manim import *
 
+import pathlib
+import sys
+workingDirectory = pathlib.Path().resolve()
+sys.path.append(str(workingDirectory) + '\Application')
+import SimulationManager as Simulation
+
 __sizeX = None
 __sizeY = None
 __lulusCount = None
@@ -384,10 +390,15 @@ def moveAll():
     lulusToMove = __lulus.copy()
 
     while (lulusToMove.__len__() > 0):
-        lulusToMove = __lulus.copy()        
+        lulusToMove = __lulus.copy()   
+
+        if(Simulation.check):
+            break     
 
         random.shuffle(lulusToMove)
         for lulu in lulusToMove[:]:
+            if(Simulation.check):
+                break
             if (getItem(lulu.position.x, lulu.position.y) == lulu):
                 if not (lulu.move()):
                     lulusToMove.remove(lulu)
