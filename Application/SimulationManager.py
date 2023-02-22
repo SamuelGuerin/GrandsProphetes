@@ -6,6 +6,8 @@ from Models.Lulu import Lulu
 from Models.Food import Food
 from Models.Saves import Save
 
+global generation
+generation = 0
 generationMoves = []
 generationsSave = Save()
 class VisualizeLulus(Scene):
@@ -110,7 +112,9 @@ def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation,
     sims = time.time()
     Territory.createMap(sizeX, sizeY, foodCount, lulusCount,
                         speed, sense, energy * 10000, size, mutateChance, speedVariation, senseVariation, sizeVariation)
-    
+
+    global check
+    check  = False
     global generation
     global generationsSave
     generationsSave = Save(sizeX,sizeY,foodCount, lulusCount,energy,speedVariation,senseVariation,sizeVariation,mutateChance,nbGeneration, generations=[])
@@ -124,6 +128,9 @@ def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation,
         Territory.resetWorld()
         Territory.dayResultLulu()
         generationMoves.append(Territory.getMoves())
+
+        if(check):
+            break
         
         if (Territory.getLulus().__len__() == 0):
             break
