@@ -48,16 +48,22 @@ from Food import Food
 import time
 #from manim import *
 
-psizeX = None
-psizeY = None
-plulusCount = None
-pfoodCount = None
-plulus = []
-pmap = {}
-penergy = None
-pnumberOfFood = 0
-EATING_RATIO = 1.2
+import pathlib
+import sys
+workingDirectory = pathlib.Path().resolve()
+sys.path.append(str(workingDirectory) + '\Application')
+import SimulationManager as Simulation
 
+__sizeX = None
+__sizeY = None
+__lulusCount = None
+__foodCount = None
+__energy = None
+__lulus = []
+__map = {}
+__moves = []
+__numberOfFood = 0
+EATING_RATIO = 1.5
 
 def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, mutateChance, speedVariation, senseVariation, sizeVariation):
     """Crée (instancie) une carte (map) avec une taille X et Y ainsi qu'un nombre donné de nourriture et de Lulus
@@ -71,36 +77,37 @@ def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, m
     :param lulusCount: Nombre de Lulus total
     :type lulusCount: int
     """
-    global psizeX
-    global psizeY
-    global pfoodCount
-    global plulusCount
-    global penergy
-    global pmutateChance
-    global pspeedVariation
-    global psenseVariation
-    global psizeVariation
-    psizeX = sizeX
-    psizeY = sizeY
-    pfoodCount = foodCount
-    plulusCount = lulusCount
-    penergy = energy
-    pmutateChance = mutateChance
-    pspeedVariation = speedVariation /100
-    psenseVariation = senseVariation /100
-    psizeVariation = sizeVariation /100
+    global __sizeX
+    global __sizeY
+    global __foodCount
+    global __lulusCount
+    global __energy
+    global __mutateChance
+    global __speedVariation
+    global __senseVariation
+    global __sizeVariation
+
+    __sizeX = sizeX
+    __sizeY = sizeY
+    __foodCount = foodCount
+    __lulusCount = lulusCount
+    __energy = energy
+    __mutateChance = mutateChance
+    __speedVariation = speedVariation / 100
+    __senseVariation = senseVariation / 100
+    __sizeVariation = sizeVariation / 100
 
     clearMap()
-
-    # Créer x lulus dans la map (La map va de 0 à maxX ou maxY)
+    
+    # Créer X nombre de Lulus dans la map (La map va de 0 à maxX ou maxY)
     # Les mettre sur le côté
     for _ in range(lulusCount):
         maxX = sizeX
         maxY = sizeY
         luluCreated = False
 
-        # Choisir un side à 0 ou maxSide, puis un random de l'autre coordonnée (x ou y)
-        while (not luluCreated and len(plulus) < (2 * maxX + 2 * maxY) - 4):
+        # Choisir des coordonnées aléatoire pour faire apparaître les Lulus tout le tour du périmètre
+        while (not luluCreated and len(__lulus) < (2 * maxX + 2 * maxY) - 4):
             if (bool(random.getrandbits(1))):
                 rx = random.choice([1, maxX])
                 ry = random.randint(1, maxY)
@@ -117,15 +124,16 @@ def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, m
     for lulu in plulus:
         lulu.isNewBorn = False
 
+
 def clearMap():
     """Supprime les données des listes de Lulus et map
 	"""
-    global plulus
-    global pmap
-    global pnumberOfFood
-    plulus = []
-    pmap = {}
-    pnumberOfFood = 0
+    global __lulus
+    global __map
+    global __numberOfFood
+    __lulus = []
+    __map = {}
+    __numberOfFood = 0
 
 def CreateLulu(rx, ry, speed, sense, size, energyRemaining, FoodCollected, isDone) -> bool:
     """Crée une Lulu et la place sur les bords de la carte selon une position donnée et l'instancie avec des paramètres de base
@@ -187,8 +195,6 @@ def CreateFood(rx, ry) -> bool:
         pnumberOfFood += 1
         return True
     return False
-
-# public
 
 
 def getItem(x, y):
@@ -257,10 +263,8 @@ def deleteItem(position):
     :param position: :class:`Position` à laquelle l'item (:class:`Lulu` ou  nourriture (:class:`Food`)) sera retiré de l'objet map (carte)
     :type position: :class:`Position`
     """
-    del pmap[position]
 
-# Vérifie s'il est possible de faire le mouvement demandé
-# return true si le move est fait, sinon false
+    del __map[position]
 
 
 def tryMove(oldPosition, newPosition) -> bool:
@@ -273,12 +277,9 @@ def tryMove(oldPosition, newPosition) -> bool:
     :return: Retourne un booléen confirmant si la Lulu peut être déplacée ou non
     :rtype: bool
     """
-
-    # from Models.Food import Food
-
-    # Vérifier si le mouvement est dans la map
+    # Vérifier si la nouvelle position est dans la map
     if ((newPosition.x >= 1 and newPosition.x <= getSizeX()) and (newPosition.y >= 1 and newPosition.y <= getSizeY())):
-        # Vérifier s'il n'y a pas une lulu plus grosse ou égale
+        # Vérifier le contenu de la case à la nouvelle position
         itemInNewPosition = getItem(newPosition.x, newPosition.y)
         if (itemInNewPosition == None):
             moveLulu(oldPosition, newPosition)
@@ -291,8 +292,6 @@ def tryMove(oldPosition, newPosition) -> bool:
             return True
     return False
 
-# Todo : Gérer l'énergie avec la formule
-
 
 def moveLulu(oldPosition, newPosition):
     """Déplace la :class:`Lulu` d'une :class:`Position` A à une :class:`Position` B
@@ -302,32 +301,41 @@ def moveLulu(oldPosition, newPosition):
     :param newPosition: La nouvelle :class:`Position` de la :class:`Lulu`
     :type newPosition: :class:`Position`
     """
-
-    # from Models.Lulu import Lulu
-
-    # S'il y avait qqch sur la nouvelle case, l'enlever et ajouter 1 de nourriture
-    currentLulu = pmap[oldPosition]
-    if (getItem(newPosition.x, newPosition.y) != None):
+    # S'il y avait quelque chose sur la nouvelle case, l'enlever et ajouter 1 de nourriture (foodAmount)
+    currentLulu = __map[oldPosition]
+    test = getItem(newPosition.x, newPosition.y)
+    if (test != None):
         currentLulu.foodAmount += 1
         # ToDo : Valider que la liste lulus ne la contient plus
-        if (type(getItem(newPosition.x, newPosition.y)) == Lulu):
-            plulus.remove(pmap[newPosition])
-        deleteItem(newPosition)
-    addItem(newPosition, currentLulu)
-    deleteItem(oldPosition)
+        if (type(test) == Lulu):
+            if test in currentLulu.lulusInRange:
+                currentLulu.lulusInRange.remove(test)
+            __lulus.remove(__map[newPosition])
+        else :
+            currentLulu.foodInRange.remove(test)
+        __deleteItem(newPosition)
+    __addItem(newPosition, currentLulu)
+    __deleteItem(oldPosition)
 
 
 def reproduceLulu(Lulu):
+    """Algorithme permettant à la lulu passée en paramètre de se reproduire.
+    Fait muté la nouvelle lulu selon un pourcentage de chance et selon les
+    variations passer dans le formulaire.
 
-    # from Models.Lulu import Lulu
-
+	:param Lulu: Lulu a reproduire
+	:type Lulu: Lulu
+	"""
     newSpeed = Lulu.speed
     newSense = Lulu.sense
     newSize = Lulu.size
-    if (random.randint(1, 100) < pmutateChance):
-        newSpeed = round(Lulu.speed * random.uniform(1 - pspeedVariation, 1 + pspeedVariation))
-        newSense = round(Lulu.sense * random.uniform(1 - psenseVariation, 1 + psenseVariation))
-        newSize = round(Lulu.size * random.uniform(1 - psizeVariation, 1 + psizeVariation))
+
+    if (random.randint(1, 100) < __mutateChance):
+        newSpeed = round(Lulu.speed * random.uniform(1 - __speedVariation, 1 + __speedVariation))
+    if (random.randint(1, 100) < __mutateChance):
+        newSense = round(Lulu.sense * random.uniform(1 - __senseVariation, 1 + __senseVariation))
+    if (random.randint(1, 100) < __mutateChance):
+        newSize = round(Lulu.size * random.uniform(1 - __sizeVariation, 1 + __sizeVariation))
         
     if (newSpeed < 1):
         newSpeed = 1
@@ -340,8 +348,9 @@ def reproduceLulu(Lulu):
     rx = 0
     ry = 0
     searchingPos = True
-    # Faire spawn le nouveau Lulu à côté de l'ancien
-    if (Lulu.position.x == 0 or Lulu.position.x == psizeX):
+
+    # Faire apparaître la nouvelle Lulu à côté de son parent
+    if (Lulu.position.x == 0 or Lulu.position.x == __sizeX):
         rx = Lulu.position.x
         while (searchingPos):
             if (Lulu.position.y + i < psizeY and getItem(Lulu.position.x, Lulu.position.y + i) == None):
@@ -376,9 +385,11 @@ def reproduceLulu(Lulu):
 
 
 def getLuluMap():
+    """Calcul le nombre de lulus présents dans la map
 
-    # from Models.Lulu import Lulu
-
+	:return: Quantité de lulus
+	:rtype: int
+	"""
     count = 0
     for item in pmap.values():
         if (type(item) == Lulu):
@@ -388,30 +399,31 @@ def getLuluMap():
 
 
 def moveAll():
+    """Algorithme qui permet à chaque lulu d'effectuer un mouvement à tour de rôle
+	"""
+    lulusToMove = __lulus.copy()
 
-    # from Models.Lulu import Lulu
-
-    lulusToMove = plulus.copy()
     while (lulusToMove.__len__() > 0):
+        lulusToMove = __lulus.copy()   
 
-        lulusToMove = plulus.copy()        
-        # time.sleep(0.2)
-        # renderAnimation()
+        if(Simulation.check):
+            break     
 
         random.shuffle(lulusToMove)
         for lulu in lulusToMove[:]:
+            if(Simulation.check):
+                break
             if (getItem(lulu.position.x, lulu.position.y) == lulu):
                 if not (lulu.move()):
                     lulusToMove.remove(lulu)
-                # time.sleep(0.2)
-                # renderAnimation()
             else:
                 lulusToMove.remove(lulu)
         
 
-
 def dayResultLulu():
-    for lulu in plulus[:]:
+    """Vérifie la quantité de nourriture que possède chaque lulu et décide si elle se reproduit, survit, ou meurt
+	"""
+    for lulu in __lulus[:]:
         if (lulu.foodAmount == 0 and not lulu.isNewBorn):
             deleteItem(lulu.position)
             plulus.remove(lulu)
@@ -420,6 +432,24 @@ def dayResultLulu():
 
         lulu.foodAmount = 0
         lulu.isNewBorn = False
+
+
+def addMove(move):
+    """Ajoute le mouvement effectué à la liste des mouvements
+
+	:param move: Objet contenant le déplacement effectué
+	:type move: Move
+	"""
+    __moves.append(move)
+
+
+def getMoves():
+    """Retourne la liste des mouvements effectués
+
+	:return: Retourne la liste des mouvements effectués
+	:rtype: list
+	"""
+    return __moves
 
 
 def printMap():
@@ -438,12 +468,13 @@ def getLulus():
 
 
 def setFood():
-    maxX = psizeX
-    maxY = psizeY
-    pnumberOfFood = 0 # ?
+    """Permet de mettre la nourriture de façon aléatoire dans la map
+	"""
+    maxX = __sizeX
+    maxY = __sizeY
 
-    # Ajouter de la nourriture partout sauf sur le côté
-    for _ in range(pfoodCount):
+    # Ajouter de la nourriture partout sauf sur le périmètre de la map
+    for _ in range(__foodCount):
         foodCreated = False
         while (not foodCreated and pnumberOfFood < ((psizeX - 2) * (psizeY - 2))):
             rx = random.randint(2, maxX - 1)
@@ -452,79 +483,20 @@ def setFood():
 
 
 def resetWorld():
-    pmap.clear()
+    """Réinitialise la nourriture restante dans le monde.
+    Réinitialise l'énergie et la nourriture des lulus.
+    Réinitialise la position des lulus sur les côtés.
+	"""
+    __map.clear()
+
+    global __numberOfFood
+    __numberOfFood = 0
     setFood()
-    for lulu in plulus[:]:
+    
+    for lulu in __lulus[:]:
         lulu.isDone = False
-        lulu.energy = penergy
+        lulu.energy = __energy
         addItem(lulu.position, lulu)
         
-    for lulu in plulus[:]:
+    for lulu in __lulus[:]:
         lulu.resetPosition()
-
-
-# class VisualizeLulus(Scene):
-#     def construct(self):
-
-#         items = getMap()
-#         # SIZE = 1/5 du plus petit x ou y?
-#         SIZE = getSizeX()/5 if getSizeX() < getSizeY() else getSizeY()/5
-#         # CENTERX = /2
-#         CENTERX = getSizeX()/2
-#         # CENTERY = /2
-#         CENTERY = getSizeY()/2
-
-#         groupdots = VGroup()
-
-#         maxSize = max(lulu.size for lulu in getLulus())
-#         minSize = min(lulu.size for lulu in getLulus())
-#         rangeOfSizes = maxSize - minSize
-
-#         for position in items:
-#             item = items.get(position)
-#             if (type(item) == Lulu):
-#                 if (item.isDone):
-#                     rangeOfColors = rangeOfSizes/6
-#                     if item.size <= minSize + (rangeOfColors):
-#                         dot = Dot([(position.x - CENTERX)/SIZE,
-#                                   (position.y - CENTERY)/SIZE, 0], color=RED_A)
-#                     elif item.size <= minSize + 2*(rangeOfColors):
-#                         dot = Dot([(position.x - CENTERX)/SIZE,
-#                                   (position.y - CENTERY)/SIZE, 0], color=RED_B)
-#                     elif item.size <= minSize + 3*(rangeOfColors):
-#                         dot = Dot([(position.x - CENTERX)/SIZE,
-#                                   (position.y - CENTERY)/SIZE, 0], color=RED_C)
-#                     elif item.size <= minSize + 4*(rangeOfColors):
-#                         dot = Dot([(position.x - CENTERX)/SIZE,
-#                                   (position.y - CENTERY)/SIZE, 0], color=RED_D)
-#                     else:
-#                         dot = Dot([(position.x - CENTERX)/SIZE,
-#                                   (position.y - CENTERY)/SIZE, 0], color=RED_E)
-#                 else:
-#                     rangeOfColors = rangeOfSizes/6
-#                     if item.size <= minSize + (rangeOfColors):
-#                         dot = Dot([(position.x - CENTERX)/SIZE,
-#                                   (position.y - CENTERY)/SIZE, 0], color=BLUE_A)
-#                     elif item.size <= minSize + 2*(rangeOfColors):
-#                         dot = Dot([(position.x - CENTERX)/SIZE,
-#                                   (position.y - CENTERY)/SIZE, 0], color=BLUE_B)
-#                     elif item.size <= minSize + 3*(rangeOfColors):
-#                         dot = Dot([(position.x - CENTERX)/SIZE,
-#                                   (position.y - CENTERY)/SIZE, 0], color=BLUE_C)
-#                     elif item.size <= minSize + 4*(rangeOfColors):
-#                         dot = Dot([(position.x - CENTERX)/SIZE,
-#                                   (position.y - CENTERY)/SIZE, 0], color=BLUE_D)
-#                     else:
-#                         dot = Dot([(position.x - CENTERX)/SIZE,
-#                                   (position.y - CENTERY)/SIZE, 0], color=BLUE_E)
-#             elif (type(item) == Food):
-#                 dot = Dot([(position.x - CENTERX)/SIZE,
-#                           (position.y - CENTERY)/SIZE, 0], color=GREEN)
-#             groupdots.add(dot)
-
-#         self.add(groupdots)
-
-
-# def renderAnimation():
-#     scene = VisualizeLulus()
-#     scene.render()

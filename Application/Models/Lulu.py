@@ -31,8 +31,12 @@ class Lulu:
         self.foodAmount = foodAmount
         self.isDone = isDone
         self.started = False
+        self.newTurn = True
         self.isNewBorn = True
         self.randomTargetPosition = self.newRandomPosition()
+        self.foodInRange = []
+        self.lulusInRange = []
+        self.lastPosition = position
 
     def __repr__(self) -> str:
         return ("Lulu")
@@ -40,54 +44,59 @@ class Lulu:
     def move(self) -> bool:
         """Algorithme qui détermine comment la :class:`Lulu` se déplacera dépendemment de ce qui est présent dans sa vision
 
-        :return: Retourne un booléen déterminant s'il reste assez d'énergie à la :class:`Lulu` pour effectuer un mouvement 
+        :return: Retourne un booléen déterminant s'il reste assez d'énergie à la :class:`Lulu` pour effectuer un mouvement
         :rtype: bool
         """
-        foodInRange = []
-        lulusInRange = []
-        energyCost = ((self.size/100) ** 3) * (self.speed ** 2) + self.sense
+        energyCost = ((self.size / 100) ** 3) * (self.speed ** 2) + self.sense * 1000
         speedLeft = self.speed
+        startPt = self.position
+        self.newTurn = True
 
         while(speedLeft > 0 and self.energy >= energyCost):
-            foodInRange.clear()
-            lulusInRange.clear()
-            self.getItems(foodInRange, lulusInRange)
+            self.getItems()
             targetPosition = None
             targetFound = False
 
-            if(len(lulusInRange) > 0):
-                targetPosition, targetFound = self.getClosestEnemy(lulusInRange)
-            if (not targetFound and len(foodInRange) > 0):
-                if(len(foodInRange) == 1):
-                    targetPosition = foodInRange[0].position
+            if(len(self.lulusInRange) > 0):
+                # Priorité #1 Vérifier si un ou des ennemis sont présents dans la vision de la Lulu
+                targetPosition, targetFound = self.getClosestEnemy(self.lulusInRange) 
+            if (not targetFound and len(self.foodInRange) > 0):
+                # Priorité #2 Vérifier si de la nourriture est présente dans la vision de la Lulu
+                if(len(self.foodInRange) == 1):
+                    targetPosition = self.foodInRange[0].position
                     targetFound = True
                 else:
-                    targetPosition, targetFound = self.getClosestFood(foodInRange)
-            if(not targetFound and len(lulusInRange) > 0):
-                targetPosition, targetFound = self.getClosestPrey(lulusInRange)
+                    targetPosition, targetFound = self.getClosestFood(self.foodInRange)
+            if(not targetFound and len(self.lulusInRange) > 0):
+                # Priorité #3 Vérifier si une ou des proies sont présentes dans la vision de la Lulu
+                targetPosition, targetFound = self.getClosestPrey(self.lulusInRange)
+
+            # Priorité #4 Se diriger vers une position cible aléatoire si aucune des 3 premières priorités n'ont été concluantes
             if(not targetFound):
                 if(self.isCloseToTargetPosition()):
                     targetPosition = self.newRandomPosition()
                     self.randomTargetPosition = targetPosition
                 else:
                     targetPosition = self.randomTargetPosition
+                self.lastPosition = self.position
                 self.goToTargetPosition(targetPosition)
             else:
+                self.lastPosition = self.position
                 self.goToTargetPosition(targetPosition)
             self.energy -= energyCost
             speedLeft -= 1
+        
+        # Enregistre le mouvement
+        endPt = self.position
+        Territory.addMove(Move(self.speed, self.sense, self.size, startPt, endPt))
+
+        # Vérifie si la Lulu a assez d'énergie pour continuer à bouger
         self.started = True
         if(self.energy < energyCost):
             self.isDone = True
             return False
         else:
             return True
-
-    # move est callé pour un lulu une fois / vitesse écoulée
-    # 1- Déterminer un point dans le sense (si il y en a un)
-    # 2- Aller au point directement jusqu'à écouler sa speed
-    # 3- S'il reste de la speed après avoir atteint son point, il va refaire le scan
-    # 4- S'il ne détecte rien, il va vers 1 point random et refait son scan à chaque point
 
     def isCloseToTargetPosition(self) -> bool:
         """Vérifie si la :class:`Lulu` est près de la position ciblée, la distance déterminant si la :class:`Lulu` est près ou non est équivalent à une distance de 5% du :class:`Territory` total
@@ -96,7 +105,7 @@ class Lulu:
         :rtype: bool
         """
         currentDistance = max(abs(self.position.x - self.randomTargetPosition.x), abs(self.position.y - self.randomTargetPosition.y))
-        randomSense = ((Territory.getSizeX() + Territory.getSizeY())/ 2 / 20)
+        randomSense = ((Territory.getSizeX() + Territory.getSizeY()) / 2 / 20) # À revoir
         randomSense = 1 if randomSense < 1 else randomSense
         return True if currentDistance <= randomSense else False
         
@@ -118,17 +127,17 @@ class Lulu:
             if(xMove == 0): # ligne verticale
                 if(not Territory.tryMove(self.position, Position(nextPos.x - 1, nextPos.y))):
                     if(not Territory.tryMove(self.position, Position(nextPos.x + 1, nextPos.y))):
-                        # ne bouge pas et trouve nouvelle cible random
+                        # Ne bouge pas et trouve une nouvelle position cible aléatoirement
                         self.randomTargetPosition = self.newRandomPosition()
             elif(yMove == 0): # ligne horizontale
                 if(not Territory.tryMove(self.position, Position(nextPos.x, nextPos.y - 1))):
                     if(not Territory.tryMove(self.position, Position(nextPos.x, nextPos.y + 1))):
-                        # ne bouge pas et trouve nouvelle cible random
+                        # Ne bouge pas et trouve une nouvelle position cible aléatoirement
                         self.randomTargetPosition = self.newRandomPosition()
             else: # diagonnale
                 if(not Territory.tryMove(self.position, Position(nextPos.x - xMove, nextPos.y))):
                     if(not Territory.tryMove(self.position, Position(nextPos.x, nextPos.y - yMove))):
-                        # ne bouge pas et trouve nouvelle cible random
+                        # Ne bouge pas et trouve une nouvelle position cible aléatoirement
                         self.randomTargetPosition = self.newRandomPosition()
     
     def newRandomPosition(self) -> Position:
@@ -137,10 +146,10 @@ class Lulu:
         :return: Retourne la nouvelle :class:`Position` aléatoire
         :rtype: :class:`Position`
         """
-        # 1 - point random sur la map (2 à maxX-1), 2 à maxY-1
+        # Détermine une nouvelle position cible de façon aléatoire comprise dans les délimitations du Territoire
         randomPosition = Position((random.randint(2, Territory.getSizeX())), random.randint(2, Territory.getSizeY()))
-        return randomPosition
-        # return le point
+        return randomPosition # Retourne la nouvelle position cible aléatoire
+        
 
     def getMoveFromDiff(self, diff):
         """Détermine dans quelle direction la :class:`Lulu` doit se déplacer sur un certain axe de la carte (map) 
@@ -166,8 +175,10 @@ class Lulu:
         """
         position = None
         closestDistance = None
-        sizeToBeEnemy = self.size * Territory.EATING_RATIO
         enemyFound = False
+        sizeToBeEnemy = self.size * Territory.EATING_RATIO
+
+        # Boucle pour déterminer quel ennemi présent dans la vision de la Lulu est le plus près et donc l'ennemi à fuir
         for i in items:
             if(i.size > sizeToBeEnemy and not i.isDone):
                 currentDistance = max(abs(self.position.x - i.position.x), abs(self.position.y - i.position.y))
@@ -178,8 +189,9 @@ class Lulu:
                 elif(currentDistance < closestDistance):
                     position = i.position
                     closestDistance = currentDistance
+        
         if (enemyFound):
-            # Retourner comme target l'opposé de l'enemi
+            # Retourner comme position cible le résultat d'un vecteur de l'opposé de l'enemi
             return Position(self.position.x + (self.position.x - position.x), self.position.y + (self.position.y - position.y)), True
         else:
             return None, False
@@ -194,8 +206,10 @@ class Lulu:
         """
         position = None
         closestDistance = None
-        sizeToBePrey = self.size / Territory.EATING_RATIO
         preyFound = False
+        sizeToBePrey = self.size / Territory.EATING_RATIO
+
+        # Boucle pour déterminer quelle proie présente dans la vision de la Lulu est la plus près et donc la proie à poursuivre
         for i in items:
             if(i.size < sizeToBePrey and i.started):
                 currentDistance = max(abs(self.position.x - i.position.x), abs(self.position.y - i.position.y))
@@ -206,6 +220,7 @@ class Lulu:
                 elif(currentDistance < closestDistance):
                     position = i.position
                     closestDistance = currentDistance
+
         return position, preyFound
 
     def getClosestFood(self, items):
@@ -219,6 +234,8 @@ class Lulu:
         position = None
         closestDistance = None
         foodFound = False
+
+        # Boucle pour déterminer quelle nourriture présente dans la vision de la Lulu est la plus près et donc la nourriture à consommer
         for i in items:
             currentDistance = max(abs(self.position.x - i.position.x), abs(self.position.y - i.position.y))
             if(not foodFound):
@@ -228,9 +245,10 @@ class Lulu:
             elif(currentDistance < closestDistance):
                 position = i.position
                 closestDistance = currentDistance
+
         return position, foodFound
                 
-    def getItems(self, foodInRange, lulusInRange):
+    def getItems(self):
         """Recherche les :class:`Food` et les :class:`Lulu` qui sont dans sa vision (sense)
 
         :param foodInRange: contient toutes les nourritures dans la vision (sense) de la :class:`Lulu`
@@ -238,22 +256,129 @@ class Lulu:
         :param lulusInRange: contient toutes les nourritures dans la vision (sense) de la :class:`Lulu`
         :type lulusInRange: list
         """
+
         map = Territory.getMap()
-        minX = self.position.x - self.sense
-        maxX = self.position.x + self.sense
-        minY = self.position.y - self.sense
-        maxY = self.position.y + self.sense
-        
-        for x in range(minX, maxX + 1):
-            for y in range(minY, maxY + 1):
-                if not (self.position.x == x and self.position.y == y):
-                    item = Territory.getItem(x,y)
+        # 1 - Supprimer les anciennes cases
+        #   1 - trouver les anciennes cases (lastPos et sense)
+        #   2 - Itération dans les listes inRange -> si Pos == anciennes cases -> del
+        #   3 - Supprimer les items ou of range
+        # 2- Ajouter les nouvelles
+        #   1 - trouver les nouvelles cases (lastPos et sense)
+        #   2 - Itération dans les listes inRange -> si Pos == nouvelles cases -> del
+        #   3 - Ajouter les items out of range
+
+        if not self.newTurn: 
+            oldVisionX = self.sense
+            oldVisionY = self.sense
+
+            # Diagonnale
+            if (self.lastPosition.x != self.position.x and self.lastPosition.y != self.position.y):
+                if (self.position.x > self.lastPosition.x):
+                    oldVisionX *= -1
+
+                if (self.position.y > self.lastPosition.y):
+                    oldVisionY *= -1
+
+                # Vérifie au cas où une supression est nécessaire
+                xToDelete = self.lastPosition.x + oldVisionX
+                yToDelete = self.lastPosition.y + oldVisionY
+                foodToDelete = [food for food in self.foodInRange if food.position.x == xToDelete or food.position.y == yToDelete]
+                lulusToDelete = [lulu for lulu in self.lulusInRange if lulu.position.x == xToDelete or lulu.position.y == yToDelete]
+                # foodToDelete = filter(lambda f: f.position.x == xToDelete or f.position.y == yToDelete, self.foodInRange)
+                for food in foodToDelete[:]:
+                    self.foodInRange.remove(food)
+
+                for lulu in lulusToDelete[:]:
+                    self.lulusInRange.remove(lulu)
+
+                # Vérifie au cas où un ajout est nécessaire
+                xToAdd = self.position.x - oldVisionX
+                yToAdd = self.position.y - oldVisionY
+
+                for x in range(self.position.x - self.sense, self.position.x + self.sense + 1):
+                    item = Territory.getItem(x,yToAdd)
                     if(type(item) == Food):
-                        foodInRange.append(item)
+                        self.foodInRange.append(item)
                     elif(type(item) == Lulu):
-                        lulusInRange.append(item)
+                        self.lulusInRange.append(item)
+
+                for y in range(self.position.y - self.sense, self.position.y + self.sense + 1):
+                    item = Territory.getItem(xToAdd,y)
+                    if(type(item) == Food):
+                        self.foodInRange.append(item)
+                    elif(type(item) == Lulu):
+                        self.lulusInRange.append(item)
+
+            # Linéaire
+            else:
+                if (self.lastPosition.y != self.position.y):
+                    if (self.position.y > self.lastPosition.y):
+                        oldVisionY *= -1
+
+                    # Vérification
+                    yToDelete = self.lastPosition.y + oldVisionY
+                    foodToDelete = [food for food in self.foodInRange if food.position.y == yToDelete]
+                    lulusToDelete = [lulu for lulu in self.lulusInRange if lulu.position.y == yToDelete]
+                    for food in foodToDelete[:]:
+                        self.foodInRange.remove(food)
+
+                    for lulu in lulusToDelete[:]:
+                        self.lulusInRange.remove(lulu)
+                
+                    # Vérifie au cas où un ajout est nécessaire
+                    yToAdd = self.position.y - oldVisionY
+
+                    for x in range(self.position.x - self.sense, self.position.x + self.sense + 1):
+                        item = Territory.getItem(x,yToAdd)
+                        if(type(item) == Food):
+                            self.foodInRange.append(item)
+                        elif(type(item) == Lulu):
+                            self.lulusInRange.append(item)
+
+                elif (self.lastPosition.x != self.position.x):
+                    if (self.position.x > self.lastPosition.x):
+                        oldVisionX *= -1
+
+                    # Vérification
+                    xToDelete = self.lastPosition.x + oldVisionX
+                    foodToDelete = [food for food in self.foodInRange if food.position.x == xToDelete]
+                    lulusToDelete = [lulu for lulu in self.lulusInRange if lulu.position.x == xToDelete]
+                    for food in foodToDelete[:]:
+                        self.foodInRange.remove(food)
+
+                    for lulu in lulusToDelete[:]:
+                        self.lulusInRange.remove(lulu)
+
+                    # Vérifie au cas où un ajout est nécessaire
+                    xToAdd = self.position.x - oldVisionX
+
+                    for y in range(self.position.y - self.sense, self.position.y + self.sense + 1):
+                        item = Territory.getItem(xToAdd,y)
+                        if(type(item) == Food):
+                            self.foodInRange.append(item)
+                        elif(type(item) == Lulu):
+                            self.lulusInRange.append(item)
+
+        # Remplir la liste 1 x au complet si nouveau tour
+        else:
+            self.newTurn = False
+            self.foodInRange = []
+            self.lulusInRange = []
+            map = Territory.getMap()
+            minX = self.position.x - self.sense
+            maxX = self.position.x + self.sense
+            minY = self.position.y - self.sense
+            maxY = self.position.y + self.sense
+            
+            for x in range(minX, maxX + 1):
+                for y in range(minY, maxY + 1):
+                    if not (self.position.x == x and self.position.y == y):
+                        item = Territory.getItem(x,y)
+                        if(type(item) == Food):
+                            self.foodInRange.append(item)
+                        elif(type(item) == Lulu):
+                            self.lulusInRange.append(item)
     
-    # Téléporte la lulu sur le côté au début d'une round
     def resetPosition(self):
         """Téléporte une :class:`Lulu` sur le côté de la carte (map) à la fin d'une génération, pour la préparer à la reproduction
         """
@@ -268,7 +393,7 @@ class Lulu:
         searchRangeX = 0
         searchRangeY = 0
 
-        if(self.position.x <= halfSizeX and self.position.y <= halfSizeY): # vérifier si centre de la map?
+        if(self.position.x <= halfSizeX and self.position.y <= halfSizeY): # Vérifier si centre de la map?
             if(self.position.x > self.position.y):
                 while(type(item) == Lulu and (self.position.x + searchRangeX) <= sizeX):
                     item = Territory.getItem(self.position.x + searchRangeX, minSizeXY)

@@ -25,6 +25,9 @@ class Index:
     ind = 0
     elev = 30
     azim = 130
+    xaxis = [0, 100]
+    yaxis = [0, 100]
+    zaxis = [0, 100]
 
     def isMax(self):
         """Fonction qui sert à savoir si ind est à la dernière génération.
@@ -46,6 +49,25 @@ class Index:
         if self.ind == 0:
             return True
         return False
+    
+    def setAxis(self):
+        maxSpeed = 0
+        maxSense = 0
+        maxSize = 0
+
+        for generation in generations:
+            for i in range(len(generation[0])):
+                if (generation[0][i] > maxSpeed):
+                    maxSpeed = generation[0][i]
+                if (generation[1][i] > maxSense):
+                    maxSense = generation[1][i]
+                if (generation[2][i] > maxSize):
+                    maxSize = generation[2][i]
+        
+        self.xaxis = [0, maxSpeed * 1.3]
+        self.yaxis = [0, maxSense * 1.3]
+        self.zaxis = [0, maxSize * 1.3]
+
 
 class graphGeneration:
         def next(index):
@@ -62,7 +84,7 @@ class graphGeneration:
             index.ind += 1
             if index.ind > len(generations) - 1:
                 index.ind = len(generations) - 1
-            return Graph.generateGraph(generations[index.ind], index.ind + 1, index.elev, index.azim)
+            return Graph.generateGraph(generations[index.ind], index.ind + 1, [index.elev, index.azim, index.xaxis, index.yaxis, index.zaxis])
             
         def previous(index):
             """Va générer le graphique de la génération précédente.
@@ -78,7 +100,7 @@ class graphGeneration:
             index.ind -= 1
             if index.ind < 0:
                 index.ind = 0
-            return Graph.generateGraph(generations[index.ind], index.ind + 1, index.elev, index.azim)
+            return Graph.generateGraph(generations[index.ind], index.ind + 1, [index.elev, index.azim, index.xaxis, index.yaxis, index.zaxis])
 
         def first(index):
             """Va générer le graphique de la première génération.
@@ -92,7 +114,7 @@ class graphGeneration:
             """
 
             index.ind = 0
-            return Graph.generateGraph(generations[index.ind], index.ind + 1, index.elev, index.azim)
+            return Graph.generateGraph(generations[index.ind], index.ind + 1, [index.elev, index.azim, index.xaxis, index.yaxis, index.zaxis])
         
         def last(index):
             """Va générer le graphique de la dernière génération.
@@ -106,7 +128,7 @@ class graphGeneration:
             """
 
             index.ind = len(generations) - 1
-            return Graph.generateGraph(generations[index.ind], index.ind + 1, index.elev, index.azim)
+            return Graph.generateGraph(generations[index.ind], index.ind + 1, [index.elev, index.azim, index.xaxis, index.yaxis, index.zaxis])
         
         def speedSize(index):
             """Cette fonction va changer l'angle de vu pour voir les axes Vitesse et Taille.
@@ -119,7 +141,7 @@ class graphGeneration:
                     :rtype: `[Figure, Axes]`
             """
 
-            return Graph.generateGraph(generations[index.ind], index.ind + 1, 0, 90)
+            return Graph.generateGraph(generations[index.ind], index.ind + 1, [0, 90, index.xaxis, index.yaxis, index.zaxis])
         
         def sizeSense(index):
             """Cette fonction va changer l'angle de vu pour voir les axes Taille et Vision.
@@ -132,7 +154,7 @@ class graphGeneration:
                     :rtype: `[Figure, Axes]`
             """
 
-            return Graph.generateGraph(generations[index.ind], index.ind + 1, 0, 0)
+            return Graph.generateGraph(generations[index.ind], index.ind + 1, [0, 0, index.xaxis, index.yaxis, index.zaxis])
         
         def senseSpeed(index):
             """Cette fonction va changer l'angle de vu pour voir les axes Vision et Vitesse.
@@ -145,7 +167,7 @@ class graphGeneration:
                     :rtype: `[Figure, Axes]`
             """
 
-            return Graph.generateGraph(generations[index.ind], index.ind + 1, -92, 0.44)
+            return Graph.generateGraph(generations[index.ind], index.ind + 1, [-92, 0.44, index.xaxis, index.yaxis, index.zaxis])
     
 def objectsToCoordinates(lulus):
     """Cette fonction sert à transformer une liste de `Lulu` en liste de coordonnées.
@@ -168,9 +190,9 @@ def objectsToCoordinates(lulus):
         senses.clear()
         sizes.clear()
         for lulu in generation:
-            speeds.append(round(lulu.Speed, 2))
-            senses.append(round(lulu.Sense, 2))
-            sizes.append(round(lulu.Size, 2))
+            speeds.append(round(lulu.speed, 2))
+            senses.append(round(lulu.sense, 2))
+            sizes.append(round(lulu.size / 100, 2))
         gens.append([speeds.copy(), senses.copy(), sizes.copy()])
     return gens
 
