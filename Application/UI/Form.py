@@ -413,8 +413,8 @@ class Form(ct.CTk):
                         lblStartFoodGood.configure(text="")
                         return startFoodValue
                 except TypeError:
-                    lblStartFoodGood.configure(text="Les tailles du territoire doivent être valide" + 
-                                               "\ravant de choisir le nombre de nourriture", text_color="red")
+                    lblStartFoodGood.configure(text="Les tailles du territoire doivent être valides" + 
+                                               "\ravant de choisir le nombre de nourritures", text_color="red")
             except ValueError:
                 lblStartFoodGood.configure(text="Ce n'est pas un nombre entier positif", text_color="red")
 
@@ -425,9 +425,9 @@ class Form(ct.CTk):
                 if(mapSizeXValue < 0 or mapSizeYValue < 0):
                     raise ValueError
                 maxFood = mapSizeXValue * mapSizeYValue * 0.50
-                return "Nombre de nourriture présent sur le territoire.\r (Le nombre de nourriture doit être inférieur ou égal\r à 50% du territoire soit " + str(math.floor(maxFood)) + ")"
+                return "Nombre de nourritures présent sur le territoire.\r (Le nombre de nourritures doit être inférieur ou égal\r à 50% du territoire soit " + str(math.floor(maxFood)) + ")"
             except ValueError:
-                return "Nombre de nourriture présent sur le territoire.\r (Le nombre de nourriture doit être inférieur ou égal\r à 50% du territoire\r(Les valeur en X et Y doivent être mise\r pour pouvoir savoir la valeur maximal))"
+                return "Nombre de nourritures présent sur le territoire.\r (Le nombre de nourritures doit être inférieur ou égal\r à 50% du territoire\r(Les valeurs en X et Y doivent être mise\r pour pouvoir savoir la valeur maximale))"
 
         # Enter 4 -- Validation
         def get_inputStartLulu():
@@ -447,8 +447,8 @@ class Form(ct.CTk):
                         print(startLuluValue)
                         return startLuluValue
                 except TypeError:
-                    lblStartLuluGood.configure(text="Les tailles du territoire doivent être valide" + 
-                                               "\ravant de choisir le nombre de lulu", text_color="red")
+                    lblStartLuluGood.configure(text="Les tailles du territoire doivent être valides" + 
+                                               "\ravant de choisir le nombre de lulus", text_color="red")
             except ValueError:
                 lblStartLuluGood.configure(text="Ce n'est pas un nombre entier positif", text_color="red")
 
@@ -461,7 +461,7 @@ class Form(ct.CTk):
                 maxLulu = (mapSizeXValue * 2 + mapSizeYValue * 2) - 4
                 return "Nombre de Lulus présent sur le territoire au début.\r (Le nombre de Lulus doit être inférieur ou égal\r au périmètre du territoire - 4 soit " + str(math.floor(maxLulu)) + ")"
             except ValueError:
-                return "Nombre de Lulus présent sur le territoire au début.\r (Le nombre de Lulus doit être inférieur ou égal\r au périmètre du territoire - 4\r (Les valeur en X et Y doivent être mise\r pour pouvoir savoir la valeur maximal))"
+                return "Nombre de Lulus présent sur le territoire au début.\r (Le nombre de Lulus doit être inférieur ou égal\r au périmètre du territoire - 4\r (Les valeurs en X et Y doivent être mise\r pour pouvoir savoir la valeur maximale))"
 
         # Enter 5 -- Validation
         def get_inputEnergy():
@@ -606,7 +606,7 @@ class Form(ct.CTk):
         progress_var = tk.DoubleVar()
         progress_bar = ttk.Progressbar(master=self.frame_1, variable=progress_var)
                   
-        btnSimulate = ct.CTkButton(master=self.frame_1, text="Lancer la Simulation", command=get_allBeforeSimulation)
+        btnSimulate = ct.CTkButton(master=self.frame_1, text="Lancer la simulation", command=get_allBeforeSimulation)
         btnSimulate.grid(row=10, column=0, columnspan=2, padx=20, pady=10, sticky="we")
 
         def importSimulation():
@@ -769,13 +769,13 @@ class Form(ct.CTk):
             createButtons()
             refreshButtons()            
 
-        btnImport = ct.CTkButton(master=self.frame_1, text="Importer une Simulation...", command=importSimulation)
+        btnImport = ct.CTkButton(master=self.frame_1, text="Importer une simulation...", command=importSimulation)
         btnImport.grid(row=10, column=2, padx=20, pady=10, sticky="we")
 
-        btnGraph = ct.CTkButton(master=self.frame_1, text="Visualiser les Graphiques", command=add_Graph)
+        btnGraph = ct.CTkButton(master=self.frame_1, text="Visualiser les graphiques", command=add_Graph)
         btnSave = ct.CTkButton(master=self.frame_1, text="Sauvegarder la simulation", command=save)
 
-        btnCancel = ct.CTkButton(master=self.frame_1, text="Cancel", command=f.Form.cancelSimulation)
+        btnCancel = ct.CTkButton(master=self.frame_1, text="Annuler la simulation", command=f.Form.cancelSimulation)
         btnCancel.grid(row=12, column=0, columnspan=3, padx=20, pady=10, sticky="we")
 
         global lblErrorInForm
