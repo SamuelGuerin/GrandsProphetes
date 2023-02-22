@@ -221,7 +221,7 @@ class Form(ct.CTk):
         infoMapSizeX.bind("<Enter>", lambda event: show_info(event, "Ce champs va déterminer la grandeur du territoire en X.\r (Cette valeur doit être entre 100 et 1 000 000)"))
         infoMapSizeX.bind("<Leave>", hide_info)
 
-        txtMapSizeX = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="100"))
+        txtMapSizeX = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="200"))
         txtMapSizeX.grid(row=0, column=2, padx=20, pady=10, sticky="ew")
 
         lblMapSizeXGood = ct.CTkLabel(master=self.frame_1, text="")
@@ -237,7 +237,7 @@ class Form(ct.CTk):
         infoMapSizeY.bind("<Enter>", lambda event: show_info(event, "Ce champs va déterminer la grandeur du territoire en Y.\r (Cette valeur doit être entre 100 et 1 000 000)"))
         infoMapSizeY.bind("<Leave>", hide_info)
 
-        txtMapSizeY = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="100"))
+        txtMapSizeY = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="200"))
         txtMapSizeY.grid(row=1, column=2, padx=20, pady=10, sticky="ew")
 
         lblMapSizeYGood = ct.CTkLabel(master=self.frame_1, text="")
@@ -252,7 +252,7 @@ class Form(ct.CTk):
         infoStartFood.bind("<Enter>", lambda event: show_info(event, get_infoStartFood()))
         infoStartFood.bind("<Leave>", hide_info)
 
-        txtStartFood = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
+        txtStartFood = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="50"))
         txtStartFood.grid(row=2, column=2, padx=20, pady=10, sticky="ew")
 
         lblStartFoodGood = ct.CTkLabel(master=self.frame_1, text="")
@@ -267,7 +267,7 @@ class Form(ct.CTk):
         infoStartLulu.bind("<Enter>", lambda event: show_info(event, get_infoStartLulu()))
         infoStartLulu.bind("<Leave>", hide_info)
 
-        txtStartLulu = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
+        txtStartLulu = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="10"))
         txtStartLulu.grid(row=3, column=2, padx=20, pady=10, sticky="ew")
 
         lblStartLuluGood = ct.CTkLabel(master=self.frame_1, text="")
@@ -282,7 +282,7 @@ class Form(ct.CTk):
         infoEnergy.bind("<Enter>", lambda event: show_info(event, "Ce champs représente le nombre mouvement\r que les Lulus pourront faire lors d'une génération.\r (Cette valeur doit être entre 100 et 1 000 000)"))
         infoEnergy.bind("<Leave>", hide_info)
 
-        txtEnergy = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="1000"))
+        txtEnergy = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="3000"))
         txtEnergy.grid(row=4, column=2, padx=20, pady=10, sticky="ew")
 
         lblEnergyGood = ct.CTkLabel(master=self.frame_1, text="")

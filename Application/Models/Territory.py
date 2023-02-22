@@ -57,7 +57,7 @@ __lulus = []
 __map = {}
 __moves = []
 __numberOfFood = 0
-EATING_RATIO = 1.2
+EATING_RATIO = 1.5
 
 def createMap(sizeX, sizeY, foodCount, lulusCount, speed, sense, energy, size, mutateChance, speedVariation, senseVariation, sizeVariation):
     """Crée (instancie) une carte (map) avec une taille X et Y ainsi qu'un nombre donné de nourriture et de Lulus
