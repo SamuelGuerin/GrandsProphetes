@@ -173,6 +173,7 @@ class Form(ct.CTk):
 
     def cancelSimulation():
         Simulation.check = True
+        btnCancel.grid_remove()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -223,7 +224,7 @@ class Form(ct.CTk):
 
         infoMapSizeX = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoMapSizeX.grid(row=0, column=1, pady=10, padx=10)
-        infoMapSizeX.bind("<Enter>", lambda event: show_info(event, "Déterminer la grandeur du territoire en X.\r (Cette valeur doit être entre 100 et 1 000 000)"))
+        infoMapSizeX.bind("<Enter>", lambda event: show_info(event, "Déterminer la grandeur du territoire en X.\r (Cette valeur doit être entre 100 et 1 000)"))
         infoMapSizeX.bind("<Leave>", hide_info)
 
         txtMapSizeX = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="200"))
@@ -239,7 +240,7 @@ class Form(ct.CTk):
 
         infoMapSizeY = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoMapSizeY.grid(row=1, column=1, pady=10, padx=10)
-        infoMapSizeY.bind("<Enter>", lambda event: show_info(event, "Déterminer la grandeur du territoire en Y.\r (Cette valeur doit être entre 100 et 1 000 000)"))
+        infoMapSizeY.bind("<Enter>", lambda event: show_info(event, "Déterminer la grandeur du territoire en Y.\r (Cette valeur doit être entre 100 et 1 000)"))
         infoMapSizeY.bind("<Leave>", hide_info)
 
         txtMapSizeY = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="200"))
@@ -284,7 +285,7 @@ class Form(ct.CTk):
 
         infoEnergy = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoEnergy.grid(row=4, column=1, pady=10, padx=10)
-        infoEnergy.bind("<Enter>", lambda event: show_info(event, "Énergie que les Lulus auront pour\r ce déplacer lors d'une génération.\r (Cette valeur doit être entre 100 et 1 000 000)"))
+        infoEnergy.bind("<Enter>", lambda event: show_info(event, "Énergie que les Lulus auront pour\r ce déplacer lors d'une génération.\r (Cette valeur doit être entre 100 et 100 000)"))
         infoEnergy.bind("<Leave>", hide_info)
 
         txtEnergy = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="3000"))
@@ -299,7 +300,7 @@ class Form(ct.CTk):
 
         infoSpeed = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoSpeed.grid(row=5, column=1, pady=10, padx=10)
-        infoSpeed.bind("<Enter>", lambda event: show_info(event, "Variation de leur vitesse en % si une mutation est effectuée.\r (Cette valeur doit être inférieur ou égal à 33)"))
+        infoSpeed.bind("<Enter>", lambda event: show_info(event, "Variation de leur vitesse en % si une mutation est effectuée.\r (Cette valeur doit être inférieur ou égal à 100)"))
         infoSpeed.bind("<Leave>", hide_info)
 
         txtSpeed = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
@@ -314,7 +315,7 @@ class Form(ct.CTk):
 
         infoSense = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoSense.grid(row=6, column=1, pady=10, padx=10)
-        infoSense.bind("<Enter>", lambda event: show_info(event, "Variation de leur vision en % si une mutation est effectuée.\r (Cette valeur doit être inférieur ou égal à 33)"))
+        infoSense.bind("<Enter>", lambda event: show_info(event, "Variation de leur vision en % si une mutation est effectuée.\r (Cette valeur doit être inférieur ou égal à 100)"))
         infoSense.bind("<Leave>", hide_info)
 
         txtSense = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
@@ -329,7 +330,7 @@ class Form(ct.CTk):
 
         infoSize = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoSize.grid(row=7, column=1, pady=10, padx=10)
-        infoSize.bind("<Enter>", lambda event: show_info(event, "Variation de leur taille en % si une mutation est effectuée.\r (Cette valeur doit être inférieur ou égal à 33)"))
+        infoSize.bind("<Enter>", lambda event: show_info(event, "Variation de leur taille en % si une mutation est effectuée.\r (Cette valeur doit être inférieur ou égal à 100)"))
         infoSize.bind("<Leave>", hide_info)
 
         txtSize = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
@@ -359,7 +360,7 @@ class Form(ct.CTk):
 
         infoGeneration = ct.CTkButton(master=self.frame_1, image=circle_image, text="", fg_color="#2b2b2b", width=10, state="disabled")
         infoGeneration.grid(row=9, column=1, pady=10, padx=10)
-        infoGeneration.bind("<Enter>", lambda event: show_info(event, "Nombre de générations\r qui sera effectuées lors de la simulation.\r (Cette valeur doit être entre 1 et 1 000 000)"))
+        infoGeneration.bind("<Enter>", lambda event: show_info(event, "Nombre de générations\r qui sera effectuées lors de la simulation.\r (Cette valeur doit être entre 1 et 1 000)"))
         infoGeneration.bind("<Leave>", hide_info)
 
         txtGeneration = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
@@ -374,8 +375,8 @@ class Form(ct.CTk):
                 mapSizeXValue = int(txtMapSizeX.get())
                 if(mapSizeXValue < 0):
                     raise ValueError
-                if(mapSizeXValue < 3 or mapSizeXValue > 1000000):
-                    lblMapSizeXGood.configure(text="Cette valeur doit être entre 100 et 1 000 000", text_color="red")
+                if(mapSizeXValue < 100 or mapSizeXValue > 1000):
+                    lblMapSizeXGood.configure(text="Cette valeur doit être entre 100 et 1 000", text_color="red")
                 else:
                     lblMapSizeXGood.configure(text="")
                     return mapSizeXValue
@@ -389,8 +390,8 @@ class Form(ct.CTk):
                 mapSizeYValue = int(txtMapSizeY.get())
                 if(mapSizeYValue < 0):
                     raise ValueError
-                if(mapSizeYValue < 3 or mapSizeYValue > 1000000):
-                    lblMapSizeYGood.configure(text="Cette valeur doit être entre 100 et 1 000 000", text_color="red")
+                if(mapSizeYValue < 100 or mapSizeYValue > 1000):
+                    lblMapSizeYGood.configure(text="Cette valeur doit être entre 100 et 1 000", text_color="red")
                 else:
                     lblMapSizeYGood.configure(text="")
                     return mapSizeYValue
@@ -471,8 +472,8 @@ class Form(ct.CTk):
                 energyValue = int(txtEnergy.get())
                 if(energyValue < 0):
                     raise ValueError
-                if(energyValue < 100 or energyValue > 1000000):
-                    lblEnergyGood.configure(text="Cette valeur doit être entre 100 et 1 000 000", text_color="red")
+                if(energyValue < 100 or energyValue > 100000):
+                    lblEnergyGood.configure(text="Cette valeur doit être entre 100 et 100 000", text_color="red")
                 else:
                     lblEnergyGood.configure(text="")
                     print(energyValue)
@@ -486,8 +487,8 @@ class Form(ct.CTk):
                 speedValue = int(txtSpeed.get())
                 if(speedValue < 0):
                     raise ValueError
-                if(speedValue > 33):
-                    lblSpeedGood.configure(text="Cette valeur doit être inférieur ou égal à 33", text_color="red")
+                if(speedValue > 100):
+                    lblSpeedGood.configure(text="Cette valeur doit être inférieur ou égal à 100", text_color="red")
                 else:
                     lblSpeedGood.configure(text="")
                     print(speedValue)
@@ -501,8 +502,8 @@ class Form(ct.CTk):
                 senseValue = int(txtSense.get())
                 if(senseValue < 0):
                     raise ValueError
-                if(senseValue > 33):
-                    lblSenseGood.configure(text="Cette valeur doit être plus petite ou égal à 33", text_color="red")
+                if(senseValue > 100):
+                    lblSenseGood.configure(text="Cette valeur doit être plus petite ou égal 100", text_color="red")
                 else:
                     lblSenseGood.configure(text="")
                     print(senseValue)
@@ -516,8 +517,8 @@ class Form(ct.CTk):
                 sizeValue = int(txtSize.get())
                 if(sizeValue < 0):
                     raise ValueError
-                if(sizeValue > 33):
-                    lblSizeGood.configure(text="Cette valeur doit être plus petite ou égal à 33", text_color="red")
+                if(sizeValue > 100):
+                    lblSizeGood.configure(text="Cette valeur doit être plus petite ou égal 100", text_color="red")
                 else:
                     lblSizeGood.configure(text="")
                     print(sizeValue)
@@ -545,8 +546,8 @@ class Form(ct.CTk):
                 generationValue = int(txtGeneration.get())
                 if(generationValue < 0):
                     raise ValueError
-                if(generationValue < 1 or generationValue > 1000000):
-                    lblGenerationGood.configure(text="Cette valeur doit être entre 1 et 1 000 000", text_color="red")
+                if(generationValue < 1 or generationValue > 1000):
+                    lblGenerationGood.configure(text="Cette valeur doit être entre 1 et 1 000", text_color="red")
                 else:
                     lblGenerationGood.configure(text="")
                     print(generationValue)
@@ -579,6 +580,7 @@ class Form(ct.CTk):
                and type(validMutation) is int
                and type(validGeneration) is int):
                 
+                btnCancel.grid(row=12, column=0, columnspan=3, padx=20, pady=10, sticky="we")
                 btnGraph.grid_remove()
                 btnSave.grid_remove()
                 btnSimulate.configure(state="disable")
@@ -601,6 +603,8 @@ class Form(ct.CTk):
                 progress_bar.grid_remove()
                 btnSimulate.configure(state="normal")
                 btnImport.configure(state="normal")
+                btnCancel.grid_remove()
+
                 lblErrorInForm.configure(text="La simulation est terminée", text_color="green")
             else:
                 lblErrorInForm.configure(text="Erreur: Veuillez remplir convenablement le formulaire", text_color="red")
@@ -817,8 +821,8 @@ class Form(ct.CTk):
         btnGraph = ct.CTkButton(master=self.frame_1, text="Visualiser les graphiques", command=add_Graph)
         btnSave = ct.CTkButton(master=self.frame_1, text="Sauvegarder la simulation", command=save)
 
+        global btnCancel
         btnCancel = ct.CTkButton(master=self.frame_1, text="Annuler la simulation", command=f.Form.cancelSimulation)
-        btnCancel.grid(row=12, column=0, columnspan=3, padx=20, pady=10, sticky="we")
 
         global lblErrorInForm
         lblErrorInForm = ct.CTkLabel(master=self.frame_1, height=100, justify=ct.CENTER, text="")
