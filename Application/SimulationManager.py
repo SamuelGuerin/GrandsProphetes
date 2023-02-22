@@ -4,11 +4,12 @@ from manim import *
 from manim.utils.file_ops import open_file as open_media_file
 from Models.Lulu import Lulu
 from Models.Food import Food
+from Models.Saves import Save
 
 global generation
 generation = 0
 generationMoves = []
-generationLulus = []
+generationsSave = Save()
 class VisualizeLulus(Scene):
     def construct(self):
 
@@ -115,14 +116,14 @@ def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation,
     global check
     check  = False
     global generation
-    global generationLulus
-    generationLulus = []
+    global generationsSave
+    generationsSave = Save(sizeX,sizeY,foodCount, lulusCount,energy,speedVariation,senseVariation,sizeVariation,mutateChance,nbGeneration, generations=[])
 
     for generation in range(nbGeneration):
         st = time.time()
         print("generation " + str(generation))
         print("nombre de lulu: " + str(Territory.getLulus().__len__()))
-        generationLulus.append(Territory.getLulus().copy())
+        generationsSave.generations.append(Territory.getLulus().copy())
         Territory.moveAll()
         Territory.resetWorld()
         Territory.dayResultLulu()
@@ -144,5 +145,9 @@ def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation,
         
     print("temps simulation: " + str(sime))
 
-def getGenerationsLulu():
-    return generationLulus
+def getGenerationsSave():
+    return generationsSave
+
+def setGenerationSave(data):
+    global generationsSave
+    generationsSave = data

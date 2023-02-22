@@ -1,5 +1,7 @@
 import json
+import jsonpickle
 import re
+from Models.Saves import Save
 from pathlib import Path
 from os import listdir
 from jsonschema import validate
@@ -19,13 +21,10 @@ def saveData(data):
     """Enregistre les données des coordonnées dans un fichier Json dans le dossier "Save".
 
     :param data: Liste des coordonnées des générations de la simulation.
-    :type data: `[[[float],[float],[float]]]`
+    :type data: `Save`
     """
 
-    def obj_dict(obj):
-        return obj.__dict__
-
-    jsonString = json.dumps(data, default=obj_dict)
+    jsonString = jsonpickle.encode(data)
 
     Path("Save/").mkdir(parents=True, exist_ok=True)
 
@@ -49,63 +48,21 @@ def loadData():
     """Permet à un utilisateur de choisir un fichier json à importer et de retourner les valeurs.
 
     :return: Retourne une liste de coordonnées pour le graphique 3d.
-    :rtype: [[[float],[float],[float]]]
+    :rtype: Save
     """
-
-    schema = {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "type": "array",
-    "items": [
-        {
-        "type": "array",
-        "items": [
-            {
-            "type": "array",
-            "items": [
-                {
-                "type": "number"
-                }
-            ],
-            "additionalItems": True
-            },
-            {
-            "type": "array",
-            "items": [
-                {
-                "type": "number"
-                }
-            ],
-            "additionalItems": True
-            },
-            {
-            "type": "array",
-            "items": [
-                {
-                "type": "number"
-                }
-            ],
-            "additionalItems": True
-            }
-        ],
-        "additionalItems": False
-        }
-    ],
-    "additionalItems": True
-    }
 
     data = None
 
     try:
         file_path = filedialog.askopenfilename(initialdir="Save/", filetypes=[("Json File", "*.json")])
 
-        f = open(file_path)
-        data = json.load(f)
+        with open(file_path) as f:
+            contents = f.readlines()
+        dataTemp = jsonpickle.decode(contents[0])
+
         f.close()
-
-        validate(instance=data, schema=schema)
-
-        if not validateData(data):
-            raise Exception()
+        data = Save(dataTemp.sizeX, dataTemp.sizeY,dataTemp.nbFood, dataTemp.nbLulu, dataTemp.energy, dataTemp.varSpeed, dataTemp.varSense, dataTemp.varSize,dataTemp.mutationChance, dataTemp.nbGen, dataTemp.generations)
+        
         
         print("fichier valide")
     except:

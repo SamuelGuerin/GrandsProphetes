@@ -48,7 +48,7 @@ class Lulu:
         :return: Retourne un booléen déterminant s'il reste assez d'énergie à la :class:`Lulu` pour effectuer un mouvement
         :rtype: bool
         """
-        energyCost = ((self.size / 100) ** 3) * (self.speed ** 2) + self.sense
+        energyCost = ((self.size / 100) ** 3) * (self.speed ** 2) + self.sense * 1000
         speedLeft = self.speed
         startPt = self.position
         self.newTurn = True

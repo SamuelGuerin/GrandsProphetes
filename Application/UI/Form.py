@@ -15,6 +15,8 @@ from JsonManager import saveData, loadData
 import threading
 import Form as f
 
+global canvasR
+canvasR = None
 
 ct.set_appearance_mode("dark")
 ct.set_default_color_theme("blue")
@@ -224,7 +226,7 @@ class Form(ct.CTk):
         infoMapSizeX.bind("<Enter>", lambda event: show_info(event, "Déterminer la grandeur du territoire en X.\r (Cette valeur doit être entre 100 et 1 000 000)"))
         infoMapSizeX.bind("<Leave>", hide_info)
 
-        txtMapSizeX = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="100"))
+        txtMapSizeX = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="200"))
         txtMapSizeX.grid(row=0, column=2, padx=20, pady=10, sticky="ew")
 
         lblMapSizeXGood = ct.CTkLabel(master=self.frame_1, text="")
@@ -240,7 +242,7 @@ class Form(ct.CTk):
         infoMapSizeY.bind("<Enter>", lambda event: show_info(event, "Déterminer la grandeur du territoire en Y.\r (Cette valeur doit être entre 100 et 1 000 000)"))
         infoMapSizeY.bind("<Leave>", hide_info)
 
-        txtMapSizeY = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="100"))
+        txtMapSizeY = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="200"))
         txtMapSizeY.grid(row=1, column=2, padx=20, pady=10, sticky="ew")
 
         lblMapSizeYGood = ct.CTkLabel(master=self.frame_1, text="")
@@ -255,7 +257,7 @@ class Form(ct.CTk):
         infoStartFood.bind("<Enter>", lambda event: show_info(event, get_infoStartFood()))
         infoStartFood.bind("<Leave>", hide_info)
 
-        txtStartFood = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
+        txtStartFood = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="50"))
         txtStartFood.grid(row=2, column=2, padx=20, pady=10, sticky="ew")
 
         lblStartFoodGood = ct.CTkLabel(master=self.frame_1, text="")
@@ -270,7 +272,7 @@ class Form(ct.CTk):
         infoStartLulu.bind("<Enter>", lambda event: show_info(event, get_infoStartLulu()))
         infoStartLulu.bind("<Leave>", hide_info)
 
-        txtStartLulu = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="25"))
+        txtStartLulu = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="10"))
         txtStartLulu.grid(row=3, column=2, padx=20, pady=10, sticky="ew")
 
         lblStartLuluGood = ct.CTkLabel(master=self.frame_1, text="")
@@ -285,7 +287,7 @@ class Form(ct.CTk):
         infoEnergy.bind("<Enter>", lambda event: show_info(event, "Énergie que les Lulus auront pour\r ce déplacer lors d'une génération.\r (Cette valeur doit être entre 100 et 1 000 000)"))
         infoEnergy.bind("<Leave>", hide_info)
 
-        txtEnergy = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="1000"))
+        txtEnergy = ct.CTkEntry(master=self.frame_1, textvariable=tk.StringVar(value="3000"))
         txtEnergy.grid(row=4, column=2, padx=20, pady=10, sticky="ew")
 
         lblEnergyGood = ct.CTkLabel(master=self.frame_1, text="")
@@ -593,7 +595,7 @@ class Form(ct.CTk):
                     progress_bar.update()
                 th.join()
 
-                fg.generations = fg.objectsToCoordinates(Simulation.getGenerationsLulu())
+                fg.generations = fg.objectsToCoordinates(Simulation.getGenerationsSave().generations)
                 btnGraph.grid(row=11, column=0, columnspan=2, padx=20, pady=10, sticky="we")
                 btnSave.grid(row=11, column=2, padx=20, pady=10, sticky="we")
                 progress_bar.grid_remove()
@@ -612,23 +614,38 @@ class Form(ct.CTk):
         def importSimulation():
             importData = loadData()
             if importData is not None:
-                btnGraph.grid_remove()
-                btnSave.grid_remove()
-                fg.generations = importData
-                add_Graph()
+                fg.generations = fg.objectsToCoordinates(importData.generations)
+                changeInputs(importData)
             else:
                 lblErrorInForm.configure(text="Erreur: Fichier non valide", text_color="red")
 
         def save():
-            saveData(fg.generations)
+            saveData(Simulation.getGenerationsSave())
             lblErrorInForm.configure(text="Le fichier a été sauvegardé.", text_color="green")
-    
+
+        def changeInputs(data):
+            changeInputText(txtMapSizeX,str(data.sizeX))
+            changeInputText(txtMapSizeY,str(data.sizeY))
+            changeInputText(txtStartFood,str(data.nbFood))
+            changeInputText(txtStartLulu,str(data.nbLulu))
+            changeInputText(txtEnergy,str(data.energy))
+            changeInputText(txtSpeed,str(data.varSpeed))
+            changeInputText(txtSense,str(data.varSense))
+            changeInputText(txtSize,str(data.varSize))
+            changeInputText(txtMutation,str(data.mutationChance))
+            changeInputText(txtGeneration,str(data.nbGen))
+        
+        def changeInputText(input,text):
+            input.delete(0,'end')
+            input.insert(0,text)
+            
         # Graph
         def add_Graph():
             global canvasR
-            graphData = fg.graphGeneration.first(index)
-            index.elev = 30
             index.azim = 130
+            index.elev = 30
+            index.setAxis()
+            graphData = fg.graphGeneration.first(index)
             global ax
             ax = graphData[1]
             fig = graphData[0]
@@ -644,6 +661,9 @@ class Form(ct.CTk):
                 canvas.get_tk_widget().destroy()
                 index.elev = ax.elev
                 index.azim = ax.azim
+                index.xaxis = ax.get_xlim()
+                index.yaxis = ax.get_ylim()
+                index.zaxis = ax.get_zlim()
                 graphData = fg.graphGeneration.previous(index)
                 updateGraph(canvas, graphData)
                 refreshButtons() 
@@ -655,6 +675,9 @@ class Form(ct.CTk):
                 canvas.get_tk_widget().destroy()
                 index.elev = ax.elev
                 index.azim = ax.azim
+                index.xaxis = ax.get_xlim()
+                index.yaxis = ax.get_ylim()
+                index.zaxis = ax.get_zlim()
                 graphData = fg.graphGeneration.next(index)
                 updateGraph(canvas, graphData)
                 refreshButtons() 
@@ -666,6 +689,9 @@ class Form(ct.CTk):
                 canvas.get_tk_widget().destroy()
                 index.elev = ax.elev
                 index.azim = ax.azim
+                index.xaxis = ax.get_xlim()
+                index.yaxis = ax.get_ylim()
+                index.zaxis = ax.get_zlim()
                 graphData = fg.graphGeneration.last(index)
                 updateGraph(canvas, graphData)
                 refreshButtons() 
@@ -677,6 +703,9 @@ class Form(ct.CTk):
                 canvas.get_tk_widget().destroy()
                 index.elev = ax.elev
                 index.azim = ax.azim
+                index.xaxis = ax.get_xlim()
+                index.yaxis = ax.get_ylim()
+                index.zaxis = ax.get_zlim()
                 graphData = fg.graphGeneration.first(index)
                 updateGraph(canvas, graphData)
                 refreshButtons() 
@@ -686,6 +715,9 @@ class Form(ct.CTk):
                 canvas.get_tk_widget().destroy()
                 index.elev = ax.elev
                 index.azim = ax.azim
+                index.xaxis = ax.get_xlim()
+                index.yaxis = ax.get_ylim()
+                index.zaxis = ax.get_zlim()
                 graphData = fg.graphGeneration.speedSize(index)
                 updateGraph(canvas, graphData)
                 refreshButtons()
@@ -695,6 +727,9 @@ class Form(ct.CTk):
                 canvas.get_tk_widget().destroy()
                 index.elev = ax.elev
                 index.azim = ax.azim
+                index.xaxis = ax.get_xlim()
+                index.yaxis = ax.get_ylim()
+                index.zaxis = ax.get_zlim()
                 graphData = fg.graphGeneration.sizeSense(index)
                 updateGraph(canvas, graphData)
                 refreshButtons() 
@@ -704,6 +739,9 @@ class Form(ct.CTk):
                 canvas.get_tk_widget().destroy()
                 index.elev = ax.elev
                 index.azim = ax.azim
+                index.xaxis = ax.get_xlim()
+                index.yaxis = ax.get_ylim()
+                index.zaxis = ax.get_zlim()
                 graphData = fg.graphGeneration.senseSpeed(index)
                 updateGraph(canvas, graphData)
                 refreshButtons() 
@@ -726,10 +764,14 @@ class Form(ct.CTk):
                 index.azim = ax.azim
                 fig = graphData[0]
                 ax = graphData[1]
-                canvasN = FigureCanvasTkAgg(fig, self)
-                canvasN.get_tk_widget().grid(row=0, column=0, columnspan=5, sticky="wesn")
                 global canvasR
-                canvasR = canvasN
+
+                if canvasR != None:
+                    canvasR.get_tk_widget().destroy()
+                canvasR = None
+
+                canvasR = FigureCanvasTkAgg(fig, self)
+                canvasR.get_tk_widget().grid(row=0, column=0, columnspan=5, sticky="wesn")
             
             def refreshButtons():
                 global buttonSpeedSize
