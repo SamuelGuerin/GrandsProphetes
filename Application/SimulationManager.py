@@ -4,9 +4,12 @@ from manim import *
 from manim.utils.file_ops import open_file as open_media_file
 from Models.Lulu import Lulu
 from Models.Food import Food
+from Models.Saves import Save
 
+global generation
+generation = 0
 generationMoves = []
-generationLulus = []
+generationsSave = Save()
 class VisualizeLulus(Scene):
     def construct(self):
 
@@ -76,7 +79,6 @@ def newMap(sizeX, sizeY, foodCount, lulusCount):
     :type lulusCount: int
 	"""
     Territory.createMap(sizeX, sizeY, foodCount, lulusCount, 0, 0, 0, 0, 0, 0, 0, 0)
-
     renderAnimation()
 
 def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation, sizeVariation, energy, nbGeneration, mutateChance):
@@ -110,22 +112,29 @@ def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation,
     sims = time.time()
     Territory.createMap(sizeX, sizeY, foodCount, lulusCount,
                         speed, sense, energy * 10000, size, mutateChance, speedVariation, senseVariation, sizeVariation)
-    
+
+    global check
+    check  = False
     global generation
+    global generationsSave
+    generationsSave = Save(sizeX,sizeY,foodCount, lulusCount,energy,speedVariation,senseVariation,sizeVariation,mutateChance,nbGeneration, generations=[])
+
     for generation in range(nbGeneration):
         st = time.time()
         print("generation " + str(generation))
         print("nombre de lulu: " + str(Territory.getLulus().__len__()))
-        generationLulus.append(Territory.getLulus().copy())
+        generationsSave.generations.append(Territory.getLulus().copy())
         Territory.moveAll()
         Territory.resetWorld()
         Territory.dayResultLulu()
         generationMoves.append(Territory.getMoves())
+
+        if(check):
+            break
         
         if (Territory.getLulus().__len__() == 0):
             break
 
-        
         et = time.time()
         elapsed = et - st
         
@@ -136,5 +145,9 @@ def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation,
         
     print("temps simulation: " + str(sime))
 
-def getGenerationsLulu():
-    return generationLulus
+def getGenerationsSave():
+    return generationsSave
+
+def setGenerationSave(data):
+    global generationsSave
+    generationsSave = data
