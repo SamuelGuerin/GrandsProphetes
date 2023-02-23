@@ -353,4 +353,3 @@ MigrationBackup/
 # Les vidéos et photos générées avec manim
 Application/media/
 media/images/
-*.txt

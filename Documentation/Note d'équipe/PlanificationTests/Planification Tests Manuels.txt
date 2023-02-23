@@ -1,0 +1,32 @@
+TESTS FORM:
+
+- Validation de tous les champs --> valeurs entières (Pas de négatifs, exemple: On ne peut pas lancer une simulation avec -25 Lulus)
+- Validation de tous les champs --> valeurs comprises entre les bornes de X à X (exemple: Les axes du Territoire doivent être de 100 à 1,000,000)
+- Les erreurs de validations s'affichent sur le côté droit du formulaire lorsque qu'une ou plusieurs valeurs entrées dans un ou plusieurs champs ne respectent pas les spécifications demandées
+
+- Les informations aditionnelles apparaissent au bas de l'écran lorsque qu'on dépose le curseur sur la bulle d'information en question
+
+- L'importation des fichiers JSON de générations fonctionne
+- Validation/erreur levée lorsqu'on tente de charger un fichier JSON invalide ou un fichier d'une autre extension
+
+- Bouton "Annuler" annule tous processus de création de simulation
+- Impossibilité de visualiser les graphiques d'une simulation si nous avons auparavant annulé la création de la simulation durant son chargement (Bouton "Annuler" durant la barre de chargement)
+
+-----------------------------------------------------------------
+TESTS GRAPHIQUES:
+
+- Les statistiques Population, Maximum, Minimum et Moyenne, s'affichent correctement selon chaque génération
+- Les différentes Lulus s'affichent avec une couleur et position différente selon leurs caractéristiques/statistiques de vitesse, vision et taille
+- La couleur des Lulus est déterminée en fonction de leurs caractéristiques/statistiques de vitesse, vision et taille et ne change pas 
+
+- L'angle de visualisation des graphiques reste le même lorsqu'on affiche le graphique d'une autre génération
+- Les 3 boutons disponibles pour afficher le graphique selon des angles précis doivent fonctionner
+- Les boutons "Prochaine, Précédente, Première, Dernière" génération, fonctionnent et affiche la bonne génération
+- Le compteur/titre de génération s'incrémente correctement lorsqu'on change de génération
+
+- Bouton de retour ramène l'utilisateur au formulaire principal pour créer une simulation
+
+
+
+
+
