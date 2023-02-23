@@ -98,6 +98,7 @@ class TestMove(unittest.TestCase):
         #self.assertFalse(lulu1.move())
 
     def test_getMovefromDiff(self):
+        # Teste si on retourne un entier positif ou négatif déterminant dans quelle direction la Lulu doit se déplacer sur les axes X et Y
         lulu1 = Lulu(Position(1,40), 1, 1, 100, 3, 0, False)
         self.assertEqual(lulu1.getMoveFromDiff(5), 1)
         self.assertEqual(lulu1.getMoveFromDiff(-5), -1)
@@ -148,14 +149,14 @@ class TestMove(unittest.TestCase):
 
 class TestTargetPosition(unittest.TestCase):
     def test_newRandomPosition(self):
-        # Tests if the new random position is different than current Target Position
+        # Teste si la nouvelle position cible aléatoire est différente de l'ancienne/la position cible actuelle
         lulu1 = Lulu(Position(50,50), 1, 1, 100, 3, 0, False)
         oldPos = lulu1.randomTargetPosition
         newPos = lulu1.newRandomPosition()
         self.assertNotEqual(oldPos, newPos)
 
-    def test_closeToTargetPosition(self): # Il faudrait coder un territoire 3x3 -> 1 seule target position possible -> forcément retourne True
-        # Tests if the Lulu is close to the target position
+    def test_closeToTargetPosition(self):
+        # Teste si la Lulu est près de la position cible
         lulu1 = Lulu(Position(60,50), 1, 1, 100, 3, 0, False)
         lulu1.randomTargetPosition = Position(61,50)
         self.assertTrue(lulu1.isCloseToTargetPosition())
