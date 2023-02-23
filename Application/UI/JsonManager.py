@@ -62,12 +62,9 @@ def loadData():
 
         f.close()
         data = Save(dataTemp.sizeX, dataTemp.sizeY,dataTemp.nbFood, dataTemp.nbLulu, dataTemp.energy, dataTemp.varSpeed, dataTemp.varSense, dataTemp.varSize,dataTemp.mutationChance, dataTemp.nbGen, dataTemp.generations)
-        
-        
-        print("fichier valide")
+
     except:
         data = None
-        print("fichier non valide")
     return data
 
 def validateData(data):

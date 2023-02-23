@@ -447,7 +447,6 @@ class Form(ct.CTk):
                                                 + str(int(maxLulu)) + "\r(Cette valeur dépend de la taille du territoire)", text_color="red")
                     else:
                         lblStartLuluGood.configure(text="")
-                        print(startLuluValue)
                         return startLuluValue
                 except TypeError:
                     lblStartLuluGood.configure(text="Les tailles du territoire doivent être valides" + 
@@ -476,7 +475,6 @@ class Form(ct.CTk):
                     lblEnergyGood.configure(text="Cette valeur doit être entre 100 et 100 000", text_color="red")
                 else:
                     lblEnergyGood.configure(text="")
-                    print(energyValue)
                     return energyValue
             except ValueError:
                 lblEnergyGood.configure(text="Ce n'est pas un nombre entier positif", text_color="red")
@@ -491,7 +489,6 @@ class Form(ct.CTk):
                     lblSpeedGood.configure(text="Cette valeur doit être inférieur ou égal à 100", text_color="red")
                 else:
                     lblSpeedGood.configure(text="")
-                    print(speedValue)
                     return speedValue
             except ValueError:
                 lblSpeedGood.configure(text="Ce n'est pas un nombre entier positif", text_color="red")
@@ -506,7 +503,6 @@ class Form(ct.CTk):
                     lblSenseGood.configure(text="Cette valeur doit être plus petite ou égal 100", text_color="red")
                 else:
                     lblSenseGood.configure(text="")
-                    print(senseValue)
                     return senseValue
             except ValueError:
                 lblSenseGood.configure(text="Ce n'est pas un nombre entier positif", text_color="red")
@@ -521,7 +517,6 @@ class Form(ct.CTk):
                     lblSizeGood.configure(text="Cette valeur doit être plus petite ou égal 100", text_color="red")
                 else:
                     lblSizeGood.configure(text="")
-                    print(sizeValue)
                     return sizeValue
             except ValueError:
                 lblSizeGood.configure(text="Ce n'est pas un nombre entier positif", text_color="red")
@@ -550,7 +545,6 @@ class Form(ct.CTk):
                     lblGenerationGood.configure(text="Cette valeur doit être entre 1 et 1 000", text_color="red")
                 else:
                     lblGenerationGood.configure(text="")
-                    print(generationValue)
                     return generationValue
             except ValueError:
                 lblGenerationGood.configure(text="Ce n'est pas un nombre entier positif", text_color="red")
@@ -568,7 +562,6 @@ class Form(ct.CTk):
             validSize = get_inputSize()
             validMutation = get_inputMutation()
             validGeneration = get_inputGeneration()
-            print(validMapSizeX)
             if(type(validMapSizeX) is int
                and type(validMapSizeY) is int
                and type(validStartFood) is int
@@ -620,6 +613,7 @@ class Form(ct.CTk):
             if importData is not None:
                 fg.generations = fg.objectsToCoordinates(importData.generations)
                 changeInputs(importData)
+                btnGraph.grid(row=11, column=0, columnspan=2, padx=20, pady=10, sticky="we")
             else:
                 lblErrorInForm.configure(text="Erreur: Fichier non valide", text_color="red")
 
