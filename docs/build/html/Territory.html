@@ -247,8 +247,25 @@ où les Lulus et la nourriture seront placés aléatoirement</p>
 </dd>
 </dl>
 <dl class="py function">
+<dt class="sig sig-object py" id="Territory.addMove">
+<span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">addMove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">move</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Territory.html#addMove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Territory.addMove" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Ajoute le mouvement effectué à la liste des mouvements</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>move</strong> (<em>Move</em>) – Objet contenant le déplacement effectué</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Territory.clearMap">
+<span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">clearMap</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Territory.html#clearMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Territory.clearMap" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Supprime les données des listes de Lulus et map</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="Territory.createMap">
-<span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">createMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sizeX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sizeY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">foodCount</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lulusCount</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Territory.html#createMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Territory.createMap" title="Lien permanent vers cette définition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">createMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sizeX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sizeY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">foodCount</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lulusCount</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sense</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutateChance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speedVariation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">senseVariation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sizeVariation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Territory.html#createMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Territory.createMap" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Crée (instancie) une carte (map) avec une taille X et Y ainsi qu’un nombre donné de nourriture et de Lulus</p>
 <dl class="field-list simple">
 <dt class="field-odd">Paramètres<span class="colon">:</span></dt>
@@ -265,7 +282,8 @@ où les Lulus et la nourriture seront placés aléatoirement</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="Territory.dayResultLulu">
 <span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">dayResultLulu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Territory.html#dayResultLulu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Territory.dayResultLulu" title="Lien permanent vers cette définition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Vérifie la quantité de nourriture que possède chaque lulu et décide si elle se reproduit, survit, ou meurt</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Territory.getItem">
@@ -283,6 +301,20 @@ où les Lulus et la nourriture seront placés aléatoirement</p>
 </dd>
 <dt class="field-odd">Type renvoyé<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="Position.html#module-Position" title="Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Territory.getLuluMap">
+<span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">getLuluMap</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Territory.html#getLuluMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Territory.getLuluMap" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Calcul le nombre de lulus présents dans la map</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Quantité de lulus</p>
+</dd>
+<dt class="field-even">Type renvoyé<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -316,6 +348,20 @@ où les Lulus et la nourriture seront placés aléatoirement</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="Territory.getMoves">
+<span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">getMoves</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Territory.html#getMoves"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Territory.getMoves" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Retourne la liste des mouvements effectués</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Retourne la liste des mouvements effectués</p>
+</dd>
+<dt class="field-even">Type renvoyé<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="Territory.getSizeX">
 <span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">getSizeX</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Territory.html#getSizeX"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Territory.getSizeX" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Retourne la taille de l’axe des X de la carte (map)</p>
@@ -344,6 +390,12 @@ où les Lulus et la nourriture seront placés aléatoirement</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="Territory.moveAll">
+<span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">moveAll</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Territory.html#moveAll"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Territory.moveAll" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Algorithme qui permet à chaque lulu d’effectuer un mouvement à tour de rôle</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="Territory.moveLulu">
 <span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">moveLulu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oldPosition</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newPosition</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Territory.html#moveLulu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Territory.moveLulu" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Déplace la <a class="reference internal" href="Lulu.html#module-Lulu" title="Lulu"><code class="xref py py-class docutils literal notranslate"><span class="pre">Lulu</span></code></a> d’une <a class="reference internal" href="Position.html#module-Position" title="Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a> A à une <a class="reference internal" href="Position.html#module-Position" title="Position"><code class="xref py py-class docutils literal notranslate"><span class="pre">Position</span></code></a> B</p>
@@ -366,7 +418,34 @@ où les Lulus et la nourriture seront placés aléatoirement</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="Territory.reproduceLulu">
 <span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">reproduceLulu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Lulu</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Territory.html#reproduceLulu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Territory.reproduceLulu" title="Lien permanent vers cette définition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Algorithme permettant à la lulu passée en paramètre de se reproduire.
+Fait muté la nouvelle lulu selon un pourcentage de chance et selon les
+variations passer dans le formulaire.</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">param Lulu<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Lulu a reproduire</p>
+</dd>
+<dt class="field-even">type Lulu<span class="colon">:</span></dt>
+<dd class="field-even"><p>Lulu</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Territory.resetWorld">
+<span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">resetWorld</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Territory.html#resetWorld"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Territory.resetWorld" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Réinitialise la nourriture restante dans le monde.
+Réinitialise l’énergie et la nourriture des lulus.
+Réinitialise la position des lulus sur les côtés.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="Territory.setFood">
+<span class="sig-prename descclassname"><span class="pre">Territory.</span></span><span class="sig-name descname"><span class="pre">setFood</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Territory.html#setFood"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Territory.setFood" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Permet de mettre la nourriture de façon aléatoire dans la map</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Territory.tryMove">
@@ -405,16 +484,23 @@ où les Lulus et la nourriture seront placés aléatoirement</p>
             <div class="page_toc">
                 <ul>
 <li><a class="reference internal" href="#">Territory module</a><ul>
+<li><a class="reference internal" href="#Territory.addMove"><code class="docutils literal notranslate"><span class="pre">addMove()</span></code></a></li>
+<li><a class="reference internal" href="#Territory.clearMap"><code class="docutils literal notranslate"><span class="pre">clearMap()</span></code></a></li>
 <li><a class="reference internal" href="#Territory.createMap"><code class="docutils literal notranslate"><span class="pre">createMap()</span></code></a></li>
 <li><a class="reference internal" href="#Territory.dayResultLulu"><code class="docutils literal notranslate"><span class="pre">dayResultLulu()</span></code></a></li>
 <li><a class="reference internal" href="#Territory.getItem"><code class="docutils literal notranslate"><span class="pre">getItem()</span></code></a></li>
+<li><a class="reference internal" href="#Territory.getLuluMap"><code class="docutils literal notranslate"><span class="pre">getLuluMap()</span></code></a></li>
 <li><a class="reference internal" href="#Territory.getLulus"><code class="docutils literal notranslate"><span class="pre">getLulus()</span></code></a></li>
 <li><a class="reference internal" href="#Territory.getMap"><code class="docutils literal notranslate"><span class="pre">getMap()</span></code></a></li>
+<li><a class="reference internal" href="#Territory.getMoves"><code class="docutils literal notranslate"><span class="pre">getMoves()</span></code></a></li>
 <li><a class="reference internal" href="#Territory.getSizeX"><code class="docutils literal notranslate"><span class="pre">getSizeX()</span></code></a></li>
 <li><a class="reference internal" href="#Territory.getSizeY"><code class="docutils literal notranslate"><span class="pre">getSizeY()</span></code></a></li>
+<li><a class="reference internal" href="#Territory.moveAll"><code class="docutils literal notranslate"><span class="pre">moveAll()</span></code></a></li>
 <li><a class="reference internal" href="#Territory.moveLulu"><code class="docutils literal notranslate"><span class="pre">moveLulu()</span></code></a></li>
 <li><a class="reference internal" href="#Territory.printMap"><code class="docutils literal notranslate"><span class="pre">printMap()</span></code></a></li>
 <li><a class="reference internal" href="#Territory.reproduceLulu"><code class="docutils literal notranslate"><span class="pre">reproduceLulu()</span></code></a></li>
+<li><a class="reference internal" href="#Territory.resetWorld"><code class="docutils literal notranslate"><span class="pre">resetWorld()</span></code></a></li>
+<li><a class="reference internal" href="#Territory.setFood"><code class="docutils literal notranslate"><span class="pre">setFood()</span></code></a></li>
 <li><a class="reference internal" href="#Territory.tryMove"><code class="docutils literal notranslate"><span class="pre">tryMove()</span></code></a></li>
 </ul>
 </li>

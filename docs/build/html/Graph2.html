@@ -153,30 +153,19 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="Graph2.calculateCoordinates">
 <span class="sig-prename descclassname"><span class="pre">Graph2.</span></span><span class="sig-name descname"><span class="pre">calculateCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">generation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speeds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">senses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sizes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Graph2.html#calculateCoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Graph2.calculateCoordinates" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Prend chaque propriété pertinente des Lulus et les assignent à une variable</p>
-<dl class="field-list simple">
-<dt class="field-odd">Paramètres<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>generation</strong> (List&lt;<cite>Lulu</cite>&gt;) – Liste contenant les Lulus et leur propriété</p></li>
-<li><p><strong>speeds</strong> (<em>List&lt;float&gt;</em>) – Liste contenant la vitesse de chaque Lulu</p></li>
-<li><p><strong>senses</strong> (<em>List&lt;float&gt;</em>) – Liste contenant la vision de chaque Lulu</p></li>
-<li><p><strong>sizes</strong> (<em>List&lt;float&gt;</em>) – Liste contenant la taille de chaque Lulu</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Graph2.generateColors">
 <span class="sig-prename descclassname"><span class="pre">Graph2.</span></span><span class="sig-name descname"><span class="pre">generateColors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">speeds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">senses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sizes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Graph2.html#generateColors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Graph2.generateColors" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Cette fonction assigne une couleur à chaque axe soit la vitesse, la vision et la taille.</p>
+<dd><p>Cette fonction assigne une valeur RGB pour chaque points</p>
 <dl class="field-list simple">
 <dt class="field-odd">Paramètres<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>speeds</strong> (<em>List&lt;float&gt;</em>) – Liste contenant les valeurs de la vitesse</p></li>
-<li><p><strong>senses</strong> (<em>List&lt;float&gt;</em>) – Liste contenant les valeurs de la vision</p></li>
-<li><p><strong>sizes</strong> (<em>List&lt;float&gt;</em>) – Liste contenant les valeurs de la taille</p></li>
-<li><p><strong>colors</strong> (<em>List&lt;List&lt;float&gt;&gt;</em>) – Liste contenant les valeurs de la couleur (valeur de la couleur rgb)</p></li>
+<li><p><strong>speeds</strong> (<em>[</em><em>float</em><em>]</em>) – Liste contenant les valeurs de la vitesse</p></li>
+<li><p><strong>senses</strong> (<em>[</em><em>float</em><em>]</em>) – Liste contenant les valeurs de la vision</p></li>
+<li><p><strong>sizes</strong> (<em>[</em><em>float</em><em>]</em>) – Liste contenant les valeurs de la taille</p></li>
+<li><p><strong>colors</strong> (<em>[</em><em>[</em><em>float</em><em>]</em><em>]</em>) – Liste contenant les valeurs de la couleur (valeur de la couleur rgb)</p></li>
 </ul>
 </dd>
 </dl>
@@ -184,22 +173,22 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Graph2.generateGraph">
-<span class="sig-prename descclassname"><span class="pre">Graph2.</span></span><span class="sig-name descname"><span class="pre">generateGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">generation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currentGeneration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elev</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">azim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Graph2.html#generateGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Graph2.generateGraph" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Créer le graphique</p>
+<span class="sig-prename descclassname"><span class="pre">Graph2.</span></span><span class="sig-name descname"><span class="pre">generateGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">generation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currentGeneration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Graph2.html#generateGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Graph2.generateGraph" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Génère le graphique 3d et ses statistiques.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Paramètres<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>generation</strong> (List&lt;<cite>Lulu</cite>&gt;) – Liste contenant les Lulus et leur propriété</p></li>
-<li><p><strong>currentGeneration</strong> (<em>Int</em>) – Index de la génération que nous allons afficher</p></li>
-<li><p><strong>elev</strong> (<em>Float</em>) – Angle que le graphique aura à l’affichage</p></li>
-<li><p><strong>azim</strong> (<em>Float</em>) – Angle que le graphique aura à l’affichage</p></li>
+<li><p><strong>generation</strong> (<cite>[[[float],[float],[float]]]</cite>) – Liste des coordonnées de la génération actuelle.</p></li>
+<li><p><strong>currentGeneration</strong> (<em>int</em>) – Numéro de la génération actuelle.</p></li>
+<li><p><strong>elev</strong> (<em>float</em>) – Angle de vue du graphique 3d.</p></li>
+<li><p><strong>azim</strong> (<em>float</em>) – Angle de vue du graphique 3d.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Renvoie<span class="colon">:</span></dt>
-<dd class="field-even"><p>Cette function retourne la figure globale du graphique et ses axes</p>
+<dd class="field-even"><p>Retourne une <cite>Figure</cite> et un <cite>Axes</cite> pour dessiner le graphique et ses statistiques.</p>
 </dd>
 <dt class="field-odd">Type renvoyé<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[matplotlib.figure.Figure, matplotlib.axes._subplots.AxesSubplot]</p>
+<dd class="field-odd"><p><cite>[Figure, Axes]</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -207,10 +196,10 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="Graph2.setAxesLabel">
 <span class="sig-prename descclassname"><span class="pre">Graph2.</span></span><span class="sig-name descname"><span class="pre">setAxesLabel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Graph2.html#setAxesLabel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Graph2.setAxesLabel" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Assigne des noms au axes du graphique</p>
+<dd><p>Assigne les noms aux axes du graphique 3d.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Paramètres<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ax</strong> (<em>matplotlib.axes._subplots.AxesSubplot</em>) – Représente les axes du graphique</p>
+<dd class="field-odd"><p><strong>ax</strong> (<cite>Axes</cite>) – Objet <cite>Axes</cite> du graphique 3d.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -218,14 +207,14 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="Graph2.setAxesSize">
 <span class="sig-prename descclassname"><span class="pre">Graph2.</span></span><span class="sig-name descname"><span class="pre">setAxesSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sz</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Graph2.html#setAxesSize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Graph2.setAxesSize" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Assigne des noms au axes du graphique</p>
+<dd><p>Assigne une grosseur aux axes du graphique 3d.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Paramètres<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ax</strong> (<em>matplotlib.axes._subplots.AxesSubplot</em>) – Représente les axes du graphique</p></li>
-<li><p><strong>sx</strong> (<em>Float</em>) – Grandeur de l’axe en x</p></li>
-<li><p><strong>sy</strong> (<em>Float</em>) – Grandeur de l’axe en y</p></li>
-<li><p><strong>sz</strong> (<em>Float</em>) – Grandeur de l’axe en z</p></li>
+<li><p><strong>ax</strong> (<cite>Axes</cite>) – Objet <cite>Axes</cite> du graphique 3d.</p></li>
+<li><p><strong>sx</strong> (<em>float</em>) – Taille de l’axe X.</p></li>
+<li><p><strong>sy</strong> (<em>float</em>) – Taille de l’axe Y.</p></li>
+<li><p><strong>sz</strong> (<em>float</em>) – Taille de l’axe Z.</p></li>
 </ul>
 </dd>
 </dl>
@@ -234,12 +223,12 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="Graph2.setStats">
 <span class="sig-prename descclassname"><span class="pre">Graph2.</span></span><span class="sig-name descname"><span class="pre">setStats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Graph2.html#setStats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#Graph2.setStats" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Construit la partie à côté du graphique pour exposer à l’utilisateur les stats du graphique</p>
+<dd><p>Génère les statistiques de la génération actuelle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Paramètres<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ax</strong> (<em>matplotlib.axes._subplots.AxesSubplot</em>) – Représente les axes du graphique</p></li>
-<li><p><strong>generation</strong> (List&lt;<cite>Lulu</cite>&gt;) – Liste contenant les Lulus et leur propriété</p></li>
+<li><p><strong>ax</strong> (<cite>Axes</cite>) – Objet <cite>Axes</cite> du graphique 2d servant de boîte pour les statistiques.</p></li>
+<li><p><strong>generation</strong> (<em>[</em><em>[</em><em>[</em><em>float</em><em>]</em><em>,</em><em>[</em><em>float</em><em>]</em><em>,</em><em>[</em><em>float</em><em>]</em><em>]</em><em>]</em>) – Liste des coordonnées de la génération actuelle.</p></li>
 </ul>
 </dd>
 </dl>

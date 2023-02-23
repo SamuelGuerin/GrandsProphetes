@@ -140,49 +140,6 @@
             
   <section id="module-main">
 <span id="main-module"></span><h1>main module<a class="headerlink" href="#module-main" title="Lien permanent vers cette rubrique">¶</a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="main.VisualizeLulus">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">VisualizeLulus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">renderer=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera_class=&lt;class</span> <span class="pre">'manim.camera.camera.Camera'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">always_update_mobjects=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_animations=False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/main.html#VisualizeLulus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#main.VisualizeLulus" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">Scene</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="main.VisualizeLulus.construct">
-<span class="sig-name descname"><span class="pre">construct</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/main.html#VisualizeLulus.construct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#main.VisualizeLulus.construct" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Add content to the Scene.</p>
-<p>From within <code class="xref py py-meth docutils literal notranslate"><span class="pre">Scene.construct()</span></code>, display mobjects on screen by calling
-<code class="xref py py-meth docutils literal notranslate"><span class="pre">Scene.add()</span></code> and remove them from screen by calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">Scene.remove()</span></code>.
-All mobjects currently on screen are kept in <code class="xref py py-attr docutils literal notranslate"><span class="pre">Scene.mobjects</span></code>.  Play
-animations by calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">Scene.play()</span></code>.</p>
-<section id="notes">
-<h2>Notes<a class="headerlink" href="#notes" title="Lien permanent vers cette rubrique">¶</a></h2>
-<p>Initialization code should go in <code class="xref py py-meth docutils literal notranslate"><span class="pre">Scene.setup()</span></code>.  Termination code should
-go in <code class="xref py py-meth docutils literal notranslate"><span class="pre">Scene.tear_down()</span></code>.</p>
-</section>
-<section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Lien permanent vers cette rubrique">¶</a></h2>
-<p>A typical manim script includes a class derived from <code class="xref py py-class docutils literal notranslate"><span class="pre">Scene</span></code> with an
-overridden <code class="xref py py-meth docutils literal notranslate"><span class="pre">Scene.contruct()</span></code> method:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">construct</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">Write</span><span class="p">(</span><span class="n">Text</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">)))</span>
-</pre></div>
-</div>
-</section>
-<section id="see-also">
-<h2>See Also<a class="headerlink" href="#see-also" title="Lien permanent vers cette rubrique">¶</a></h2>
-<p><code class="xref py py-meth docutils literal notranslate"><span class="pre">Scene.setup()</span></code>
-<code class="xref py py-meth docutils literal notranslate"><span class="pre">Scene.render()</span></code>
-<code class="xref py py-meth docutils literal notranslate"><span class="pre">Scene.tear_down()</span></code></p>
-</section>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="main.renderAnimation">
-<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">renderAnimation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/main.html#renderAnimation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#main.renderAnimation" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Génère une image de l’état actuel du <a class="reference internal" href="Territory.html#module-Territory" title="Territory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Territory</span></code></a></p>
-</dd></dl>
-
 </section>
 
 
@@ -190,27 +147,6 @@ overridden <code class="xref py py-meth docutils literal notranslate"><span clas
           </div>
         </div>
       </div>
-    
-        <div id="show_right_sidebar">
-            <p><a class="toggle_right_sidebar" href="#"><span class="icon"><</span><span>Page contents<span></a></p>
-        </div>
-
-        <div id="right_sidebar">
-            <p><a class="toggle_right_sidebar" href="#"><span class="icon">></span><span>Page contents:<span></a></p>
-            <div class="page_toc">
-                <ul>
-<li><a class="reference internal" href="#">main module</a><ul>
-<li><a class="reference internal" href="#main.VisualizeLulus"><code class="docutils literal notranslate"><span class="pre">VisualizeLulus</span></code></a><ul>
-<li><a class="reference internal" href="#main.VisualizeLulus.construct"><code class="docutils literal notranslate"><span class="pre">VisualizeLulus.construct()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#main.renderAnimation"><code class="docutils literal notranslate"><span class="pre">renderAnimation()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-            </div>
-        </div>
     
 
       <div class="clearer"></div>
