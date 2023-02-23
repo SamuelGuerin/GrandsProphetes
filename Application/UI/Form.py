@@ -4,12 +4,8 @@ from tkinter import ttk
 from PIL import Image
 import os
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import pathlib
-import sys
 import FormGraph as fg
 import math
-workingDirectory = pathlib.Path().resolve()
-sys.path.append(str(workingDirectory) + '\Application')
 import SimulationManager as Simulation
 from JsonManager import saveData, loadData
 import threading
