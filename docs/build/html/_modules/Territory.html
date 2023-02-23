@@ -159,7 +159,7 @@
 
 <span class="sd">=====================       =================================================================================================================================================</span>
 <span class="sd">Méthode                     Action</span>
-<span class="sd">=====================       =================================================================================================================================================      </span>
+<span class="sd">=====================       =================================================================================================================================================</span>
 <span class="sd">:meth:`createMap`           Crée une carte (map) avec les paramètres donnés (__sizeX, sizeY, __foodCount, __lulusCount)</span>
 <span class="sd">:meth:`__CreateLulu`        Crée une Lulu avec les paramètres donnés (rx, ry, speed, sense, size, energyRemaining, FoodCollected, isDone)</span>
 <span class="sd">:meth:`__CreateFood`        Ajoute une nourriture sur la carte (map) à la position donnée en paramètres (rx, ry)</span>
@@ -173,7 +173,7 @@
 <span class="sd">:meth:`printMap`            Affiche tous les items de la carte avec leur :class:`Position` dans la console (outil de débogage)</span>
 <span class="sd">:meth:`tryMove`             Vérifie si la Lulu peut se déplacer d&#39;un point A à un point B en faisant toutes les validations et confirmations nécessaires, retourne un booléen</span>
 <span class="sd">:meth:`moveLulu`            Effectue le mouvement précédemment testé par la méthode :meth:`tryMove`</span>
-<span class="sd">=====================       =================================================================================================================================================    </span>
+<span class="sd">=====================       =================================================================================================================================================</span>
 
 <span class="sd">:return: N/A</span>
 <span class="sd">:rtype: Module</span>
@@ -183,21 +183,27 @@
 <span class="kn">from</span> <span class="nn">Models.Position</span> <span class="kn">import</span> <span class="n">Position</span>
 <span class="kn">from</span> <span class="nn">Models.Lulu</span> <span class="kn">import</span> <span class="n">Lulu</span>
 <span class="kn">from</span> <span class="nn">Models.Food</span> <span class="kn">import</span> <span class="n">Food</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">manim</span> <span class="kn">import</span> <span class="o">*</span>
 
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">workingDirectory</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">workingDirectory</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;\Application&#39;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">SimulationManager</span> <span class="k">as</span> <span class="nn">Simulation</span>
 
 <span class="n">__sizeX</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">__sizeY</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">__lulusCount</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">__foodCount</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">__energy</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">__lulus</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">__map</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">__moves</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">__numberOfFood</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">EATING_RATIO</span> <span class="o">=</span> <span class="mf">1.5</span>
 
-<span class="n">EATING_RATIO</span> <span class="o">=</span> <span class="mf">1.2</span>
-<span class="n">STARTING_ENERGY</span> <span class="o">=</span> <span class="mi">1000000</span>
-
-
-<div class="viewcode-block" id="createMap"><a class="viewcode-back" href="../Territory.html#Territory.createMap">[docs]</a><span class="k">def</span> <span class="nf">createMap</span><span class="p">(</span><span class="n">sizeX</span><span class="p">,</span> <span class="n">sizeY</span><span class="p">,</span> <span class="n">foodCount</span><span class="p">,</span> <span class="n">lulusCount</span><span class="p">):</span>
+<div class="viewcode-block" id="createMap"><a class="viewcode-back" href="../Territory.html#Territory.createMap">[docs]</a><span class="k">def</span> <span class="nf">createMap</span><span class="p">(</span><span class="n">sizeX</span><span class="p">,</span> <span class="n">sizeY</span><span class="p">,</span> <span class="n">foodCount</span><span class="p">,</span> <span class="n">lulusCount</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="n">sense</span><span class="p">,</span> <span class="n">energy</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">mutateChance</span><span class="p">,</span> <span class="n">speedVariation</span><span class="p">,</span> <span class="n">senseVariation</span><span class="p">,</span> <span class="n">sizeVariation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Crée (instancie) une carte (map) avec une taille X et Y ainsi qu&#39;un nombre donné de nourriture et de Lulus</span>
 
 <span class="sd">    :param sizeX: Taille de la carte sur l&#39;axe des X</span>
@@ -213,38 +219,61 @@
     <span class="k">global</span> <span class="n">__sizeY</span>
     <span class="k">global</span> <span class="n">__foodCount</span>
     <span class="k">global</span> <span class="n">__lulusCount</span>
+    <span class="k">global</span> <span class="n">__energy</span>
+    <span class="k">global</span> <span class="n">__mutateChance</span>
+    <span class="k">global</span> <span class="n">__speedVariation</span>
+    <span class="k">global</span> <span class="n">__senseVariation</span>
+    <span class="k">global</span> <span class="n">__sizeVariation</span>
+
     <span class="n">__sizeX</span> <span class="o">=</span> <span class="n">sizeX</span>
     <span class="n">__sizeY</span> <span class="o">=</span> <span class="n">sizeY</span>
     <span class="n">__foodCount</span> <span class="o">=</span> <span class="n">foodCount</span>
     <span class="n">__lulusCount</span> <span class="o">=</span> <span class="n">lulusCount</span>
+    <span class="n">__energy</span> <span class="o">=</span> <span class="n">energy</span>
+    <span class="n">__mutateChance</span> <span class="o">=</span> <span class="n">mutateChance</span>
+    <span class="n">__speedVariation</span> <span class="o">=</span> <span class="n">speedVariation</span> <span class="o">/</span> <span class="mi">100</span>
+    <span class="n">__senseVariation</span> <span class="o">=</span> <span class="n">senseVariation</span> <span class="o">/</span> <span class="mi">100</span>
+    <span class="n">__sizeVariation</span> <span class="o">=</span> <span class="n">sizeVariation</span> <span class="o">/</span> <span class="mi">100</span>
 
-    <span class="c1"># Créer x lulus dans la map (La map va de 0 à maxX ou maxY)</span>
+    <span class="n">clearMap</span><span class="p">()</span>
+    
+    <span class="c1"># Créer X nombre de Lulus dans la map (La map va de 0 à maxX ou maxY)</span>
     <span class="c1"># Les mettre sur le côté</span>
     <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">__lulusCount</span><span class="p">):</span>
-            <span class="n">maxX</span> <span class="o">=</span> <span class="n">__sizeX</span>
-            <span class="n">maxY</span> <span class="o">=</span> <span class="n">__sizeY</span>
-            <span class="n">luluCreated</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">maxX</span> <span class="o">=</span> <span class="n">__sizeX</span>
+        <span class="n">maxY</span> <span class="o">=</span> <span class="n">__sizeY</span>
+        <span class="n">luluCreated</span> <span class="o">=</span> <span class="kc">False</span>
 
-            <span class="c1"># Choisir un side à 0 ou maxSide, puis un random de l&#39;autre coordonnée (x ou y)</span>
-            <span class="k">while</span> <span class="p">(</span><span class="ow">not</span> <span class="n">luluCreated</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">__lulus</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">maxX</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">maxY</span><span class="p">)</span> <span class="o">-</span> <span class="mi">4</span><span class="p">):</span>
-                <span class="k">if</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">getrandbits</span><span class="p">(</span><span class="mi">1</span><span class="p">))):</span>
-                    <span class="n">rx</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">maxX</span><span class="p">])</span>
-                    <span class="n">ry</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">maxY</span><span class="p">)</span>
-                    <span class="n">luluCreated</span> <span class="o">=</span> <span class="n">__CreateLulu</span><span class="p">(</span><span class="n">rx</span><span class="p">,</span> <span class="n">ry</span><span class="p">,</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">50</span><span class="p">),</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">20</span><span class="p">),</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">500</span><span class="p">),</span> <span class="n">STARTING_ENERGY</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-                <span class="k">else</span> <span class="p">:</span>
-                    <span class="n">ry</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">maxY</span><span class="p">])</span>
-                    <span class="n">rx</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">maxX</span><span class="p">)</span>
-                    <span class="n">luluCreated</span> <span class="o">=</span> <span class="n">__CreateLulu</span><span class="p">(</span><span class="n">rx</span><span class="p">,</span> <span class="n">ry</span><span class="p">,</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="p">),</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">20</span><span class="p">),</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">500</span><span class="p">),</span> <span class="n">STARTING_ENERGY</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># Choisir des coordonnées aléatoire pour faire apparaître les Lulus tout le tour du périmètre</span>
+        <span class="k">while</span> <span class="p">(</span><span class="ow">not</span> <span class="n">luluCreated</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">__lulus</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">maxX</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">maxY</span><span class="p">)</span> <span class="o">-</span> <span class="mi">4</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">getrandbits</span><span class="p">(</span><span class="mi">1</span><span class="p">))):</span>
+                <span class="n">rx</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">maxX</span><span class="p">])</span>
+                <span class="n">ry</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">maxY</span><span class="p">)</span>
+                <span class="n">luluCreated</span> <span class="o">=</span> <span class="n">__CreateLulu</span><span class="p">(</span>
+                    <span class="n">rx</span><span class="p">,</span> <span class="n">ry</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="n">sense</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">energy</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ry</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">maxY</span><span class="p">])</span>
+                <span class="n">rx</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">maxX</span><span class="p">)</span>
+                <span class="n">luluCreated</span> <span class="o">=</span> <span class="n">__CreateLulu</span><span class="p">(</span>
+                    <span class="n">rx</span><span class="p">,</span> <span class="n">ry</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="n">sense</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">energy</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
-    <span class="c1"># Ajouter de la nourriture partout sauf sur le côté</span>
-    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">__foodCount</span><span class="p">):</span>
-        <span class="n">foodCreated</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">while</span> <span class="p">(</span> <span class="ow">not</span> <span class="n">foodCreated</span> <span class="ow">and</span> <span class="n">__numberOfFood</span> <span class="o">&lt;</span> <span class="p">((</span><span class="n">sizeX</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">sizeY</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)))</span> <span class="p">:</span>
-            <span class="n">rx</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">maxX</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="n">ry</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">maxY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="n">foodCreated</span> <span class="o">=</span> <span class="n">__CreateFood</span><span class="p">(</span><span class="n">rx</span><span class="p">,</span> <span class="n">ry</span><span class="p">)</span></div>
+    <span class="n">setFood</span><span class="p">()</span>
 
-<span class="c1"># private</span>
+    <span class="k">for</span> <span class="n">lulu</span> <span class="ow">in</span> <span class="n">__lulus</span><span class="p">:</span>
+        <span class="n">lulu</span><span class="o">.</span><span class="n">isNewBorn</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="clearMap"><a class="viewcode-back" href="../Territory.html#Territory.clearMap">[docs]</a><span class="k">def</span> <span class="nf">clearMap</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Supprime les données des listes de Lulus et map</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">__lulus</span>
+    <span class="k">global</span> <span class="n">__map</span>
+    <span class="k">global</span> <span class="n">__numberOfFood</span>
+    <span class="n">__lulus</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">__map</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">__numberOfFood</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
 <span class="k">def</span> <span class="nf">__CreateLulu</span><span class="p">(</span><span class="n">rx</span><span class="p">,</span> <span class="n">ry</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="n">sense</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">energyRemaining</span><span class="p">,</span> <span class="n">FoodCollected</span><span class="p">,</span> <span class="n">isDone</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Crée une Lulu et la place sur les bords de la carte selon une position donnée et l&#39;instancie avec des paramètres de base</span>
 
@@ -270,13 +299,14 @@
     <span class="c1"># Créer une lulu si la case est vide</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">getItem</span><span class="p">(</span><span class="n">rx</span><span class="p">,</span> <span class="n">ry</span><span class="p">)</span> <span class="o">==</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">rPos</span> <span class="o">=</span> <span class="n">Position</span><span class="p">(</span><span class="n">rx</span><span class="p">,</span> <span class="n">ry</span><span class="p">)</span>
-        <span class="n">__map</span><span class="p">[</span><span class="n">rPos</span><span class="p">]</span> <span class="o">=</span> <span class="n">Lulu</span><span class="p">(</span><span class="n">rPos</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="n">sense</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">energyRemaining</span><span class="p">,</span> <span class="n">FoodCollected</span><span class="p">,</span> <span class="n">isDone</span><span class="p">)</span>
+        <span class="n">__map</span><span class="p">[</span><span class="n">rPos</span><span class="p">]</span> <span class="o">=</span> <span class="n">Lulu</span><span class="p">(</span><span class="n">rPos</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="n">sense</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span>
+                           <span class="n">energyRemaining</span><span class="p">,</span> <span class="n">FoodCollected</span><span class="p">,</span> <span class="n">isDone</span><span class="p">)</span>
         <span class="c1"># Ajouter la lulu dans la liste de lulus</span>
         <span class="n">__lulus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">__map</span><span class="p">[</span><span class="n">rPos</span><span class="p">])</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">return</span> <span class="kc">False</span>
 
-<span class="c1"># private</span>
+
 <span class="k">def</span> <span class="nf">__CreateFood</span><span class="p">(</span><span class="n">rx</span><span class="p">,</span> <span class="n">ry</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Ajoute une nourriture sur la carte (map) à la position donnée en paramètres (rx, ry)</span>
 
@@ -296,7 +326,7 @@
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">return</span> <span class="kc">False</span>
 
-<span class="c1"># public</span>
+
 <div class="viewcode-block" id="getItem"><a class="viewcode-back" href="../Territory.html#Territory.getItem">[docs]</a><span class="k">def</span> <span class="nf">getItem</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Obtiens un item (:class:`Lulu` ou  nourriture (:class:`Food`)) dans le dictionnaire __map (carte) selon sa :class:`Position` et retourne l&#39;item trouvé</span>
 
@@ -310,13 +340,15 @@
     <span class="n">item</span> <span class="o">=</span> <span class="n">__map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Position</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">item</span></div>
 
+
 <div class="viewcode-block" id="getMap"><a class="viewcode-back" href="../Territory.html#Territory.getMap">[docs]</a><span class="k">def</span> <span class="nf">getMap</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Retourne la map (carte) y permettant l&#39;accès depuis d&#39;autres classes du projet</span>
 
-<span class="sd">    :return: Retourne l&#39;objet __map </span>
+<span class="sd">    :return: Retourne l&#39;objet __map</span>
 <span class="sd">    :rtype: dictionnary</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">__map</span></div>
+
 
 <div class="viewcode-block" id="getSizeX"><a class="viewcode-back" href="../Territory.html#Territory.getSizeX">[docs]</a><span class="k">def</span> <span class="nf">getSizeX</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Retourne la taille de l&#39;axe des X de la carte (map)</span>
@@ -326,6 +358,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">__sizeX</span></div>
 
+
 <div class="viewcode-block" id="getSizeY"><a class="viewcode-back" href="../Territory.html#Territory.getSizeY">[docs]</a><span class="k">def</span> <span class="nf">getSizeY</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Retourne la taille de l&#39;axe des Y de la carte (map)</span>
 
@@ -334,70 +367,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">__sizeY</span></div>
 
-<div class="viewcode-block" id="reproduceLulu"><a class="viewcode-back" href="../Territory.html#Territory.reproduceLulu">[docs]</a><span class="k">def</span> <span class="nf">reproduceLulu</span><span class="p">(</span><span class="n">Lulu</span><span class="p">):</span>
-    <span class="c1">#50% Chance de mutation</span>
-    <span class="n">newSpeed</span><span class="p">,</span><span class="n">newSense</span><span class="p">,</span><span class="n">newSize</span>
-    <span class="k">if</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">getrandbits</span><span class="p">(</span><span class="mi">1</span><span class="p">))):</span>
-        <span class="n">newSpeed</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">speed</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.66</span><span class="p">,</span><span class="mf">1.33</span><span class="p">))</span>
-        <span class="n">newSense</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">sense</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.66</span><span class="p">,</span><span class="mf">1.33</span><span class="p">))</span>
-        <span class="n">newSize</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.66</span><span class="p">,</span><span class="mf">1.33</span><span class="p">))</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">newSpeed</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">speed</span>
-        <span class="n">newSense</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">sense</span>
-        <span class="n">newSize</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">size</span>
 
-    <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">rx</span><span class="p">,</span><span class="n">ry</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">searchingPos</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="c1"># Faire spawn le nouveau Lulu à côté de l&#39;ancien</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">__sizeX</span><span class="p">):</span>
-        <span class="n">rx</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">searchingPos</span><span class="p">):</span>
-            <span class="k">if</span><span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">__sizeY</span> <span class="ow">and</span> <span class="n">getItem</span><span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">):</span>
-                <span class="n">ry</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">i</span>
-                <span class="n">searchingPos</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">elif</span> <span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">getItem</span><span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">):</span>
-                <span class="n">ry</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">i</span>
-                <span class="n">searchingPos</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">elif</span> <span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">__sizeY</span> <span class="ow">or</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
-                <span class="n">ry</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span>
-                <span class="n">searchingPos</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-                
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">ry</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">searchingPos</span><span class="p">):</span>
-            <span class="k">if</span><span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">__sizeY</span> <span class="ow">and</span> <span class="n">getItem</span><span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">):</span>
-                <span class="n">rx</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">i</span>
-                <span class="n">searchingPos</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">elif</span> <span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">getItem</span><span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">i</span><span class="p">,</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">):</span>
-                <span class="n">rx</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">i</span>
-                <span class="n">searchingPos</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">elif</span> <span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">__sizeY</span> <span class="ow">or</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
-                <span class="n">rx</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span>
-                <span class="n">searchingPos</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-    
-    <span class="n">__CreateLulu</span><span class="p">(</span><span class="n">rx</span><span class="p">,</span><span class="n">ry</span><span class="p">,</span><span class="n">newSpeed</span><span class="p">,</span><span class="n">newSense</span><span class="p">,</span><span class="n">Lulu</span><span class="o">.</span><span class="n">energy</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">newSize</span><span class="p">,</span><span class="n">Position</span><span class="p">(</span><span class="n">rx</span><span class="p">,</span><span class="n">ry</span><span class="p">),</span><span class="kc">False</span><span class="p">)</span></div>
-            
-                
-
-
-
-
-
-<span class="c1"># getItemsInSense(x, y, sense)</span>
-<span class="c1"># reproduceLulu()</span>
-<div class="viewcode-block" id="dayResultLulu"><a class="viewcode-back" href="../Territory.html#Territory.dayResultLulu">[docs]</a><span class="k">def</span> <span class="nf">dayResultLulu</span><span class="p">():</span>
-    <span class="k">for</span> <span class="n">lulu</span> <span class="ow">in</span> <span class="n">__lulus</span><span class="p">:</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">lulu</span><span class="o">.</span><span class="n">foodAmount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
-            <span class="n">__lulus</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">lulu</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="p">(</span><span class="n">lulu</span><span class="o">.</span><span class="n">foodAmount</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="n">lulu</span><span class="o">.</span><span class="n">resetPosition</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="p">(</span><span class="n">lulu</span><span class="o">.</span><span class="n">foodAmount</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="n">reproduceLulu</span><span class="p">(</span><span class="n">lulu</span><span class="p">)</span> </div>
 <span class="k">def</span> <span class="nf">__addItem</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Ajoute un item (valeur) (:class:`Lulu` ou  nourriture (:class:`Food`)) dans le dictionnaire __map à une :class:`Position` donnée (clé)</span>
 
@@ -410,16 +380,17 @@
     <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">==</span> <span class="n">Lulu</span><span class="p">):</span>
         <span class="n">item</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
 
+
 <span class="k">def</span> <span class="nf">__deleteItem</span><span class="p">(</span><span class="n">position</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Retire un item (valeur) (:class:`Lulu` ou  nourriture (:class:`Food`)) dans le dictionnaire __map à une :class:`Position` donnée (clé)</span>
 
 <span class="sd">    :param position: :class:`Position` à laquelle l&#39;item (:class:`Lulu` ou  nourriture (:class:`Food`)) sera retiré de l&#39;objet __map (carte)</span>
 <span class="sd">    :type position: :class:`Position`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">del</span> <span class="n">__map</span><span class="p">[</span><span class="n">position</span><span class="p">]</span>
 
-<span class="c1"># Vérifie s&#39;il est possible de faire le mouvement demandé</span>
-<span class="c1"># return true si le move est fait, sinon false</span>
+
 <div class="viewcode-block" id="tryMove"><a class="viewcode-back" href="../Territory.html#Territory.tryMove">[docs]</a><span class="k">def</span> <span class="nf">tryMove</span><span class="p">(</span><span class="n">oldPosition</span><span class="p">,</span> <span class="n">newPosition</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Vérifie si la :class:`Lulu` peut se déplacer d&#39;une :class:`Position` A à une :class:`Position` B en faisant toutes les validations et confirmations nécessaires</span>
 
@@ -430,9 +401,9 @@
 <span class="sd">    :return: Retourne un booléen confirmant si la Lulu peut être déplacée ou non</span>
 <span class="sd">    :rtype: bool</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Vérifier si le mouvement est dans la map</span>
-    <span class="k">if</span><span class="p">((</span><span class="n">newPosition</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">newPosition</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">getSizeX</span><span class="p">())</span> <span class="ow">and</span> <span class="p">(</span><span class="n">newPosition</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">newPosition</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;=</span> <span class="n">getSizeY</span><span class="p">())):</span>
-        <span class="c1"># Vérifier s&#39;il n&#39;y a pas une lulu plus grosse ou égale</span>
+    <span class="c1"># Vérifier si la nouvelle position est dans la map</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">newPosition</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">newPosition</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">getSizeX</span><span class="p">())</span> <span class="ow">and</span> <span class="p">(</span><span class="n">newPosition</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">newPosition</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;=</span> <span class="n">getSizeY</span><span class="p">())):</span>
+        <span class="c1"># Vérifier le contenu de la case à la nouvelle position</span>
         <span class="n">itemInNewPosition</span> <span class="o">=</span> <span class="n">getItem</span><span class="p">(</span><span class="n">newPosition</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">newPosition</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">itemInNewPosition</span> <span class="o">==</span> <span class="kc">None</span><span class="p">):</span>
             <span class="n">moveLulu</span><span class="p">(</span><span class="n">oldPosition</span><span class="p">,</span> <span class="n">newPosition</span><span class="p">)</span>
@@ -445,7 +416,7 @@
             <span class="k">return</span> <span class="kc">True</span>
     <span class="k">return</span> <span class="kc">False</span></div>
 
-<span class="c1"># Todo : Gérer l&#39;énergie avec la formule</span>
+
 <div class="viewcode-block" id="moveLulu"><a class="viewcode-back" href="../Territory.html#Territory.moveLulu">[docs]</a><span class="k">def</span> <span class="nf">moveLulu</span><span class="p">(</span><span class="n">oldPosition</span><span class="p">,</span> <span class="n">newPosition</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Déplace la :class:`Lulu` d&#39;une :class:`Position` A à une :class:`Position` B</span>
 
@@ -454,21 +425,162 @@
 <span class="sd">    :param newPosition: La nouvelle :class:`Position` de la :class:`Lulu`</span>
 <span class="sd">    :type newPosition: :class:`Position`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># S&#39;il y avait qqch sur la nouvelle case, l&#39;enlever et ajouter 1 de nourriture</span>
+    <span class="c1"># S&#39;il y avait quelque chose sur la nouvelle case, l&#39;enlever et ajouter 1 de nourriture (foodAmount)</span>
     <span class="n">currentLulu</span> <span class="o">=</span> <span class="n">__map</span><span class="p">[</span><span class="n">oldPosition</span><span class="p">]</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">getItem</span><span class="p">(</span><span class="n">newPosition</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">newPosition</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">getItem</span><span class="p">(</span><span class="n">newPosition</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">newPosition</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">test</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">currentLulu</span><span class="o">.</span><span class="n">foodAmount</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="c1"># ToDo : Valider que la liste lulus ne la contient plus</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">__map</span><span class="p">[</span><span class="n">newPosition</span><span class="p">])</span> <span class="o">==</span> <span class="n">Lulu</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">test</span><span class="p">)</span> <span class="o">==</span> <span class="n">Lulu</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">test</span> <span class="ow">in</span> <span class="n">currentLulu</span><span class="o">.</span><span class="n">lulusInRange</span><span class="p">:</span>
+                <span class="n">currentLulu</span><span class="o">.</span><span class="n">lulusInRange</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
             <span class="n">__lulus</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">__map</span><span class="p">[</span><span class="n">newPosition</span><span class="p">])</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">currentLulu</span><span class="o">.</span><span class="n">foodInRange</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
         <span class="n">__deleteItem</span><span class="p">(</span><span class="n">newPosition</span><span class="p">)</span>
     <span class="n">__addItem</span><span class="p">(</span><span class="n">newPosition</span><span class="p">,</span> <span class="n">currentLulu</span><span class="p">)</span>
     <span class="n">__deleteItem</span><span class="p">(</span><span class="n">oldPosition</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="reproduceLulu"><a class="viewcode-back" href="../Territory.html#Territory.reproduceLulu">[docs]</a><span class="k">def</span> <span class="nf">reproduceLulu</span><span class="p">(</span><span class="n">Lulu</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Algorithme permettant à la lulu passée en paramètre de se reproduire.</span>
+<span class="sd">    Fait muté la nouvelle lulu selon un pourcentage de chance et selon les</span>
+<span class="sd">    variations passer dans le formulaire.</span>
+
+<span class="sd">	:param Lulu: Lulu a reproduire</span>
+<span class="sd">	:type Lulu: Lulu</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+    <span class="n">newSpeed</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">speed</span>
+    <span class="n">newSense</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">sense</span>
+    <span class="n">newSize</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">__mutateChance</span><span class="p">):</span>
+        <span class="n">newSpeed</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">speed</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">__speedVariation</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">__speedVariation</span><span class="p">))</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">__mutateChance</span><span class="p">):</span>
+        <span class="n">newSense</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">sense</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">__senseVariation</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">__senseVariation</span><span class="p">))</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">__mutateChance</span><span class="p">):</span>
+        <span class="n">newSize</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">__sizeVariation</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">__sizeVariation</span><span class="p">))</span>
+        
+    <span class="k">if</span> <span class="p">(</span><span class="n">newSpeed</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">newSpeed</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">newSense</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">newSense</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">newSize</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">newSize</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">rx</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">ry</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">searchingPos</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># Faire apparaître la nouvelle Lulu à côté de son parent</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">__sizeX</span><span class="p">):</span>
+        <span class="n">rx</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">searchingPos</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">__sizeY</span> <span class="ow">and</span> <span class="n">getItem</span><span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">ry</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">i</span>
+                <span class="n">searchingPos</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">getItem</span><span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">ry</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">i</span>
+                <span class="n">searchingPos</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">__sizeY</span> <span class="ow">or</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">ry</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span>
+                <span class="n">searchingPos</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ry</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">searchingPos</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">__sizeX</span> <span class="ow">and</span> <span class="n">getItem</span><span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">rx</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">i</span>
+                <span class="n">searchingPos</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">getItem</span><span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">i</span><span class="p">,</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">rx</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">i</span>
+                <span class="n">searchingPos</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">__sizeX</span> <span class="ow">or</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">rx</span> <span class="o">=</span> <span class="n">Lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span>
+                <span class="n">searchingPos</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">__CreateLulu</span><span class="p">(</span><span class="n">rx</span><span class="p">,</span> <span class="n">ry</span><span class="p">,</span> <span class="n">newSpeed</span><span class="p">,</span> <span class="n">newSense</span><span class="p">,</span> <span class="n">newSize</span><span class="p">,</span> <span class="n">__energy</span><span class="p">,</span>
+                 <span class="mi">0</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="getLuluMap"><a class="viewcode-back" href="../Territory.html#Territory.getLuluMap">[docs]</a><span class="k">def</span> <span class="nf">getLuluMap</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calcul le nombre de lulus présents dans la map</span>
+
+<span class="sd">	:return: Quantité de lulus</span>
+<span class="sd">	:rtype: int</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">__map</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">==</span> <span class="n">Lulu</span><span class="p">):</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">count</span></div>
+
+
+<div class="viewcode-block" id="moveAll"><a class="viewcode-back" href="../Territory.html#Territory.moveAll">[docs]</a><span class="k">def</span> <span class="nf">moveAll</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Algorithme qui permet à chaque lulu d&#39;effectuer un mouvement à tour de rôle</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+    <span class="n">lulusToMove</span> <span class="o">=</span> <span class="n">__lulus</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">lulusToMove</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">lulusToMove</span> <span class="o">=</span> <span class="n">__lulus</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>   
+
+        <span class="k">if</span><span class="p">(</span><span class="n">Simulation</span><span class="o">.</span><span class="n">check</span><span class="p">):</span>
+            <span class="k">break</span>     
+
+        <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">lulusToMove</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">lulu</span> <span class="ow">in</span> <span class="n">lulusToMove</span><span class="p">[:]:</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">Simulation</span><span class="o">.</span><span class="n">check</span><span class="p">):</span>
+                <span class="k">break</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">getItem</span><span class="p">(</span><span class="n">lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">lulu</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="n">lulu</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">lulu</span><span class="o">.</span><span class="n">move</span><span class="p">()):</span>
+                    <span class="n">lulusToMove</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">lulu</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">lulusToMove</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">lulu</span><span class="p">)</span></div>
+        
+
+<div class="viewcode-block" id="dayResultLulu"><a class="viewcode-back" href="../Territory.html#Territory.dayResultLulu">[docs]</a><span class="k">def</span> <span class="nf">dayResultLulu</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Vérifie la quantité de nourriture que possède chaque lulu et décide si elle se reproduit, survit, ou meurt</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">lulu</span> <span class="ow">in</span> <span class="n">__lulus</span><span class="p">[:]:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">lulu</span><span class="o">.</span><span class="n">foodAmount</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">lulu</span><span class="o">.</span><span class="n">isNewBorn</span><span class="p">):</span>
+            <span class="n">__deleteItem</span><span class="p">(</span><span class="n">lulu</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+            <span class="n">__lulus</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">lulu</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">lulu</span><span class="o">.</span><span class="n">foodAmount</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">reproduceLulu</span><span class="p">(</span><span class="n">lulu</span><span class="p">)</span>
+
+        <span class="n">lulu</span><span class="o">.</span><span class="n">foodAmount</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">lulu</span><span class="o">.</span><span class="n">isNewBorn</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="addMove"><a class="viewcode-back" href="../Territory.html#Territory.addMove">[docs]</a><span class="k">def</span> <span class="nf">addMove</span><span class="p">(</span><span class="n">move</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ajoute le mouvement effectué à la liste des mouvements</span>
+
+<span class="sd">	:param move: Objet contenant le déplacement effectué</span>
+<span class="sd">	:type move: Move</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+    <span class="n">__moves</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">move</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="getMoves"><a class="viewcode-back" href="../Territory.html#Territory.getMoves">[docs]</a><span class="k">def</span> <span class="nf">getMoves</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retourne la liste des mouvements effectués</span>
+
+<span class="sd">	:return: Retourne la liste des mouvements effectués</span>
+<span class="sd">	:rtype: list</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">__moves</span></div>
+
 
 <div class="viewcode-block" id="printMap"><a class="viewcode-back" href="../Territory.html#Territory.printMap">[docs]</a><span class="k">def</span> <span class="nf">printMap</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Affiche tous les items de la carte avec leur :class:`Position` dans la console (outil de débogage) </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">__map</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="getLulus"><a class="viewcode-back" href="../Territory.html#Territory.getLulus">[docs]</a><span class="k">def</span> <span class="nf">getLulus</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Retourne la liste contenant toutes les Lulus</span>
@@ -477,6 +589,41 @@
 <span class="sd">    :rtype: Liste</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">__lulus</span></div>
+
+
+<div class="viewcode-block" id="setFood"><a class="viewcode-back" href="../Territory.html#Territory.setFood">[docs]</a><span class="k">def</span> <span class="nf">setFood</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Permet de mettre la nourriture de façon aléatoire dans la map</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+    <span class="n">maxX</span> <span class="o">=</span> <span class="n">__sizeX</span>
+    <span class="n">maxY</span> <span class="o">=</span> <span class="n">__sizeY</span>
+
+    <span class="c1"># Ajouter de la nourriture partout sauf sur le périmètre de la map</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">__foodCount</span><span class="p">):</span>
+        <span class="n">foodCreated</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">while</span> <span class="p">(</span><span class="ow">not</span> <span class="n">foodCreated</span> <span class="ow">and</span> <span class="n">__numberOfFood</span> <span class="o">&lt;</span> <span class="p">((</span><span class="n">__sizeX</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">__sizeY</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))):</span>
+            <span class="n">rx</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">maxX</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">ry</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">maxY</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">foodCreated</span> <span class="o">=</span> <span class="n">__CreateFood</span><span class="p">(</span><span class="n">rx</span><span class="p">,</span> <span class="n">ry</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="resetWorld"><a class="viewcode-back" href="../Territory.html#Territory.resetWorld">[docs]</a><span class="k">def</span> <span class="nf">resetWorld</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Réinitialise la nourriture restante dans le monde.</span>
+<span class="sd">    Réinitialise l&#39;énergie et la nourriture des lulus.</span>
+<span class="sd">    Réinitialise la position des lulus sur les côtés.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+    <span class="n">__map</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+    <span class="k">global</span> <span class="n">__numberOfFood</span>
+    <span class="n">__numberOfFood</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">setFood</span><span class="p">()</span>
+    
+    <span class="k">for</span> <span class="n">lulu</span> <span class="ow">in</span> <span class="n">__lulus</span><span class="p">[:]:</span>
+        <span class="n">lulu</span><span class="o">.</span><span class="n">isDone</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">lulu</span><span class="o">.</span><span class="n">energy</span> <span class="o">=</span> <span class="n">__energy</span>
+        <span class="n">__addItem</span><span class="p">(</span><span class="n">lulu</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="n">lulu</span><span class="p">)</span>
+        
+    <span class="k">for</span> <span class="n">lulu</span> <span class="ow">in</span> <span class="n">__lulus</span><span class="p">[:]:</span>
+        <span class="n">lulu</span><span class="o">.</span><span class="n">resetPosition</span><span class="p">()</span></div>
 </pre></div>
 
             <div class="clearer"></div>

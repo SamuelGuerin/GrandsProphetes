@@ -167,11 +167,49 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="FormGraph.Index.isMax">
 <span class="sig-name descname"><span class="pre">isMax</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/FormGraph.html#Index.isMax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FormGraph.Index.isMax" title="Lien permanent vers cette définition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Fonction qui sert à savoir si ind est à la dernière génération.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>True</cite> si ind est à la dernière génération.</p>
+</dd>
+<dt class="field-even">Type renvoyé<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="FormGraph.Index.isMin">
 <span class="sig-name descname"><span class="pre">isMin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/FormGraph.html#Index.isMin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FormGraph.Index.isMin" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Fonction qui sert à savoir si ind est à la première génération.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>True</cite> si ind est à la première génération.</p>
+</dd>
+<dt class="field-even">Type renvoyé<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="FormGraph.Index.setAxis">
+<span class="sig-name descname"><span class="pre">setAxis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/FormGraph.html#Index.setAxis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FormGraph.Index.setAxis" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="FormGraph.Index.xaxis">
+<span class="sig-name descname"><span class="pre">xaxis</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[0,</span> <span class="pre">100]</span></em><a class="headerlink" href="#FormGraph.Index.xaxis" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="FormGraph.Index.yaxis">
+<span class="sig-name descname"><span class="pre">yaxis</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[0,</span> <span class="pre">100]</span></em><a class="headerlink" href="#FormGraph.Index.yaxis" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="FormGraph.Index.zaxis">
+<span class="sig-name descname"><span class="pre">zaxis</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[0,</span> <span class="pre">100]</span></em><a class="headerlink" href="#FormGraph.Index.zaxis" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -194,16 +232,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="FormGraph.graphGeneration.first">
 <span class="sig-name descname"><span class="pre">first</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/FormGraph.html#graphGeneration.first"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FormGraph.graphGeneration.first" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Cette fonction va chercher la première génération.</p>
+<dd><p>Va générer le graphique de la première génération.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Paramètres<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) – représente l’index de la génération actuelle</p>
+<dd class="field-odd"><p><strong>index</strong> (<cite>Index</cite>) – L’index de type <cite>Index</cite> qui permet de garder en mémoire la génération actuelle.</p>
 </dd>
 <dt class="field-even">Renvoie<span class="colon">:</span></dt>
-<dd class="field-even"><p>Renvoie la première génération</p>
+<dd class="field-even"><p><cite>Figure</cite>: Permet de dessiner le graphique.
+<cite>Axes</cite>: Permet de garder les données du graphique 3d en mémoire.</p>
 </dd>
 <dt class="field-odd">Type renvoyé<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List&lt;float&gt;</p>
+<dd class="field-odd"><p><cite>[Figure, Axes]</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -211,16 +250,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="FormGraph.graphGeneration.last">
 <span class="sig-name descname"><span class="pre">last</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/FormGraph.html#graphGeneration.last"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FormGraph.graphGeneration.last" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Cette fonction va chercher la dernière génération.</p>
+<dd><p>Va générer le graphique de la dernière génération.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Paramètres<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) – représente l’index de la génération actuelle</p>
+<dd class="field-odd"><p><strong>index</strong> (<cite>Index</cite>) – L’index de type <cite>Index</cite> qui permet de garder en mémoire la génération actuelle.</p>
 </dd>
 <dt class="field-even">Renvoie<span class="colon">:</span></dt>
-<dd class="field-even"><p>Renvoie la dernière génération</p>
+<dd class="field-even"><p><cite>Figure</cite>: Permet de dessiner le graphique.
+<cite>Axes</cite>: Permet de garder les données du graphique 3d en mémoire.</p>
 </dd>
 <dt class="field-odd">Type renvoyé<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List&lt;float&gt;</p>
+<dd class="field-odd"><p><cite>[Figure, Axes]</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -228,16 +268,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="FormGraph.graphGeneration.next">
 <span class="sig-name descname"><span class="pre">next</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/FormGraph.html#graphGeneration.next"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FormGraph.graphGeneration.next" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Cette fonction va chercher la prochaine génération.</p>
+<dd><p>Va générer le graphique de la prochaine génération.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Paramètres<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) – représente l’index de la génération actuelle</p>
+<dd class="field-odd"><p><strong>index</strong> (<cite>Index</cite>) – L’index de type <cite>Index</cite> qui permet de garder en mémoire la génération actuelle.</p>
 </dd>
 <dt class="field-even">Renvoie<span class="colon">:</span></dt>
-<dd class="field-even"><p>Renvoie la prochaine génération</p>
+<dd class="field-even"><p><cite>Figure</cite>: Permet de dessiner le graphique.
+<cite>Axes</cite>: Permet de garder les données du graphique 3d en mémoire.</p>
 </dd>
 <dt class="field-odd">Type renvoyé<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List&lt;float&gt;</p>
+<dd class="field-odd"><p><cite>[Figure, Axes]</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -245,16 +286,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="FormGraph.graphGeneration.previous">
 <span class="sig-name descname"><span class="pre">previous</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/FormGraph.html#graphGeneration.previous"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FormGraph.graphGeneration.previous" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Cette fonction va chercher la génération précédente.</p>
+<dd><p>Va générer le graphique de la génération précédente.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Paramètres<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) – représente l’index de la génération actuelle</p>
+<dd class="field-odd"><p><strong>index</strong> (<cite>Index</cite>) – L’index de type <cite>Index</cite> qui permet de garder en mémoire la génération actuelle.</p>
 </dd>
 <dt class="field-even">Renvoie<span class="colon">:</span></dt>
-<dd class="field-even"><p>Renvoie la génération précédente</p>
+<dd class="field-even"><p><cite>Figure</cite>: Permet de dessiner le graphique.
+<cite>Axes</cite>: Permet de garder les données du graphique 3d en mémoire.</p>
 </dd>
 <dt class="field-odd">Type renvoyé<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List&lt;float&gt;</p>
+<dd class="field-odd"><p><cite>[Figure, Axes]</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -262,16 +304,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="FormGraph.graphGeneration.senseSpeed">
 <span class="sig-name descname"><span class="pre">senseSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/FormGraph.html#graphGeneration.senseSpeed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FormGraph.graphGeneration.senseSpeed" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Cette fonction va chercher changer l’angle de vu de la génération actuelle.</p>
+<dd><p>Cette fonction va changer l’angle de vu pour voir les axes Vision et Vitesse.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Paramètres<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) – représente l’index de la génération actuelle</p>
+<dd class="field-odd"><p><strong>index</strong> (<cite>Index</cite>) – L’index de type <cite>Index</cite> qui permet de garder en mémoire la génération actuelle.</p>
 </dd>
 <dt class="field-even">Renvoie<span class="colon">:</span></dt>
-<dd class="field-even"><p>Renvoie la génération actuelle sous un autre angle soit axe de la vision et de la vitesse</p>
+<dd class="field-even"><p><cite>Figure</cite>: Permet de dessiner le graphique.
+<cite>Axes</cite>: Permet de garder les données du graphique 3d en mémoire.</p>
 </dd>
 <dt class="field-odd">Type renvoyé<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List&lt;float&gt;</p>
+<dd class="field-odd"><p><cite>[Figure, Axes]</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -279,16 +322,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="FormGraph.graphGeneration.sizeSense">
 <span class="sig-name descname"><span class="pre">sizeSense</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/FormGraph.html#graphGeneration.sizeSense"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FormGraph.graphGeneration.sizeSense" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Cette fonction va chercher changer l’angle de vu de la génération actuelle.</p>
+<dd><p>Cette fonction va changer l’angle de vu pour voir les axes Taille et Vision.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Paramètres<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) – représente l’index de la génération actuelle</p>
+<dd class="field-odd"><p><strong>index</strong> (<cite>Index</cite>) – L’index de type <cite>Index</cite> qui permet de garder en mémoire la génération actuelle.</p>
 </dd>
 <dt class="field-even">Renvoie<span class="colon">:</span></dt>
-<dd class="field-even"><p>Renvoie la génération actuelle sous un autre angle soit axe de la taille et de la vision</p>
+<dd class="field-even"><p><cite>Figure</cite>: Permet de dessiner le graphique.
+<cite>Axes</cite>: Permet de garder les données du graphique 3d en mémoire.</p>
 </dd>
 <dt class="field-odd">Type renvoyé<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List&lt;float&gt;</p>
+<dd class="field-odd"><p><cite>[Figure, Axes]</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -296,20 +340,38 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="FormGraph.graphGeneration.speedSize">
 <span class="sig-name descname"><span class="pre">speedSize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/FormGraph.html#graphGeneration.speedSize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FormGraph.graphGeneration.speedSize" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Cette fonction va chercher changer l’angle de vu de la génération actuelle.</p>
+<dd><p>Cette fonction va changer l’angle de vu pour voir les axes Vitesse et Taille.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Paramètres<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) – représente l’index de la génération actuelle</p>
+<dd class="field-odd"><p><strong>index</strong> (<cite>Index</cite>) – L’index de type <cite>Index</cite> qui permet de garder en mémoire la génération actuelle.</p>
 </dd>
 <dt class="field-even">Renvoie<span class="colon">:</span></dt>
-<dd class="field-even"><p>Renvoie la génération actuelle sous un autre angle soit axe de la vitesse et de la taille</p>
+<dd class="field-even"><p><cite>Figure</cite>: Permet de dessiner le graphique.
+<cite>Axes</cite>: Permet de garder les données du graphique 3d en mémoire.</p>
 </dd>
 <dt class="field-odd">Type renvoyé<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List&lt;float&gt;</p>
+<dd class="field-odd"><p><cite>[Figure, Axes]</cite></p>
 </dd>
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="FormGraph.objectsToCoordinates">
+<span class="sig-prename descclassname"><span class="pre">FormGraph.</span></span><span class="sig-name descname"><span class="pre">objectsToCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lulus</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FormGraph.html#objectsToCoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#FormGraph.objectsToCoordinates" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Cette fonction sert à transformer une liste de <cite>Lulu</cite> en liste de coordonnées.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lulus</strong> (<cite>Lulu</cite>) – Liste de <cite>Lulu</cite> à transformer.</p>
+</dd>
+<dt class="field-even">Renvoie<span class="colon">:</span></dt>
+<dd class="field-even"><p>Liste de coordonnées pour générer des graphiques.</p>
+</dd>
+<dt class="field-odd">Type renvoyé<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[[[float],[float],[float]]]</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -335,6 +397,10 @@
 <li><a class="reference internal" href="#FormGraph.Index.ind"><code class="docutils literal notranslate"><span class="pre">Index.ind</span></code></a></li>
 <li><a class="reference internal" href="#FormGraph.Index.isMax"><code class="docutils literal notranslate"><span class="pre">Index.isMax()</span></code></a></li>
 <li><a class="reference internal" href="#FormGraph.Index.isMin"><code class="docutils literal notranslate"><span class="pre">Index.isMin()</span></code></a></li>
+<li><a class="reference internal" href="#FormGraph.Index.setAxis"><code class="docutils literal notranslate"><span class="pre">Index.setAxis()</span></code></a></li>
+<li><a class="reference internal" href="#FormGraph.Index.xaxis"><code class="docutils literal notranslate"><span class="pre">Index.xaxis</span></code></a></li>
+<li><a class="reference internal" href="#FormGraph.Index.yaxis"><code class="docutils literal notranslate"><span class="pre">Index.yaxis</span></code></a></li>
+<li><a class="reference internal" href="#FormGraph.Index.zaxis"><code class="docutils literal notranslate"><span class="pre">Index.zaxis</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#FormGraph.Lulu"><code class="docutils literal notranslate"><span class="pre">Lulu</span></code></a></li>
@@ -349,6 +415,7 @@
 <li><a class="reference internal" href="#FormGraph.graphGeneration.speedSize"><code class="docutils literal notranslate"><span class="pre">graphGeneration.speedSize()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#FormGraph.objectsToCoordinates"><code class="docutils literal notranslate"><span class="pre">objectsToCoordinates()</span></code></a></li>
 </ul>
 </li>
 </ul>
