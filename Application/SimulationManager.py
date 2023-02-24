@@ -47,7 +47,7 @@ def __run__(sizeX, sizeY, foodCount, lulusCount, speedVariation, senseVariation,
     generationsSave = Save(sizeX,sizeY,foodCount, lulusCount,energy,speedVariation,senseVariation,sizeVariation,mutateChance,nbGeneration, generations=[])
 
     for generation in range(nbGeneration):
-        generationsSave.generations.append(Territory.getLulus().copy())
+        generationsSave.generations.append(Save.createSaveLulu(Territory.getLulus().copy()))
         Territory.moveAll()
         Territory.resetWorld()
         Territory.dayResultLulu()

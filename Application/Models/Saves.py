@@ -11,3 +11,10 @@ class Save:
         self.mutationChance = mutationChance
         self.nbGen = nbGen
         self.generations = generations
+
+    def createSaveLulu(lstLulus):
+        lstSaveLulu = []
+        for lulu in lstLulus[:]:
+            saveLulu = (lulu.speed,lulu.sense,lulu.size)
+            lstSaveLulu.append(saveLulu)
+        return lstSaveLulu

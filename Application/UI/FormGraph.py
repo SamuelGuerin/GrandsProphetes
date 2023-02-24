@@ -190,9 +190,9 @@ def objectsToCoordinates(lulus):
         senses.clear()
         sizes.clear()
         for lulu in generation:
-            speeds.append(round(lulu.speed, 2))
-            senses.append(round(lulu.sense, 2))
-            sizes.append(round(lulu.size / 100, 2))
+            speeds.append(round(lulu[0], 2))
+            senses.append(round(lulu[1], 2))
+            sizes.append(round(lulu[2] / 100, 2))
         gens.append([speeds.copy(), senses.copy(), sizes.copy()])
     return gens
 
