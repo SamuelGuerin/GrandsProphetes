@@ -1,8 +1,0 @@
-{
-	"esbonio.sphinx.confDir": "",
-	"python.analysis.extraPaths": [
-		"./Application/UI",
-		"./Application",
-		"./Application/Models"
-	]
-}

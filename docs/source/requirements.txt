@@ -1,7 +1,0 @@
-manim
-customtkinter
-matplotlib
-numpy
-sphinx
-jsonschema
-jsonpickle
